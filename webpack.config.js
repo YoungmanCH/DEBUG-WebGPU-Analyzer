@@ -3,12 +3,13 @@ const path = require("path");
 const lazPerf = require("laz-perf");
 const Dotenv = require("dotenv-webpack");
 module.exports = {
-  entry: "./src/index.js",
+  entry: "./src/index.ts",
   output: {
     filename: "bundle.js",
     path: path.resolve(__dirname, "docs"),
   },
   resolve: {
+    extensions: [".ts", ".tsx", ".js", ".jsx"],
     fallback: {
       fs: false,
     },
@@ -16,13 +17,23 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.css$/,
-        use: ["style-loader", "css-loader"],
+        test: /\.worker\.ts$/,
+        exclude: /node_modules/,
+        use: {
+          loader: "worker-loader",
+          options: {
+            esModule: true,
+          },
+        },
       },
       {
-        test: /\.worker\.js$/,
+        test: /\.tsx?$/,
+        use: "ts-loader",
         exclude: /node_modules/,
-        use: "worker-loader",
+      },
+      {
+        test: /\.css$/,
+        use: ["style-loader", "css-loader"],
       },
     ],
   },

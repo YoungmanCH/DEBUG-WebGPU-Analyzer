@@ -60,9 +60,9 @@ option {
   font-size: 14px;
 }
 
-#stats-div{
+#stats-div {
   position: absolute;
-  bottom: 100px; 
+  bottom: 100px;
   right: 50px;
   background-color: aliceblue;
   padding: 20px;
