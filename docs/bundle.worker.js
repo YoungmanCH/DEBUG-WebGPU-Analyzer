@@ -52959,7 +52959,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var three__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! three */ "./node_modules/three/build/three.module.js");
 
 
-// Constants
 const FILENAME = "https://media.githubusercontent.com/media/sceneserver/copc/main/naarden-vesting.copc.laz";
 // Worker state
 const workerState = {

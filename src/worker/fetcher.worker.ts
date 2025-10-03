@@ -1,7 +1,7 @@
 import { Copc } from "copc";
 import * as THREE from "three";
 
-const FILENAME = (process.env as any).filename;
+const FILENAME = (process.env as any).COPC_FILE;
 
 // Worker state
 const workerState = {

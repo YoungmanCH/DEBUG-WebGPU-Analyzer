@@ -57881,33 +57881,33 @@ function updateHtmlUI(nodeNotFoundInBuffer, nodeFoundInBuffer, nodeFoundInLRU, n
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   appState: () => (/* binding */ appState),
-/* harmony export */   loadCOPC: () => (/* binding */ loadCOPC),
 /* harmony export */   retrivePoints: () => (/* binding */ retrivePoints)
 /* harmony export */ });
 /* harmony import */ var three__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! three */ "./node_modules/three/build/three.module.js");
 /* harmony import */ var three_addons_controls_OrbitControls_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! three/addons/controls/OrbitControls.js */ "./node_modules/three/examples/jsm/controls/OrbitControls.js");
-/* harmony import */ var copc__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! copc */ "./node_modules/copc/lib/index.js");
-/* harmony import */ var copc__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(copc__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var gl_matrix__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! gl-matrix */ "./node_modules/gl-matrix/esm/mat4.js");
-/* harmony import */ var _worker_fetcher_worker__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./worker/fetcher.worker */ "./src/worker/fetcher.worker.ts");
-/* harmony import */ var _webgpu_renderer__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./webgpu/renderer */ "./src/webgpu/renderer.ts");
-/* harmony import */ var _passiveloader__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./passiveloader */ "./src/passiveloader.ts");
-/* harmony import */ var _private_origin_file_manager__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./private_origin/file_manager */ "./src/private_origin/file_manager.ts");
-/* harmony import */ var _private_origin_cache_manager__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./private_origin/cache_manager */ "./src/private_origin/cache_manager.ts");
-/* harmony import */ var _helper__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./helper */ "./src/helper.ts");
-/* harmony import */ var _lru_cache_index__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./lru-cache/index */ "./src/lru-cache/index.ts");
-
-
-
-
-
-const Worker = _worker_fetcher_worker__WEBPACK_IMPORTED_MODULE_4__["default"] || _worker_fetcher_worker__WEBPACK_IMPORTED_MODULE_4__;
+/* harmony import */ var gl_matrix__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! gl-matrix */ "./node_modules/gl-matrix/esm/mat4.js");
+/* harmony import */ var _worker_fetcher_worker__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./worker/fetcher.worker */ "./src/worker/fetcher.worker.ts");
+/* harmony import */ var _webgpu_renderer__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./webgpu/renderer */ "./src/webgpu/renderer.ts");
+/* harmony import */ var _passiveloader__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./passiveloader */ "./src/passiveloader.ts");
+/* harmony import */ var _private_origin_file_manager__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./private_origin/file_manager */ "./src/private_origin/file_manager.ts");
+/* harmony import */ var _private_origin_cache_manager__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./private_origin/cache_manager */ "./src/private_origin/cache_manager.ts");
+/* harmony import */ var _helper__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./helper */ "./src/helper.ts");
+/* harmony import */ var _lru_cache_index__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./lru-cache/index */ "./src/lru-cache/index.ts");
+/* harmony import */ var _utils_utils__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./utils/utils */ "./src/utils/utils.ts");
+/* harmony import */ var _loaders_copc_loader__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./loaders/copc-loader */ "./src/loaders/copc-loader.ts");
 
 
 
 
 
 
+
+
+
+
+
+
+const Worker = _worker_fetcher_worker__WEBPACK_IMPORTED_MODULE_3__["default"] || _worker_fetcher_worker__WEBPACK_IMPORTED_MODULE_3__;
 const SOURCE_FILE_NAME = "https://media.githubusercontent.com/media/sceneserver/copc/main/naarden-vesting.copc.laz".split("/").pop();
 const MAX_WORKERS = navigator.hardwareConcurrency - 1;
 const canvas = document.getElementById("screen-canvas");
@@ -57948,26 +57948,61 @@ const appState = {
     promises: [],
     clock: new three__WEBPACK_IMPORTED_MODULE_0__.Clock(),
 };
+async function loadPointCloud() {
+    const files = "[\"https://media.githubusercontent.com/media/sceneserver/copc/main/naarden-vesting.copc.laz\"]";
+    console.log("files: ", files);
+    const filenames = JSON.parse(files);
+    const loader = new _utils_utils__WEBPACK_IMPORTED_MODULE_10__.FileLoader(filenames);
+    await loader.loadFiles(async (data, format, filename) => {
+        console.log(`Processing ${format} file: ${filename}`);
+        switch (format) {
+            case "copc":
+                appState.clock.getDelta();
+                updateCOPCState(data);
+                break;
+            case "las":
+                // updateLASState(data);
+                break;
+            case "laz":
+                // updateLAZState(data);
+                break;
+            default:
+                console.warn(`No state updater for format: ${format}`);
+        }
+    });
+}
 async function loadCOPC() {
     appState.clock.getDelta();
     const filename = "https://media.githubusercontent.com/media/sceneserver/copc/main/naarden-vesting.copc.laz";
-    const copc = await copc__WEBPACK_IMPORTED_MODULE_2__.Copc.create(filename);
-    console.log("file is", copc);
+    const copcLoader = new _loaders_copc_loader__WEBPACK_IMPORTED_MODULE_11__.COPCFileLoader(filename);
+    const copcData = await copcLoader.loadFile();
+    updateCOPCState(copcData);
+}
+function updateCOPCState(copcData) {
+    // Initialize COPC state
     appState.scaleFactor = [1.0, 1.0, 1.0];
-    appState.copcString = JSON.stringify(copc);
-    [appState.xMin, appState.yMin, appState.zMin, appState.xMax, appState.yMax, appState.zMax] = [
-        ...copc.header.min,
-        ...copc.header.max,
-    ];
+    appState.copcString = JSON.stringify(copcData.copc);
+    // Set bounding box
+    [
+        appState.xMin,
+        appState.yMin,
+        appState.zMin,
+        appState.xMax,
+        appState.yMax,
+        appState.zMax,
+    ] = [...copcData.boundingBox.min, ...copcData.boundingBox.max];
+    // Calculate scaled bounding box
     appState.xMin *= appState.scaleFactor[0];
     appState.xMax *= appState.scaleFactor[0];
     appState.yMin *= appState.scaleFactor[1];
     appState.yMax *= appState.scaleFactor[1];
     appState.zMin *= appState.scaleFactor[2];
     appState.zMax *= appState.scaleFactor[2];
+    // Calculate dimensions
     appState.widthX = Math.abs(appState.xMax - appState.xMin);
     appState.widthY = Math.abs(appState.yMax - appState.yMin);
     appState.widthZ = Math.abs(appState.zMax - appState.zMin);
+    // Set params
     appState.params = [
         appState.widthX,
         appState.widthY,
@@ -57976,16 +58011,20 @@ async function loadCOPC() {
         appState.yMin,
         appState.zMin,
     ];
-    appState.centerX = (appState.xMin + appState.xMax) / 2 - appState.xMin - 0.5 * appState.widthX;
-    appState.centerY = (appState.yMin + appState.yMax) / 2 - appState.yMin - 0.5 * appState.widthY;
-    appState.centerZ = (appState.zMin + appState.zMax) / 2 - appState.zMin - 0.5 * appState.widthZ;
-    const { nodes: nodePages1, pages: pages } = await copc__WEBPACK_IMPORTED_MODULE_2__.Copc.loadHierarchyPage(filename, copc.info.rootHierarchyPage);
-    appState.nodePages = nodePages1;
-    appState.nodePagesString = JSON.stringify(nodePages1);
-    appState.pagesString = JSON.stringify(pages);
+    // Calculate center
+    appState.centerX =
+        (appState.xMin + appState.xMax) / 2 - appState.xMin - 0.5 * appState.widthX;
+    appState.centerY =
+        (appState.yMin + appState.yMax) / 2 - appState.yMin - 0.5 * appState.widthY;
+    appState.centerZ =
+        (appState.zMin + appState.zMax) / 2 - appState.zMin - 0.5 * appState.widthZ;
+    // Set hierarchy data
+    appState.nodePages = copcData.hierarchy.nodes;
+    appState.nodePagesString = JSON.stringify(copcData.hierarchy.nodes);
+    appState.pagesString = JSON.stringify(copcData.hierarchy.pages);
 }
 async function retrivePoints(projectionViewMatrix, controllerSignal = null) {
-    let [keyCountMap, nodeToPrefetch] = (0,_passiveloader__WEBPACK_IMPORTED_MODULE_6__.traverseTreeWrapper)(appState.nodePages, [0, 0, 0, 0], appState.centerX, appState.centerY, appState.centerZ, [0.5 * appState.widthX, 0.5 * appState.widthY, 0.5 * appState.widthZ], appState.scaleFactor, appState.controls, projectionViewMatrix);
+    let [keyCountMap, nodeToPrefetch] = (0,_passiveloader__WEBPACK_IMPORTED_MODULE_5__.traverseTreeWrapper)(appState.nodePages, [0, 0, 0, 0], appState.centerX, appState.centerY, appState.centerZ, [0.5 * appState.widthX, 0.5 * appState.widthY, 0.5 * appState.widthZ], appState.scaleFactor, appState.controls, projectionViewMatrix);
     keyCountMap = await _filterKeyCountMap(keyCountMap);
     appState.prefetchKeyCountMap = await _filterKeyCountMapPrefetch(nodeToPrefetch);
     appState.clock.getDelta();
@@ -58009,7 +58048,7 @@ async function retrivePoints(projectionViewMatrix, controllerSignal = null) {
 }
 function _createBuffer(positions, colors) {
     let size = positions.length;
-    let positionBuffer = _webgpu_renderer__WEBPACK_IMPORTED_MODULE_5__.device.device.createBuffer({
+    let positionBuffer = _webgpu_renderer__WEBPACK_IMPORTED_MODULE_4__.device.device.createBuffer({
         label: `${size}`,
         size: size * 4,
         usage: GPUBufferUsage.VERTEX,
@@ -58018,7 +58057,7 @@ function _createBuffer(positions, colors) {
     let positionMappedArray = new Float32Array(positionBuffer.getMappedRange());
     positionMappedArray.set(positions);
     positionBuffer.unmap();
-    let colorBuffer = _webgpu_renderer__WEBPACK_IMPORTED_MODULE_5__.device.device.createBuffer({
+    let colorBuffer = _webgpu_renderer__WEBPACK_IMPORTED_MODULE_4__.device.device.createBuffer({
         label: `${size}`,
         size: size * 4,
         usage: GPUBufferUsage.VERTEX,
@@ -58096,7 +58135,7 @@ async function _syncThread() {
                 maxIntensity: data[3],
             };
             let dataJsonStringify = JSON.stringify(dataJson);
-            await (0,_private_origin_file_manager__WEBPACK_IMPORTED_MODULE_7__.writeFile)(`${SOURCE_FILE_NAME}-${fileName}`, dataJsonStringify);
+            await (0,_private_origin_file_manager__WEBPACK_IMPORTED_MODULE_6__.writeFile)(`${SOURCE_FILE_NAME}-${fileName}`, dataJsonStringify);
             let [positionBuffer, colorBuffer] = _createBuffer(data[0], data[1]);
             appState.bufferMap[data[2]] = {
                 position: positionBuffer,
@@ -58109,27 +58148,27 @@ async function _syncThread() {
 async function _filterKeyCountMapPrefetch(keyMap) {
     let afterCheckingCache = [];
     for (let i = 0; i < keyMap.length; i += 2) {
-        let cachedResult = _lru_cache_index__WEBPACK_IMPORTED_MODULE_10__.cache.get(keyMap[i]);
+        let cachedResult = _lru_cache_index__WEBPACK_IMPORTED_MODULE_9__.cache.get(keyMap[i]);
         if (!cachedResult) {
             afterCheckingCache.push(keyMap[i], keyMap[i + 1]);
         }
     }
     let filteredElements = [];
     for (let i = 0; i < afterCheckingCache.length; i += 2) {
-        let [exist, data] = (await (0,_private_origin_file_manager__WEBPACK_IMPORTED_MODULE_7__.doesExist)(`${SOURCE_FILE_NAME}-${afterCheckingCache[i]}`));
+        let [exist, data] = (await (0,_private_origin_file_manager__WEBPACK_IMPORTED_MODULE_6__.doesExist)(`${SOURCE_FILE_NAME}-${afterCheckingCache[i]}`));
         if (exist) {
-            _lru_cache_index__WEBPACK_IMPORTED_MODULE_10__.cache.set(afterCheckingCache[i], JSON.stringify(data));
-            appState.persCache = (0,_private_origin_cache_manager__WEBPACK_IMPORTED_MODULE_8__.getInCache)(appState.persCache, afterCheckingCache[i]);
+            _lru_cache_index__WEBPACK_IMPORTED_MODULE_9__.cache.set(afterCheckingCache[i], JSON.stringify(data));
+            appState.persCache = (0,_private_origin_cache_manager__WEBPACK_IMPORTED_MODULE_7__.getInCache)(appState.persCache, afterCheckingCache[i]);
         }
         else {
             filteredElements.push(afterCheckingCache[i], afterCheckingCache[i + 1]);
-            appState.persCache = (0,_private_origin_cache_manager__WEBPACK_IMPORTED_MODULE_8__.putInCache)(appState.persCache, afterCheckingCache[i], {
+            appState.persCache = (0,_private_origin_cache_manager__WEBPACK_IMPORTED_MODULE_7__.putInCache)(appState.persCache, afterCheckingCache[i], {
                 count: 1,
                 date: Date.now(),
             });
         }
     }
-    (0,_private_origin_file_manager__WEBPACK_IMPORTED_MODULE_7__.throttledUpdatePersCache)((0,_private_origin_cache_manager__WEBPACK_IMPORTED_MODULE_8__.mapIntoJSON)(_lru_cache_index__WEBPACK_IMPORTED_MODULE_10__.cache));
+    (0,_private_origin_file_manager__WEBPACK_IMPORTED_MODULE_6__.throttledUpdatePersCache)((0,_private_origin_cache_manager__WEBPACK_IMPORTED_MODULE_7__.mapIntoJSON)(_lru_cache_index__WEBPACK_IMPORTED_MODULE_9__.cache));
     return filteredElements;
 }
 async function _filterKeyCountMap(keyMap) {
@@ -58166,17 +58205,17 @@ async function _filterKeyCountMap(keyMap) {
             if (maxIntensity > appState.globalMaxIntensity) {
                 appState.globalMaxIntensity = maxIntensity;
             }
-            appState.persCache = (0,_private_origin_cache_manager__WEBPACK_IMPORTED_MODULE_8__.getInCache)(appState.persCache, keyMap[i]);
+            appState.persCache = (0,_private_origin_cache_manager__WEBPACK_IMPORTED_MODULE_7__.getInCache)(appState.persCache, keyMap[i]);
             delete toDeleteArray[keyMap[i]];
         }
     }
     let afterCheckingCache = [];
     for (let i = 0; i < newKeyMap.length; i += 2) {
-        let cachedResult = _lru_cache_index__WEBPACK_IMPORTED_MODULE_10__.cache.get(newKeyMap[i]);
+        let cachedResult = _lru_cache_index__WEBPACK_IMPORTED_MODULE_9__.cache.get(newKeyMap[i]);
         if (cachedResult) {
             nodeFoundInLRU++;
             cachedResult = JSON.parse(cachedResult);
-            appState.persCache = (0,_private_origin_cache_manager__WEBPACK_IMPORTED_MODULE_8__.getInCache)(appState.persCache, newKeyMap[i]);
+            appState.persCache = (0,_private_origin_cache_manager__WEBPACK_IMPORTED_MODULE_7__.getInCache)(appState.persCache, newKeyMap[i]);
             let [positionBuffer, colorBuffer] = _createBuffer(cachedResult.position, cachedResult.color);
             const maxIntensity = cachedResult.maxIntensity;
             newBufferMap[newKeyMap[i]] = {
@@ -58194,7 +58233,7 @@ async function _filterKeyCountMap(keyMap) {
     }
     let filteredElements = [];
     for (let i = 0; i < afterCheckingCache.length; i += 2) {
-        let [exist, data] = (await (0,_private_origin_file_manager__WEBPACK_IMPORTED_MODULE_7__.doesExist)(`${SOURCE_FILE_NAME}-${afterCheckingCache[i]}`));
+        let [exist, data] = (await (0,_private_origin_file_manager__WEBPACK_IMPORTED_MODULE_6__.doesExist)(`${SOURCE_FILE_NAME}-${afterCheckingCache[i]}`));
         if (exist) {
             console.log("found in POFS");
             nodeFoundInPersistent++;
@@ -58207,19 +58246,19 @@ async function _filterKeyCountMap(keyMap) {
             if (data.maxIntensity > appState.globalMaxIntensity) {
                 appState.globalMaxIntensity = data.maxIntensity;
             }
-            _lru_cache_index__WEBPACK_IMPORTED_MODULE_10__.cache.set(afterCheckingCache[i], JSON.stringify(data));
-            appState.persCache = (0,_private_origin_cache_manager__WEBPACK_IMPORTED_MODULE_8__.getInCache)(appState.persCache, afterCheckingCache[i]);
+            _lru_cache_index__WEBPACK_IMPORTED_MODULE_9__.cache.set(afterCheckingCache[i], JSON.stringify(data));
+            appState.persCache = (0,_private_origin_cache_manager__WEBPACK_IMPORTED_MODULE_7__.getInCache)(appState.persCache, afterCheckingCache[i]);
         }
         else {
             filteredElements.push(afterCheckingCache[i], afterCheckingCache[i + 1]);
-            appState.persCache = (0,_private_origin_cache_manager__WEBPACK_IMPORTED_MODULE_8__.putInCache)(appState.persCache, afterCheckingCache[i], {
+            appState.persCache = (0,_private_origin_cache_manager__WEBPACK_IMPORTED_MODULE_7__.putInCache)(appState.persCache, afterCheckingCache[i], {
                 count: 1,
                 date: Date.now(),
             });
             nodeToFetch++;
         }
     }
-    (0,_private_origin_file_manager__WEBPACK_IMPORTED_MODULE_7__.throttledUpdatePersCache)((0,_private_origin_cache_manager__WEBPACK_IMPORTED_MODULE_8__.mapIntoJSON)(_lru_cache_index__WEBPACK_IMPORTED_MODULE_10__.cache));
+    (0,_private_origin_file_manager__WEBPACK_IMPORTED_MODULE_6__.throttledUpdatePersCache)((0,_private_origin_cache_manager__WEBPACK_IMPORTED_MODULE_7__.mapIntoJSON)(_lru_cache_index__WEBPACK_IMPORTED_MODULE_9__.cache));
     for (let key in toDeleteArray) {
         appState.toDeleteMap[key] = {
             position: appState.bufferMap[key].position,
@@ -58227,7 +58266,7 @@ async function _filterKeyCountMap(keyMap) {
         };
     }
     appState.bufferMap = newBufferMap;
-    (0,_helper__WEBPACK_IMPORTED_MODULE_9__.updateHtmlUI)(nodeNotFoundInBuffer, nodeFoundInBuffer, nodeFoundInLRU, nodeFoundInPersistent, nodeToFetch);
+    (0,_helper__WEBPACK_IMPORTED_MODULE_8__.updateHtmlUI)(nodeNotFoundInBuffer, nodeFoundInBuffer, nodeFoundInLRU, nodeFoundInPersistent, nodeToFetch);
     return filteredElements;
 }
 async function _createCameraProj() {
@@ -58241,20 +58280,82 @@ async function _createCameraProj() {
     appState.controls.zoomSpeed = 1;
     appState.controls.panSpeed = 2;
     appState.controls.update();
-    appState.proj = gl_matrix__WEBPACK_IMPORTED_MODULE_3__.perspective(gl_matrix__WEBPACK_IMPORTED_MODULE_3__.create(), (50 * Math.PI) / 180.0, canvas.width / canvas.height, 0.1, 8000);
+    appState.proj = gl_matrix__WEBPACK_IMPORTED_MODULE_2__.perspective(gl_matrix__WEBPACK_IMPORTED_MODULE_2__.create(), (50 * Math.PI) / 180.0, canvas.width / canvas.height, 0.1, 8000);
 }
 // ============================================================================
 // Initialization
 // ============================================================================
 (async () => {
-    await (0,_private_origin_file_manager__WEBPACK_IMPORTED_MODULE_7__.createPersistentMetaCache)();
-    appState.persCache = await (0,_private_origin_cache_manager__WEBPACK_IMPORTED_MODULE_8__.pCache)();
+    await (0,_private_origin_file_manager__WEBPACK_IMPORTED_MODULE_6__.createPersistentMetaCache)();
+    appState.persCache = await (0,_private_origin_cache_manager__WEBPACK_IMPORTED_MODULE_7__.pCache)();
     await _createCameraProj();
-    await loadCOPC();
-    let projViewMatrix = await (0,_webgpu_renderer__WEBPACK_IMPORTED_MODULE_5__.stages)(appState.camera, appState.proj, appState.params);
+    await loadPointCloud();
+    // await loadCOPC();
+    let projViewMatrix = await (0,_webgpu_renderer__WEBPACK_IMPORTED_MODULE_4__.stages)(appState.camera, appState.proj, appState.params);
     await retrivePoints(projViewMatrix);
-    await (0,_webgpu_renderer__WEBPACK_IMPORTED_MODULE_5__.renderWrapper)();
+    await (0,_webgpu_renderer__WEBPACK_IMPORTED_MODULE_4__.renderWrapper)();
 })();
+
+
+/***/ }),
+
+/***/ "./src/loaders/base-loader.ts":
+/*!************************************!*\
+  !*** ./src/loaders/base-loader.ts ***!
+  \************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   BaseFileLoader: () => (/* binding */ BaseFileLoader)
+/* harmony export */ });
+class BaseFileLoader {
+    constructor(filename) {
+        this.filename = filename;
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/loaders/copc-loader.ts":
+/*!************************************!*\
+  !*** ./src/loaders/copc-loader.ts ***!
+  \************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   COPCFileLoader: () => (/* binding */ COPCFileLoader)
+/* harmony export */ });
+/* harmony import */ var _base_loader__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./base-loader */ "./src/loaders/base-loader.ts");
+/* harmony import */ var copc__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! copc */ "./node_modules/copc/lib/index.js");
+/* harmony import */ var copc__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(copc__WEBPACK_IMPORTED_MODULE_1__);
+
+
+class COPCFileLoader extends _base_loader__WEBPACK_IMPORTED_MODULE_0__.BaseFileLoader {
+    async loadFile() {
+        const copc = await copc__WEBPACK_IMPORTED_MODULE_1__.Copc.create(this.filename);
+        const hierarchy = await this._loadHierarchy(copc);
+        const boundingBox = {
+            min: copc.header.min,
+            max: copc.header.max,
+        };
+        console.log(`Loading COPC file: ${this.filename}`);
+        console.log("COPC file loaded:", copc);
+        return {
+            copc,
+            hierarchy,
+            boundingBox,
+        };
+    }
+    async _loadHierarchy(copc) {
+        const { nodes, pages } = await copc__WEBPACK_IMPORTED_MODULE_1__.Copc.loadHierarchyPage(this.filename, copc.info.rootHierarchyPage);
+        return { nodes, pages };
+    }
+}
 
 
 /***/ }),
@@ -58767,7 +58868,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   fs: () => (/* binding */ fs),
 /* harmony export */   vs: () => (/* binding */ vs)
 /* harmony export */ });
-let vs = `
+let vs = /* wgsl */ `
     struct VertexInput {
         @location(0) position: vec4<f32>,
         @location(1) color: vec3<f32>
@@ -58859,7 +58960,7 @@ let vs = `
         return out;
     }
 `;
-let fs = `
+let fs = /* wgsl */ `
 struct VertexOut {
     @builtin(position) position: vec4<f32>,
     @location(0) color: vec4<f32>
@@ -58903,6 +59004,99 @@ function computeFocalLength(angle) {
 }
 function computeSSE(width, distance, focalLength) {
     return (width / distance) * focalLength;
+}
+
+
+/***/ }),
+
+/***/ "./src/utils/utils.ts":
+/*!****************************!*\
+  !*** ./src/utils/utils.ts ***!
+  \****************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   FileLoader: () => (/* binding */ FileLoader),
+/* harmony export */   deepCopy: () => (/* binding */ deepCopy)
+/* harmony export */ });
+/* harmony import */ var _loaders_copc_loader__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../loaders/copc-loader */ "./src/loaders/copc-loader.ts");
+
+// import { LASFileLoader, LASParams } from "../loaders/las-loader";
+// import { LAZFileLoader, LAZParams } from "../loaders/laz-loader";
+function deepCopy(obj) {
+    const newObj = {};
+    for (let key in obj) {
+        const value = obj[key];
+        if (typeof value === "object" && value !== null) {
+            newObj[key] = deepCopy(value);
+        }
+        else {
+            newObj[key] = value;
+        }
+    }
+    return newObj;
+}
+// export type PointCloudData = COPCParams | LASParams | LAZParams;
+class FileLoader {
+    constructor(filename) {
+        this.filenames = Array.isArray(filename) ? filename : [filename];
+    }
+    async loadFiles(onFileLoaded) {
+        console.log(`Loading ${this.filenames.length} point cloud files...`);
+        for (const filename of this.filenames) {
+            const format = this._detectFileFormat(filename);
+            let data = null;
+            switch (format) {
+                case "copc":
+                    const copcLoader = new _loaders_copc_loader__WEBPACK_IMPORTED_MODULE_0__.COPCFileLoader(filename);
+                    data = await copcLoader.loadFile();
+                    break;
+                case "las":
+                    // const lasLoader = new LASFileLoader(filename);
+                    // data = await lasLoader.loadFile();
+                    break;
+                case "laz":
+                    // const lazLoader = new LAZFileLoader(filename);
+                    // data = await lazLoader.loadFile();
+                    break;
+                case "tif":
+                    // TODO: update
+                    console.log(`TIF format not yet supported: ${filename}`);
+                    break;
+                case "xyz":
+                    // TODO: update
+                    console.log(`XYZ format not yet supported: ${filename}`);
+                    break;
+                default:
+                    console.warn(`Unknown file format for: ${filename}`);
+            }
+            if (data) {
+                await onFileLoaded(data, format, filename);
+            }
+        }
+    }
+    _detectFileFormat(filename) {
+        const lowerFilename = filename.toLowerCase();
+        if (lowerFilename.endsWith(".copc.laz")) {
+            return "copc";
+        }
+        else if (lowerFilename.endsWith(".las")) {
+            return "las";
+        }
+        else if (lowerFilename.endsWith(".laz")) {
+            return "laz";
+        }
+        else if (lowerFilename.endsWith(".tif") ||
+            lowerFilename.endsWith(".tiff")) {
+            return "tif";
+        }
+        else if (lowerFilename.endsWith(".xyz")) {
+            return "xyz";
+        }
+        return "unknown";
+    }
 }
 
 

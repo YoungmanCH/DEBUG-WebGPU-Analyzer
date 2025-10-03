@@ -1,6 +1,5 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
-import { Copc } from "copc";
 import { mat4 } from "gl-matrix";
 import * as WorkerModule from "./worker/fetcher.worker";
 import { device, stages, renderWrapper } from "./webgpu/renderer";
@@ -19,10 +18,12 @@ import {
 } from "./private_origin/cache_manager";
 import { updateHtmlUI } from "./helper";
 import { cache } from "./lru-cache/index";
+import { FileLoader } from "./utils/utils";
+import { COPCFileLoader, COPCParams } from "./loaders/copc-loader";
 
 const Worker = (WorkerModule as any).default || WorkerModule;
 
-const SOURCE_FILE_NAME = ((process.env as any) as any).filename.split("/").pop();
+const SOURCE_FILE_NAME = (process.env as any as any).COPC_FILE.split("/").pop();
 const MAX_WORKERS = navigator.hardwareConcurrency - 1;
 
 const canvas = document.getElementById("screen-canvas") as HTMLCanvasElement;
@@ -69,20 +70,57 @@ export const appState = {
   clock: new THREE.Clock(),
 };
 
-export async function loadCOPC() {
+async function loadPointCloud() {
+  const files: string = (process.env as any).POINT_CLOUD_FILES;
+  const filenames: string[] = JSON.parse(files);
+  const loader = new FileLoader(filenames);
+
+  await loader.loadFiles(async (data, format, filename) => {
+    console.log(`Processing ${format} file: ${filename}`);
+
+    switch (format) {
+      case "copc":
+        appState.clock.getDelta();
+        updateCOPCState(data as COPCParams);
+        break;
+      case "las":
+        // updateLASState(data);
+        break;
+      case "laz":
+        // updateLAZState(data);
+        break;
+      default:
+        console.warn(`No state updater for format: ${format}`);
+    }
+  });
+}
+
+async function loadCOPC() {
   appState.clock.getDelta();
-  const filename = (process.env as any).filename;
-  const copc = await Copc.create(filename);
-  console.log("file is", copc);
+  const filename = (process.env as any).COPC_FILE;
 
+  const copcLoader = new COPCFileLoader(filename);
+  const copcData = await copcLoader.loadFile();
+
+  updateCOPCState(copcData);
+}
+
+function updateCOPCState(copcData: COPCParams) {
+  // Initialize COPC state
   appState.scaleFactor = [1.0, 1.0, 1.0];
-  appState.copcString = JSON.stringify(copc);
+  appState.copcString = JSON.stringify(copcData.copc);
 
-  [appState.xMin, appState.yMin, appState.zMin, appState.xMax, appState.yMax, appState.zMax] = [
-    ...copc.header.min,
-    ...copc.header.max,
-  ];
+  // Set bounding box
+  [
+    appState.xMin,
+    appState.yMin,
+    appState.zMin,
+    appState.xMax,
+    appState.yMax,
+    appState.zMax,
+  ] = [...copcData.boundingBox.min, ...copcData.boundingBox.max];
 
+  // Calculate scaled bounding box
   appState.xMin *= appState.scaleFactor[0];
   appState.xMax *= appState.scaleFactor[0];
   appState.yMin *= appState.scaleFactor[1];
@@ -90,10 +128,12 @@ export async function loadCOPC() {
   appState.zMin *= appState.scaleFactor[2];
   appState.zMax *= appState.scaleFactor[2];
 
+  // Calculate dimensions
   appState.widthX = Math.abs(appState.xMax - appState.xMin);
   appState.widthY = Math.abs(appState.yMax - appState.yMin);
   appState.widthZ = Math.abs(appState.zMax - appState.zMin);
 
+  // Set params
   appState.params = [
     appState.widthX,
     appState.widthY,
@@ -103,20 +143,24 @@ export async function loadCOPC() {
     appState.zMin,
   ];
 
-  appState.centerX = (appState.xMin + appState.xMax) / 2 - appState.xMin - 0.5 * appState.widthX;
-  appState.centerY = (appState.yMin + appState.yMax) / 2 - appState.yMin - 0.5 * appState.widthY;
-  appState.centerZ = (appState.zMin + appState.zMax) / 2 - appState.zMin - 0.5 * appState.widthZ;
+  // Calculate center
+  appState.centerX =
+    (appState.xMin + appState.xMax) / 2 - appState.xMin - 0.5 * appState.widthX;
+  appState.centerY =
+    (appState.yMin + appState.yMax) / 2 - appState.yMin - 0.5 * appState.widthY;
+  appState.centerZ =
+    (appState.zMin + appState.zMax) / 2 - appState.zMin - 0.5 * appState.widthZ;
 
-  const { nodes: nodePages1, pages: pages } = await Copc.loadHierarchyPage(
-    filename,
-    copc.info.rootHierarchyPage
-  );
-  appState.nodePages = nodePages1;
-  appState.nodePagesString = JSON.stringify(nodePages1);
-  appState.pagesString = JSON.stringify(pages);
+  // Set hierarchy data
+  appState.nodePages = copcData.hierarchy.nodes;
+  appState.nodePagesString = JSON.stringify(copcData.hierarchy.nodes);
+  appState.pagesString = JSON.stringify(copcData.hierarchy.pages);
 }
 
-export async function retrivePoints(projectionViewMatrix, controllerSignal = null) {
+export async function retrivePoints(
+  projectionViewMatrix,
+  controllerSignal = null
+) {
   let [keyCountMap, nodeToPrefetch] = traverseTreeWrapper(
     appState.nodePages,
     [0, 0, 0, 0],
@@ -130,7 +174,9 @@ export async function retrivePoints(projectionViewMatrix, controllerSignal = nul
   );
 
   keyCountMap = await _filterKeyCountMap(keyCountMap);
-  appState.prefetchKeyCountMap = await _filterKeyCountMapPrefetch(nodeToPrefetch);
+  appState.prefetchKeyCountMap = await _filterKeyCountMapPrefetch(
+    nodeToPrefetch
+  );
 
   appState.clock.getDelta();
   let totalNodes = keyCountMap.length / 2;
@@ -262,7 +308,6 @@ async function _syncThread() {
   });
 }
 
-
 async function _filterKeyCountMapPrefetch(keyMap) {
   let afterCheckingCache = [];
 
@@ -280,13 +325,20 @@ async function _filterKeyCountMapPrefetch(keyMap) {
     )) as any;
     if (exist) {
       cache.set(afterCheckingCache[i], JSON.stringify(data));
-      appState.persCache = getInCache(appState.persCache, afterCheckingCache[i]);
+      appState.persCache = getInCache(
+        appState.persCache,
+        afterCheckingCache[i]
+      );
     } else {
       filteredElements.push(afterCheckingCache[i], afterCheckingCache[i + 1]);
-      appState.persCache = putInCache(appState.persCache, afterCheckingCache[i], {
-        count: 1,
-        date: Date.now(),
-      });
+      appState.persCache = putInCache(
+        appState.persCache,
+        afterCheckingCache[i],
+        {
+          count: 1,
+          date: Date.now(),
+        }
+      );
     }
   }
   throttledUpdatePersCache(mapIntoJSON(cache));
@@ -367,7 +419,10 @@ async function _filterKeyCountMap(keyMap) {
     if (exist) {
       console.log("found in POFS");
       nodeFoundInPersistent++;
-      let [positionBuffer, colorBuffer] = _createBuffer(data.position, data.color);
+      let [positionBuffer, colorBuffer] = _createBuffer(
+        data.position,
+        data.color
+      );
       newBufferMap[afterCheckingCache[i]] = {
         position: positionBuffer,
         color: colorBuffer,
@@ -377,13 +432,20 @@ async function _filterKeyCountMap(keyMap) {
         appState.globalMaxIntensity = data.maxIntensity;
       }
       cache.set(afterCheckingCache[i], JSON.stringify(data));
-      appState.persCache = getInCache(appState.persCache, afterCheckingCache[i]);
+      appState.persCache = getInCache(
+        appState.persCache,
+        afterCheckingCache[i]
+      );
     } else {
       filteredElements.push(afterCheckingCache[i], afterCheckingCache[i + 1]);
-      appState.persCache = putInCache(appState.persCache, afterCheckingCache[i], {
-        count: 1,
-        date: Date.now(),
-      });
+      appState.persCache = putInCache(
+        appState.persCache,
+        afterCheckingCache[i],
+        {
+          count: 1,
+          date: Date.now(),
+        }
+      );
       nodeToFetch++;
     }
   }
@@ -445,9 +507,15 @@ async function _createCameraProj() {
   appState.persCache = await pCache();
 
   await _createCameraProj();
-  await loadCOPC();
 
-  let projViewMatrix = await stages(appState.camera, appState.proj, appState.params);
+  await loadPointCloud();
+  // await loadCOPC();
+
+  let projViewMatrix = await stages(
+    appState.camera,
+    appState.proj,
+    appState.params
+  );
   await retrivePoints(projViewMatrix);
   await renderWrapper();
 })();
