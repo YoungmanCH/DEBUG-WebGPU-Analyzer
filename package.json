@@ -22,6 +22,7 @@
     "copc": "^0.0.4",
     "cross-fetch": "^3.1.5",
     "dotenv-webpack": "^8.0.1",
+    "gl-matrix": "^3.4.4",
     "json-fn": "^1.1.1",
     "laz-perf": "^0.0.5",
     "lru-cache": "^8.0.4",
@@ -31,8 +32,14 @@
     "webpack-dev-server": "^5.2.2"
   },
   "devDependencies": {
+    "@types/gl-matrix": "^3.2.0",
+    "@types/node": "^24.6.2",
+    "@types/three": "^0.180.0",
+    "@webgpu/types": "^0.1.65",
     "css-loader": "^6.7.3",
     "style-loader": "^3.3.1",
+    "ts-loader": "^9.5.4",
+    "typescript": "^5.9.3",
     "worker-loader": "^3.0.8"
   }
 }
