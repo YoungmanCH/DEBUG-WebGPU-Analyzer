@@ -785,7 +785,6 @@ function parse(buffer) {
     }
     const dv = utils_1.Binary.toDataView(buffer);
     const fileSignature = utils_1.Binary.toCString(buffer.slice(0, 4));
-    console.log(fileSignature)
     if (fileSignature !== 'LASF') {
         throw new Error(`Invalid file signature: ${fileSignature}`);
     }
@@ -1041,8 +1040,6 @@ function create(buffer, header, eb = [], include) {
                 extractors[name] = getter;
             return extractors;
         }, {});
-        // console.log("i am extractor", extractors)
-
     }
     const dimensions = dimensions_1.Dimensions.create(extractors, eb);
     const dv = utils_1.Binary.toDataView(buffer);
@@ -2182,151 +2179,2117 @@ module.exports = exports
 
 /***/ }),
 
-/***/ "./node_modules/css-loader/dist/cjs.js!./src/styles/main.css":
-/*!*******************************************************************!*\
-  !*** ./node_modules/css-loader/dist/cjs.js!./src/styles/main.css ***!
-  \*******************************************************************/
-/***/ ((module, __webpack_exports__, __webpack_require__) => {
+/***/ "./node_modules/gl-matrix/esm/common.js":
+/*!**********************************************!*\
+  !*** ./node_modules/gl-matrix/esm/common.js ***!
+  \**********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */   ANGLE_ORDER: () => (/* binding */ ANGLE_ORDER),
+/* harmony export */   ARRAY_TYPE: () => (/* binding */ ARRAY_TYPE),
+/* harmony export */   EPSILON: () => (/* binding */ EPSILON),
+/* harmony export */   RANDOM: () => (/* binding */ RANDOM),
+/* harmony export */   equals: () => (/* binding */ equals),
+/* harmony export */   round: () => (/* binding */ round),
+/* harmony export */   setMatrixArrayType: () => (/* binding */ setMatrixArrayType),
+/* harmony export */   toDegree: () => (/* binding */ toDegree),
+/* harmony export */   toRadian: () => (/* binding */ toRadian)
 /* harmony export */ });
-/* harmony import */ var _node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../node_modules/css-loader/dist/runtime/sourceMaps.js */ "./node_modules/css-loader/dist/runtime/sourceMaps.js");
-/* harmony import */ var _node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../node_modules/css-loader/dist/runtime/api.js */ "./node_modules/css-loader/dist/runtime/api.js");
-/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__);
-// Imports
+/**
+ * Common utilities
+ * @module glMatrix
+ */
 
+// Configuration Constants
+var EPSILON = 0.000001;
+var ARRAY_TYPE = typeof Float32Array !== "undefined" ? Float32Array : Array;
+var RANDOM = Math.random;
+var ANGLE_ORDER = "zyx";
 
-var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default()));
-// Module
-___CSS_LOADER_EXPORT___.push([module.id, "* {\r\n  box-sizing: border-box;\r\n  margin: 0;\r\n  padding: 0;\r\n  border: none;\r\n  font-family: \"Poppins\", sans-serif;\r\n}\r\n\r\nbody {\r\n  overflow: hidden;\r\n}\r\n\r\n.note {\r\n  position: absolute;\r\n  color: rgb(32, 31, 30);\r\n  top: 15px;\r\n  left: 20px;\r\n}\r\n\r\n.note title {\r\n  font-size: 20px;\r\n}\r\n\r\n.bottom-note {\r\n  position: absolute;\r\n  bottom: 55px;\r\n  left: 50px;\r\n  font-weight: 600;\r\n}\r\n.selection-map {\r\n  position: absolute;\r\n  top: 50px;\r\n  right: 50px;\r\n}\r\n\r\n.option-title {\r\n  border-bottom: 1px solid #aaa;\r\n  margin-bottom: 20px;\r\n}\r\n\r\nselect {\r\n  padding: 20px;\r\n  border: 1px solid #ccc;\r\n}\r\n\r\noption {\r\n  text-indent: 15px;\r\n}\r\n", "",{"version":3,"sources":["webpack://./src/styles/main.css"],"names":[],"mappings":"AAAA;EACE,sBAAsB;EACtB,SAAS;EACT,UAAU;EACV,YAAY;EACZ,kCAAkC;AACpC;;AAEA;EACE,gBAAgB;AAClB;;AAEA;EACE,kBAAkB;EAClB,sBAAsB;EACtB,SAAS;EACT,UAAU;AACZ;;AAEA;EACE,eAAe;AACjB;;AAEA;EACE,kBAAkB;EAClB,YAAY;EACZ,UAAU;EACV,gBAAgB;AAClB;AACA;EACE,kBAAkB;EAClB,SAAS;EACT,WAAW;AACb;;AAEA;EACE,6BAA6B;EAC7B,mBAAmB;AACrB;;AAEA;EACE,aAAa;EACb,sBAAsB;AACxB;;AAEA;EACE,iBAAiB;AACnB","sourcesContent":["* {\r\n  box-sizing: border-box;\r\n  margin: 0;\r\n  padding: 0;\r\n  border: none;\r\n  font-family: \"Poppins\", sans-serif;\r\n}\r\n\r\nbody {\r\n  overflow: hidden;\r\n}\r\n\r\n.note {\r\n  position: absolute;\r\n  color: rgb(32, 31, 30);\r\n  top: 15px;\r\n  left: 20px;\r\n}\r\n\r\n.note title {\r\n  font-size: 20px;\r\n}\r\n\r\n.bottom-note {\r\n  position: absolute;\r\n  bottom: 55px;\r\n  left: 50px;\r\n  font-weight: 600;\r\n}\r\n.selection-map {\r\n  position: absolute;\r\n  top: 50px;\r\n  right: 50px;\r\n}\r\n\r\n.option-title {\r\n  border-bottom: 1px solid #aaa;\r\n  margin-bottom: 20px;\r\n}\r\n\r\nselect {\r\n  padding: 20px;\r\n  border: 1px solid #ccc;\r\n}\r\n\r\noption {\r\n  text-indent: 15px;\r\n}\r\n"],"sourceRoot":""}]);
-// Exports
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
+/**
+ * Symmetric round
+ * see https://www.npmjs.com/package/round-half-up-symmetric#user-content-detailed-background
+ *
+ * @param {Number} a value to round
+ */
+function round(a) {
+  if (a >= 0) return Math.round(a);
+  return a % 0.5 === 0 ? Math.floor(a) : Math.round(a);
+}
 
+/**
+ * Sets the type of array used when creating new vectors and matrices
+ *
+ * @param {Float32ArrayConstructor | ArrayConstructor} type Array type, such as Float32Array or Array
+ */
+function setMatrixArrayType(type) {
+  ARRAY_TYPE = type;
+}
+var degree = Math.PI / 180;
+var radian = 180 / Math.PI;
 
-/***/ }),
+/**
+ * Convert Degree To Radian
+ *
+ * @param {Number} a Angle in Degrees
+ */
+function toRadian(a) {
+  return a * degree;
+}
 
-/***/ "./node_modules/css-loader/dist/runtime/api.js":
-/*!*****************************************************!*\
-  !*** ./node_modules/css-loader/dist/runtime/api.js ***!
-  \*****************************************************/
-/***/ ((module) => {
+/**
+ * Convert Radian To Degree
+ *
+ * @param {Number} a Angle in Radians
+ */
+function toDegree(a) {
+  return a * radian;
+}
 
-"use strict";
-
-
-/*
-  MIT License http://www.opensource.org/licenses/mit-license.php
-  Author Tobias Koppers @sokra
-*/
-module.exports = function (cssWithMappingToString) {
-  var list = [];
-
-  // return the list of modules as css string
-  list.toString = function toString() {
-    return this.map(function (item) {
-      var content = "";
-      var needLayer = typeof item[5] !== "undefined";
-      if (item[4]) {
-        content += "@supports (".concat(item[4], ") {");
-      }
-      if (item[2]) {
-        content += "@media ".concat(item[2], " {");
-      }
-      if (needLayer) {
-        content += "@layer".concat(item[5].length > 0 ? " ".concat(item[5]) : "", " {");
-      }
-      content += cssWithMappingToString(item);
-      if (needLayer) {
-        content += "}";
-      }
-      if (item[2]) {
-        content += "}";
-      }
-      if (item[4]) {
-        content += "}";
-      }
-      return content;
-    }).join("");
-  };
-
-  // import a list of modules into the list
-  list.i = function i(modules, media, dedupe, supports, layer) {
-    if (typeof modules === "string") {
-      modules = [[null, modules, undefined]];
-    }
-    var alreadyImportedModules = {};
-    if (dedupe) {
-      for (var k = 0; k < this.length; k++) {
-        var id = this[k][0];
-        if (id != null) {
-          alreadyImportedModules[id] = true;
-        }
-      }
-    }
-    for (var _k = 0; _k < modules.length; _k++) {
-      var item = [].concat(modules[_k]);
-      if (dedupe && alreadyImportedModules[item[0]]) {
-        continue;
-      }
-      if (typeof layer !== "undefined") {
-        if (typeof item[5] === "undefined") {
-          item[5] = layer;
-        } else {
-          item[1] = "@layer".concat(item[5].length > 0 ? " ".concat(item[5]) : "", " {").concat(item[1], "}");
-          item[5] = layer;
-        }
-      }
-      if (media) {
-        if (!item[2]) {
-          item[2] = media;
-        } else {
-          item[1] = "@media ".concat(item[2], " {").concat(item[1], "}");
-          item[2] = media;
-        }
-      }
-      if (supports) {
-        if (!item[4]) {
-          item[4] = "".concat(supports);
-        } else {
-          item[1] = "@supports (".concat(item[4], ") {").concat(item[1], "}");
-          item[4] = supports;
-        }
-      }
-      list.push(item);
-    }
-  };
-  return list;
-};
+/**
+ * Tests whether or not the arguments have approximately the same value, within an absolute
+ * or relative tolerance of glMatrix.EPSILON (an absolute tolerance is used for values less
+ * than or equal to 1.0, and a relative tolerance is used for larger values)
+ *
+ * @param {Number} a          The first number to test.
+ * @param {Number} b          The second number to test.
+ * @param {Number} tolerance  Absolute or relative tolerance (default glMatrix.EPSILON)
+ * @returns {Boolean} True if the numbers are approximately equal, false otherwise.
+ */
+function equals(a, b) {
+  var tolerance = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : EPSILON;
+  return Math.abs(a - b) <= tolerance * Math.max(1, Math.abs(a), Math.abs(b));
+}
 
 /***/ }),
 
-/***/ "./node_modules/css-loader/dist/runtime/sourceMaps.js":
-/*!************************************************************!*\
-  !*** ./node_modules/css-loader/dist/runtime/sourceMaps.js ***!
-  \************************************************************/
-/***/ ((module) => {
+/***/ "./node_modules/gl-matrix/esm/mat4.js":
+/*!********************************************!*\
+  !*** ./node_modules/gl-matrix/esm/mat4.js ***!
+  \********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   add: () => (/* binding */ add),
+/* harmony export */   adjoint: () => (/* binding */ adjoint),
+/* harmony export */   clone: () => (/* binding */ clone),
+/* harmony export */   copy: () => (/* binding */ copy),
+/* harmony export */   create: () => (/* binding */ create),
+/* harmony export */   decompose: () => (/* binding */ decompose),
+/* harmony export */   determinant: () => (/* binding */ determinant),
+/* harmony export */   equals: () => (/* binding */ equals),
+/* harmony export */   exactEquals: () => (/* binding */ exactEquals),
+/* harmony export */   frob: () => (/* binding */ frob),
+/* harmony export */   fromQuat: () => (/* binding */ fromQuat),
+/* harmony export */   fromQuat2: () => (/* binding */ fromQuat2),
+/* harmony export */   fromRotation: () => (/* binding */ fromRotation),
+/* harmony export */   fromRotationTranslation: () => (/* binding */ fromRotationTranslation),
+/* harmony export */   fromRotationTranslationScale: () => (/* binding */ fromRotationTranslationScale),
+/* harmony export */   fromRotationTranslationScaleOrigin: () => (/* binding */ fromRotationTranslationScaleOrigin),
+/* harmony export */   fromScaling: () => (/* binding */ fromScaling),
+/* harmony export */   fromTranslation: () => (/* binding */ fromTranslation),
+/* harmony export */   fromValues: () => (/* binding */ fromValues),
+/* harmony export */   fromXRotation: () => (/* binding */ fromXRotation),
+/* harmony export */   fromYRotation: () => (/* binding */ fromYRotation),
+/* harmony export */   fromZRotation: () => (/* binding */ fromZRotation),
+/* harmony export */   frustum: () => (/* binding */ frustum),
+/* harmony export */   getRotation: () => (/* binding */ getRotation),
+/* harmony export */   getScaling: () => (/* binding */ getScaling),
+/* harmony export */   getTranslation: () => (/* binding */ getTranslation),
+/* harmony export */   identity: () => (/* binding */ identity),
+/* harmony export */   invert: () => (/* binding */ invert),
+/* harmony export */   lookAt: () => (/* binding */ lookAt),
+/* harmony export */   mul: () => (/* binding */ mul),
+/* harmony export */   multiply: () => (/* binding */ multiply),
+/* harmony export */   multiplyScalar: () => (/* binding */ multiplyScalar),
+/* harmony export */   multiplyScalarAndAdd: () => (/* binding */ multiplyScalarAndAdd),
+/* harmony export */   ortho: () => (/* binding */ ortho),
+/* harmony export */   orthoNO: () => (/* binding */ orthoNO),
+/* harmony export */   orthoZO: () => (/* binding */ orthoZO),
+/* harmony export */   perspective: () => (/* binding */ perspective),
+/* harmony export */   perspectiveFromFieldOfView: () => (/* binding */ perspectiveFromFieldOfView),
+/* harmony export */   perspectiveNO: () => (/* binding */ perspectiveNO),
+/* harmony export */   perspectiveZO: () => (/* binding */ perspectiveZO),
+/* harmony export */   rotate: () => (/* binding */ rotate),
+/* harmony export */   rotateX: () => (/* binding */ rotateX),
+/* harmony export */   rotateY: () => (/* binding */ rotateY),
+/* harmony export */   rotateZ: () => (/* binding */ rotateZ),
+/* harmony export */   scale: () => (/* binding */ scale),
+/* harmony export */   set: () => (/* binding */ set),
+/* harmony export */   str: () => (/* binding */ str),
+/* harmony export */   sub: () => (/* binding */ sub),
+/* harmony export */   subtract: () => (/* binding */ subtract),
+/* harmony export */   targetTo: () => (/* binding */ targetTo),
+/* harmony export */   translate: () => (/* binding */ translate),
+/* harmony export */   transpose: () => (/* binding */ transpose)
+/* harmony export */ });
+/* harmony import */ var _common_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./common.js */ "./node_modules/gl-matrix/esm/common.js");
 
 
-module.exports = function (item) {
-  var content = item[1];
-  var cssMapping = item[3];
-  if (!cssMapping) {
-    return content;
+/**
+ * 4x4 Matrix<br>Format: column-major, when typed out it looks like row-major<br>The matrices are being post multiplied.
+ * @module mat4
+ */
+
+/**
+ * Creates a new identity mat4
+ *
+ * @returns {mat4} a new 4x4 matrix
+ */
+function create() {
+  var out = new _common_js__WEBPACK_IMPORTED_MODULE_0__.ARRAY_TYPE(16);
+  if (_common_js__WEBPACK_IMPORTED_MODULE_0__.ARRAY_TYPE != Float32Array) {
+    out[1] = 0;
+    out[2] = 0;
+    out[3] = 0;
+    out[4] = 0;
+    out[6] = 0;
+    out[7] = 0;
+    out[8] = 0;
+    out[9] = 0;
+    out[11] = 0;
+    out[12] = 0;
+    out[13] = 0;
+    out[14] = 0;
   }
-  if (typeof btoa === "function") {
-    var base64 = btoa(unescape(encodeURIComponent(JSON.stringify(cssMapping))));
-    var data = "sourceMappingURL=data:application/json;charset=utf-8;base64,".concat(base64);
-    var sourceMapping = "/*# ".concat(data, " */");
-    return [content].concat([sourceMapping]).join("\n");
+  out[0] = 1;
+  out[5] = 1;
+  out[10] = 1;
+  out[15] = 1;
+  return out;
+}
+
+/**
+ * Creates a new mat4 initialized with values from an existing matrix
+ *
+ * @param {ReadonlyMat4} a matrix to clone
+ * @returns {mat4} a new 4x4 matrix
+ */
+function clone(a) {
+  var out = new _common_js__WEBPACK_IMPORTED_MODULE_0__.ARRAY_TYPE(16);
+  out[0] = a[0];
+  out[1] = a[1];
+  out[2] = a[2];
+  out[3] = a[3];
+  out[4] = a[4];
+  out[5] = a[5];
+  out[6] = a[6];
+  out[7] = a[7];
+  out[8] = a[8];
+  out[9] = a[9];
+  out[10] = a[10];
+  out[11] = a[11];
+  out[12] = a[12];
+  out[13] = a[13];
+  out[14] = a[14];
+  out[15] = a[15];
+  return out;
+}
+
+/**
+ * Copy the values from one mat4 to another
+ *
+ * @param {mat4} out the receiving matrix
+ * @param {ReadonlyMat4} a the source matrix
+ * @returns {mat4} out
+ */
+function copy(out, a) {
+  out[0] = a[0];
+  out[1] = a[1];
+  out[2] = a[2];
+  out[3] = a[3];
+  out[4] = a[4];
+  out[5] = a[5];
+  out[6] = a[6];
+  out[7] = a[7];
+  out[8] = a[8];
+  out[9] = a[9];
+  out[10] = a[10];
+  out[11] = a[11];
+  out[12] = a[12];
+  out[13] = a[13];
+  out[14] = a[14];
+  out[15] = a[15];
+  return out;
+}
+
+/**
+ * Create a new mat4 with the given values
+ *
+ * @param {Number} m00 Component in column 0, row 0 position (index 0)
+ * @param {Number} m01 Component in column 0, row 1 position (index 1)
+ * @param {Number} m02 Component in column 0, row 2 position (index 2)
+ * @param {Number} m03 Component in column 0, row 3 position (index 3)
+ * @param {Number} m10 Component in column 1, row 0 position (index 4)
+ * @param {Number} m11 Component in column 1, row 1 position (index 5)
+ * @param {Number} m12 Component in column 1, row 2 position (index 6)
+ * @param {Number} m13 Component in column 1, row 3 position (index 7)
+ * @param {Number} m20 Component in column 2, row 0 position (index 8)
+ * @param {Number} m21 Component in column 2, row 1 position (index 9)
+ * @param {Number} m22 Component in column 2, row 2 position (index 10)
+ * @param {Number} m23 Component in column 2, row 3 position (index 11)
+ * @param {Number} m30 Component in column 3, row 0 position (index 12)
+ * @param {Number} m31 Component in column 3, row 1 position (index 13)
+ * @param {Number} m32 Component in column 3, row 2 position (index 14)
+ * @param {Number} m33 Component in column 3, row 3 position (index 15)
+ * @returns {mat4} A new mat4
+ */
+function fromValues(m00, m01, m02, m03, m10, m11, m12, m13, m20, m21, m22, m23, m30, m31, m32, m33) {
+  var out = new _common_js__WEBPACK_IMPORTED_MODULE_0__.ARRAY_TYPE(16);
+  out[0] = m00;
+  out[1] = m01;
+  out[2] = m02;
+  out[3] = m03;
+  out[4] = m10;
+  out[5] = m11;
+  out[6] = m12;
+  out[7] = m13;
+  out[8] = m20;
+  out[9] = m21;
+  out[10] = m22;
+  out[11] = m23;
+  out[12] = m30;
+  out[13] = m31;
+  out[14] = m32;
+  out[15] = m33;
+  return out;
+}
+
+/**
+ * Set the components of a mat4 to the given values
+ *
+ * @param {mat4} out the receiving matrix
+ * @param {Number} m00 Component in column 0, row 0 position (index 0)
+ * @param {Number} m01 Component in column 0, row 1 position (index 1)
+ * @param {Number} m02 Component in column 0, row 2 position (index 2)
+ * @param {Number} m03 Component in column 0, row 3 position (index 3)
+ * @param {Number} m10 Component in column 1, row 0 position (index 4)
+ * @param {Number} m11 Component in column 1, row 1 position (index 5)
+ * @param {Number} m12 Component in column 1, row 2 position (index 6)
+ * @param {Number} m13 Component in column 1, row 3 position (index 7)
+ * @param {Number} m20 Component in column 2, row 0 position (index 8)
+ * @param {Number} m21 Component in column 2, row 1 position (index 9)
+ * @param {Number} m22 Component in column 2, row 2 position (index 10)
+ * @param {Number} m23 Component in column 2, row 3 position (index 11)
+ * @param {Number} m30 Component in column 3, row 0 position (index 12)
+ * @param {Number} m31 Component in column 3, row 1 position (index 13)
+ * @param {Number} m32 Component in column 3, row 2 position (index 14)
+ * @param {Number} m33 Component in column 3, row 3 position (index 15)
+ * @returns {mat4} out
+ */
+function set(out, m00, m01, m02, m03, m10, m11, m12, m13, m20, m21, m22, m23, m30, m31, m32, m33) {
+  out[0] = m00;
+  out[1] = m01;
+  out[2] = m02;
+  out[3] = m03;
+  out[4] = m10;
+  out[5] = m11;
+  out[6] = m12;
+  out[7] = m13;
+  out[8] = m20;
+  out[9] = m21;
+  out[10] = m22;
+  out[11] = m23;
+  out[12] = m30;
+  out[13] = m31;
+  out[14] = m32;
+  out[15] = m33;
+  return out;
+}
+
+/**
+ * Set a mat4 to the identity matrix
+ *
+ * @param {mat4} out the receiving matrix
+ * @returns {mat4} out
+ */
+function identity(out) {
+  out[0] = 1;
+  out[1] = 0;
+  out[2] = 0;
+  out[3] = 0;
+  out[4] = 0;
+  out[5] = 1;
+  out[6] = 0;
+  out[7] = 0;
+  out[8] = 0;
+  out[9] = 0;
+  out[10] = 1;
+  out[11] = 0;
+  out[12] = 0;
+  out[13] = 0;
+  out[14] = 0;
+  out[15] = 1;
+  return out;
+}
+
+/**
+ * Transpose the values of a mat4
+ *
+ * @param {mat4} out the receiving matrix
+ * @param {ReadonlyMat4} a the source matrix
+ * @returns {mat4} out
+ */
+function transpose(out, a) {
+  // If we are transposing ourselves we can skip a few steps but have to cache some values
+  if (out === a) {
+    var a01 = a[1],
+      a02 = a[2],
+      a03 = a[3];
+    var a12 = a[6],
+      a13 = a[7];
+    var a23 = a[11];
+    out[1] = a[4];
+    out[2] = a[8];
+    out[3] = a[12];
+    out[4] = a01;
+    out[6] = a[9];
+    out[7] = a[13];
+    out[8] = a02;
+    out[9] = a12;
+    out[11] = a[14];
+    out[12] = a03;
+    out[13] = a13;
+    out[14] = a23;
+  } else {
+    out[0] = a[0];
+    out[1] = a[4];
+    out[2] = a[8];
+    out[3] = a[12];
+    out[4] = a[1];
+    out[5] = a[5];
+    out[6] = a[9];
+    out[7] = a[13];
+    out[8] = a[2];
+    out[9] = a[6];
+    out[10] = a[10];
+    out[11] = a[14];
+    out[12] = a[3];
+    out[13] = a[7];
+    out[14] = a[11];
+    out[15] = a[15];
   }
-  return [content].join("\n");
-};
+  return out;
+}
+
+/**
+ * Inverts a mat4
+ *
+ * @param {mat4} out the receiving matrix
+ * @param {ReadonlyMat4} a the source matrix
+ * @returns {mat4 | null} out, or null if source matrix is not invertible
+ */
+function invert(out, a) {
+  var a00 = a[0],
+    a01 = a[1],
+    a02 = a[2],
+    a03 = a[3];
+  var a10 = a[4],
+    a11 = a[5],
+    a12 = a[6],
+    a13 = a[7];
+  var a20 = a[8],
+    a21 = a[9],
+    a22 = a[10],
+    a23 = a[11];
+  var a30 = a[12],
+    a31 = a[13],
+    a32 = a[14],
+    a33 = a[15];
+  var b00 = a00 * a11 - a01 * a10;
+  var b01 = a00 * a12 - a02 * a10;
+  var b02 = a00 * a13 - a03 * a10;
+  var b03 = a01 * a12 - a02 * a11;
+  var b04 = a01 * a13 - a03 * a11;
+  var b05 = a02 * a13 - a03 * a12;
+  var b06 = a20 * a31 - a21 * a30;
+  var b07 = a20 * a32 - a22 * a30;
+  var b08 = a20 * a33 - a23 * a30;
+  var b09 = a21 * a32 - a22 * a31;
+  var b10 = a21 * a33 - a23 * a31;
+  var b11 = a22 * a33 - a23 * a32;
+
+  // Calculate the determinant
+  var det = b00 * b11 - b01 * b10 + b02 * b09 + b03 * b08 - b04 * b07 + b05 * b06;
+  if (!det) {
+    return null;
+  }
+  det = 1.0 / det;
+  out[0] = (a11 * b11 - a12 * b10 + a13 * b09) * det;
+  out[1] = (a02 * b10 - a01 * b11 - a03 * b09) * det;
+  out[2] = (a31 * b05 - a32 * b04 + a33 * b03) * det;
+  out[3] = (a22 * b04 - a21 * b05 - a23 * b03) * det;
+  out[4] = (a12 * b08 - a10 * b11 - a13 * b07) * det;
+  out[5] = (a00 * b11 - a02 * b08 + a03 * b07) * det;
+  out[6] = (a32 * b02 - a30 * b05 - a33 * b01) * det;
+  out[7] = (a20 * b05 - a22 * b02 + a23 * b01) * det;
+  out[8] = (a10 * b10 - a11 * b08 + a13 * b06) * det;
+  out[9] = (a01 * b08 - a00 * b10 - a03 * b06) * det;
+  out[10] = (a30 * b04 - a31 * b02 + a33 * b00) * det;
+  out[11] = (a21 * b02 - a20 * b04 - a23 * b00) * det;
+  out[12] = (a11 * b07 - a10 * b09 - a12 * b06) * det;
+  out[13] = (a00 * b09 - a01 * b07 + a02 * b06) * det;
+  out[14] = (a31 * b01 - a30 * b03 - a32 * b00) * det;
+  out[15] = (a20 * b03 - a21 * b01 + a22 * b00) * det;
+  return out;
+}
+
+/**
+ * Calculates the adjugate of a mat4
+ *
+ * @param {mat4} out the receiving matrix
+ * @param {ReadonlyMat4} a the source matrix
+ * @returns {mat4} out
+ */
+function adjoint(out, a) {
+  var a00 = a[0],
+    a01 = a[1],
+    a02 = a[2],
+    a03 = a[3];
+  var a10 = a[4],
+    a11 = a[5],
+    a12 = a[6],
+    a13 = a[7];
+  var a20 = a[8],
+    a21 = a[9],
+    a22 = a[10],
+    a23 = a[11];
+  var a30 = a[12],
+    a31 = a[13],
+    a32 = a[14],
+    a33 = a[15];
+  var b00 = a00 * a11 - a01 * a10;
+  var b01 = a00 * a12 - a02 * a10;
+  var b02 = a00 * a13 - a03 * a10;
+  var b03 = a01 * a12 - a02 * a11;
+  var b04 = a01 * a13 - a03 * a11;
+  var b05 = a02 * a13 - a03 * a12;
+  var b06 = a20 * a31 - a21 * a30;
+  var b07 = a20 * a32 - a22 * a30;
+  var b08 = a20 * a33 - a23 * a30;
+  var b09 = a21 * a32 - a22 * a31;
+  var b10 = a21 * a33 - a23 * a31;
+  var b11 = a22 * a33 - a23 * a32;
+  out[0] = a11 * b11 - a12 * b10 + a13 * b09;
+  out[1] = a02 * b10 - a01 * b11 - a03 * b09;
+  out[2] = a31 * b05 - a32 * b04 + a33 * b03;
+  out[3] = a22 * b04 - a21 * b05 - a23 * b03;
+  out[4] = a12 * b08 - a10 * b11 - a13 * b07;
+  out[5] = a00 * b11 - a02 * b08 + a03 * b07;
+  out[6] = a32 * b02 - a30 * b05 - a33 * b01;
+  out[7] = a20 * b05 - a22 * b02 + a23 * b01;
+  out[8] = a10 * b10 - a11 * b08 + a13 * b06;
+  out[9] = a01 * b08 - a00 * b10 - a03 * b06;
+  out[10] = a30 * b04 - a31 * b02 + a33 * b00;
+  out[11] = a21 * b02 - a20 * b04 - a23 * b00;
+  out[12] = a11 * b07 - a10 * b09 - a12 * b06;
+  out[13] = a00 * b09 - a01 * b07 + a02 * b06;
+  out[14] = a31 * b01 - a30 * b03 - a32 * b00;
+  out[15] = a20 * b03 - a21 * b01 + a22 * b00;
+  return out;
+}
+
+/**
+ * Calculates the determinant of a mat4
+ *
+ * @param {ReadonlyMat4} a the source matrix
+ * @returns {Number} determinant of a
+ */
+function determinant(a) {
+  var a00 = a[0],
+    a01 = a[1],
+    a02 = a[2],
+    a03 = a[3];
+  var a10 = a[4],
+    a11 = a[5],
+    a12 = a[6],
+    a13 = a[7];
+  var a20 = a[8],
+    a21 = a[9],
+    a22 = a[10],
+    a23 = a[11];
+  var a30 = a[12],
+    a31 = a[13],
+    a32 = a[14],
+    a33 = a[15];
+  var b0 = a00 * a11 - a01 * a10;
+  var b1 = a00 * a12 - a02 * a10;
+  var b2 = a01 * a12 - a02 * a11;
+  var b3 = a20 * a31 - a21 * a30;
+  var b4 = a20 * a32 - a22 * a30;
+  var b5 = a21 * a32 - a22 * a31;
+  var b6 = a00 * b5 - a01 * b4 + a02 * b3;
+  var b7 = a10 * b5 - a11 * b4 + a12 * b3;
+  var b8 = a20 * b2 - a21 * b1 + a22 * b0;
+  var b9 = a30 * b2 - a31 * b1 + a32 * b0;
+
+  // Calculate the determinant
+  return a13 * b6 - a03 * b7 + a33 * b8 - a23 * b9;
+}
+
+/**
+ * Multiplies two mat4s
+ *
+ * @param {mat4} out the receiving matrix
+ * @param {ReadonlyMat4} a the first operand
+ * @param {ReadonlyMat4} b the second operand
+ * @returns {mat4} out
+ */
+function multiply(out, a, b) {
+  var a00 = a[0],
+    a01 = a[1],
+    a02 = a[2],
+    a03 = a[3];
+  var a10 = a[4],
+    a11 = a[5],
+    a12 = a[6],
+    a13 = a[7];
+  var a20 = a[8],
+    a21 = a[9],
+    a22 = a[10],
+    a23 = a[11];
+  var a30 = a[12],
+    a31 = a[13],
+    a32 = a[14],
+    a33 = a[15];
+
+  // Cache only the current line of the second matrix
+  var b0 = b[0],
+    b1 = b[1],
+    b2 = b[2],
+    b3 = b[3];
+  out[0] = b0 * a00 + b1 * a10 + b2 * a20 + b3 * a30;
+  out[1] = b0 * a01 + b1 * a11 + b2 * a21 + b3 * a31;
+  out[2] = b0 * a02 + b1 * a12 + b2 * a22 + b3 * a32;
+  out[3] = b0 * a03 + b1 * a13 + b2 * a23 + b3 * a33;
+  b0 = b[4];
+  b1 = b[5];
+  b2 = b[6];
+  b3 = b[7];
+  out[4] = b0 * a00 + b1 * a10 + b2 * a20 + b3 * a30;
+  out[5] = b0 * a01 + b1 * a11 + b2 * a21 + b3 * a31;
+  out[6] = b0 * a02 + b1 * a12 + b2 * a22 + b3 * a32;
+  out[7] = b0 * a03 + b1 * a13 + b2 * a23 + b3 * a33;
+  b0 = b[8];
+  b1 = b[9];
+  b2 = b[10];
+  b3 = b[11];
+  out[8] = b0 * a00 + b1 * a10 + b2 * a20 + b3 * a30;
+  out[9] = b0 * a01 + b1 * a11 + b2 * a21 + b3 * a31;
+  out[10] = b0 * a02 + b1 * a12 + b2 * a22 + b3 * a32;
+  out[11] = b0 * a03 + b1 * a13 + b2 * a23 + b3 * a33;
+  b0 = b[12];
+  b1 = b[13];
+  b2 = b[14];
+  b3 = b[15];
+  out[12] = b0 * a00 + b1 * a10 + b2 * a20 + b3 * a30;
+  out[13] = b0 * a01 + b1 * a11 + b2 * a21 + b3 * a31;
+  out[14] = b0 * a02 + b1 * a12 + b2 * a22 + b3 * a32;
+  out[15] = b0 * a03 + b1 * a13 + b2 * a23 + b3 * a33;
+  return out;
+}
+
+/**
+ * Translate a mat4 by the given vector
+ *
+ * @param {mat4} out the receiving matrix
+ * @param {ReadonlyMat4} a the matrix to translate
+ * @param {ReadonlyVec3} v vector to translate by
+ * @returns {mat4} out
+ */
+function translate(out, a, v) {
+  var x = v[0],
+    y = v[1],
+    z = v[2];
+  var a00, a01, a02, a03;
+  var a10, a11, a12, a13;
+  var a20, a21, a22, a23;
+  if (a === out) {
+    out[12] = a[0] * x + a[4] * y + a[8] * z + a[12];
+    out[13] = a[1] * x + a[5] * y + a[9] * z + a[13];
+    out[14] = a[2] * x + a[6] * y + a[10] * z + a[14];
+    out[15] = a[3] * x + a[7] * y + a[11] * z + a[15];
+  } else {
+    a00 = a[0];
+    a01 = a[1];
+    a02 = a[2];
+    a03 = a[3];
+    a10 = a[4];
+    a11 = a[5];
+    a12 = a[6];
+    a13 = a[7];
+    a20 = a[8];
+    a21 = a[9];
+    a22 = a[10];
+    a23 = a[11];
+    out[0] = a00;
+    out[1] = a01;
+    out[2] = a02;
+    out[3] = a03;
+    out[4] = a10;
+    out[5] = a11;
+    out[6] = a12;
+    out[7] = a13;
+    out[8] = a20;
+    out[9] = a21;
+    out[10] = a22;
+    out[11] = a23;
+    out[12] = a00 * x + a10 * y + a20 * z + a[12];
+    out[13] = a01 * x + a11 * y + a21 * z + a[13];
+    out[14] = a02 * x + a12 * y + a22 * z + a[14];
+    out[15] = a03 * x + a13 * y + a23 * z + a[15];
+  }
+  return out;
+}
+
+/**
+ * Scales the mat4 by the dimensions in the given vec3 not using vectorization
+ *
+ * @param {mat4} out the receiving matrix
+ * @param {ReadonlyMat4} a the matrix to scale
+ * @param {ReadonlyVec3} v the vec3 to scale the matrix by
+ * @returns {mat4} out
+ **/
+function scale(out, a, v) {
+  var x = v[0],
+    y = v[1],
+    z = v[2];
+  out[0] = a[0] * x;
+  out[1] = a[1] * x;
+  out[2] = a[2] * x;
+  out[3] = a[3] * x;
+  out[4] = a[4] * y;
+  out[5] = a[5] * y;
+  out[6] = a[6] * y;
+  out[7] = a[7] * y;
+  out[8] = a[8] * z;
+  out[9] = a[9] * z;
+  out[10] = a[10] * z;
+  out[11] = a[11] * z;
+  out[12] = a[12];
+  out[13] = a[13];
+  out[14] = a[14];
+  out[15] = a[15];
+  return out;
+}
+
+/**
+ * Rotates a mat4 by the given angle around the given axis
+ *
+ * @param {mat4} out the receiving matrix
+ * @param {ReadonlyMat4} a the matrix to rotate
+ * @param {Number} rad the angle to rotate the matrix by
+ * @param {ReadonlyVec3} axis the axis to rotate around
+ * @returns {mat4} out
+ */
+function rotate(out, a, rad, axis) {
+  var x = axis[0],
+    y = axis[1],
+    z = axis[2];
+  var len = Math.sqrt(x * x + y * y + z * z);
+  var s, c, t;
+  var a00, a01, a02, a03;
+  var a10, a11, a12, a13;
+  var a20, a21, a22, a23;
+  var b00, b01, b02;
+  var b10, b11, b12;
+  var b20, b21, b22;
+  if (len < _common_js__WEBPACK_IMPORTED_MODULE_0__.EPSILON) {
+    return null;
+  }
+  len = 1 / len;
+  x *= len;
+  y *= len;
+  z *= len;
+  s = Math.sin(rad);
+  c = Math.cos(rad);
+  t = 1 - c;
+  a00 = a[0];
+  a01 = a[1];
+  a02 = a[2];
+  a03 = a[3];
+  a10 = a[4];
+  a11 = a[5];
+  a12 = a[6];
+  a13 = a[7];
+  a20 = a[8];
+  a21 = a[9];
+  a22 = a[10];
+  a23 = a[11];
+
+  // Construct the elements of the rotation matrix
+  b00 = x * x * t + c;
+  b01 = y * x * t + z * s;
+  b02 = z * x * t - y * s;
+  b10 = x * y * t - z * s;
+  b11 = y * y * t + c;
+  b12 = z * y * t + x * s;
+  b20 = x * z * t + y * s;
+  b21 = y * z * t - x * s;
+  b22 = z * z * t + c;
+
+  // Perform rotation-specific matrix multiplication
+  out[0] = a00 * b00 + a10 * b01 + a20 * b02;
+  out[1] = a01 * b00 + a11 * b01 + a21 * b02;
+  out[2] = a02 * b00 + a12 * b01 + a22 * b02;
+  out[3] = a03 * b00 + a13 * b01 + a23 * b02;
+  out[4] = a00 * b10 + a10 * b11 + a20 * b12;
+  out[5] = a01 * b10 + a11 * b11 + a21 * b12;
+  out[6] = a02 * b10 + a12 * b11 + a22 * b12;
+  out[7] = a03 * b10 + a13 * b11 + a23 * b12;
+  out[8] = a00 * b20 + a10 * b21 + a20 * b22;
+  out[9] = a01 * b20 + a11 * b21 + a21 * b22;
+  out[10] = a02 * b20 + a12 * b21 + a22 * b22;
+  out[11] = a03 * b20 + a13 * b21 + a23 * b22;
+  if (a !== out) {
+    // If the source and destination differ, copy the unchanged last row
+    out[12] = a[12];
+    out[13] = a[13];
+    out[14] = a[14];
+    out[15] = a[15];
+  }
+  return out;
+}
+
+/**
+ * Rotates a matrix by the given angle around the X axis
+ *
+ * @param {mat4} out the receiving matrix
+ * @param {ReadonlyMat4} a the matrix to rotate
+ * @param {Number} rad the angle to rotate the matrix by
+ * @returns {mat4} out
+ */
+function rotateX(out, a, rad) {
+  var s = Math.sin(rad);
+  var c = Math.cos(rad);
+  var a10 = a[4];
+  var a11 = a[5];
+  var a12 = a[6];
+  var a13 = a[7];
+  var a20 = a[8];
+  var a21 = a[9];
+  var a22 = a[10];
+  var a23 = a[11];
+  if (a !== out) {
+    // If the source and destination differ, copy the unchanged rows
+    out[0] = a[0];
+    out[1] = a[1];
+    out[2] = a[2];
+    out[3] = a[3];
+    out[12] = a[12];
+    out[13] = a[13];
+    out[14] = a[14];
+    out[15] = a[15];
+  }
+
+  // Perform axis-specific matrix multiplication
+  out[4] = a10 * c + a20 * s;
+  out[5] = a11 * c + a21 * s;
+  out[6] = a12 * c + a22 * s;
+  out[7] = a13 * c + a23 * s;
+  out[8] = a20 * c - a10 * s;
+  out[9] = a21 * c - a11 * s;
+  out[10] = a22 * c - a12 * s;
+  out[11] = a23 * c - a13 * s;
+  return out;
+}
+
+/**
+ * Rotates a matrix by the given angle around the Y axis
+ *
+ * @param {mat4} out the receiving matrix
+ * @param {ReadonlyMat4} a the matrix to rotate
+ * @param {Number} rad the angle to rotate the matrix by
+ * @returns {mat4} out
+ */
+function rotateY(out, a, rad) {
+  var s = Math.sin(rad);
+  var c = Math.cos(rad);
+  var a00 = a[0];
+  var a01 = a[1];
+  var a02 = a[2];
+  var a03 = a[3];
+  var a20 = a[8];
+  var a21 = a[9];
+  var a22 = a[10];
+  var a23 = a[11];
+  if (a !== out) {
+    // If the source and destination differ, copy the unchanged rows
+    out[4] = a[4];
+    out[5] = a[5];
+    out[6] = a[6];
+    out[7] = a[7];
+    out[12] = a[12];
+    out[13] = a[13];
+    out[14] = a[14];
+    out[15] = a[15];
+  }
+
+  // Perform axis-specific matrix multiplication
+  out[0] = a00 * c - a20 * s;
+  out[1] = a01 * c - a21 * s;
+  out[2] = a02 * c - a22 * s;
+  out[3] = a03 * c - a23 * s;
+  out[8] = a00 * s + a20 * c;
+  out[9] = a01 * s + a21 * c;
+  out[10] = a02 * s + a22 * c;
+  out[11] = a03 * s + a23 * c;
+  return out;
+}
+
+/**
+ * Rotates a matrix by the given angle around the Z axis
+ *
+ * @param {mat4} out the receiving matrix
+ * @param {ReadonlyMat4} a the matrix to rotate
+ * @param {Number} rad the angle to rotate the matrix by
+ * @returns {mat4} out
+ */
+function rotateZ(out, a, rad) {
+  var s = Math.sin(rad);
+  var c = Math.cos(rad);
+  var a00 = a[0];
+  var a01 = a[1];
+  var a02 = a[2];
+  var a03 = a[3];
+  var a10 = a[4];
+  var a11 = a[5];
+  var a12 = a[6];
+  var a13 = a[7];
+  if (a !== out) {
+    // If the source and destination differ, copy the unchanged last row
+    out[8] = a[8];
+    out[9] = a[9];
+    out[10] = a[10];
+    out[11] = a[11];
+    out[12] = a[12];
+    out[13] = a[13];
+    out[14] = a[14];
+    out[15] = a[15];
+  }
+
+  // Perform axis-specific matrix multiplication
+  out[0] = a00 * c + a10 * s;
+  out[1] = a01 * c + a11 * s;
+  out[2] = a02 * c + a12 * s;
+  out[3] = a03 * c + a13 * s;
+  out[4] = a10 * c - a00 * s;
+  out[5] = a11 * c - a01 * s;
+  out[6] = a12 * c - a02 * s;
+  out[7] = a13 * c - a03 * s;
+  return out;
+}
+
+/**
+ * Creates a matrix from a vector translation
+ * This is equivalent to (but much faster than):
+ *
+ *     mat4.identity(dest);
+ *     mat4.translate(dest, dest, vec);
+ *
+ * @param {mat4} out mat4 receiving operation result
+ * @param {ReadonlyVec3} v Translation vector
+ * @returns {mat4} out
+ */
+function fromTranslation(out, v) {
+  out[0] = 1;
+  out[1] = 0;
+  out[2] = 0;
+  out[3] = 0;
+  out[4] = 0;
+  out[5] = 1;
+  out[6] = 0;
+  out[7] = 0;
+  out[8] = 0;
+  out[9] = 0;
+  out[10] = 1;
+  out[11] = 0;
+  out[12] = v[0];
+  out[13] = v[1];
+  out[14] = v[2];
+  out[15] = 1;
+  return out;
+}
+
+/**
+ * Creates a matrix from a vector scaling
+ * This is equivalent to (but much faster than):
+ *
+ *     mat4.identity(dest);
+ *     mat4.scale(dest, dest, vec);
+ *
+ * @param {mat4} out mat4 receiving operation result
+ * @param {ReadonlyVec3} v Scaling vector
+ * @returns {mat4} out
+ */
+function fromScaling(out, v) {
+  out[0] = v[0];
+  out[1] = 0;
+  out[2] = 0;
+  out[3] = 0;
+  out[4] = 0;
+  out[5] = v[1];
+  out[6] = 0;
+  out[7] = 0;
+  out[8] = 0;
+  out[9] = 0;
+  out[10] = v[2];
+  out[11] = 0;
+  out[12] = 0;
+  out[13] = 0;
+  out[14] = 0;
+  out[15] = 1;
+  return out;
+}
+
+/**
+ * Creates a matrix from a given angle around a given axis
+ * This is equivalent to (but much faster than):
+ *
+ *     mat4.identity(dest);
+ *     mat4.rotate(dest, dest, rad, axis);
+ *
+ * @param {mat4} out mat4 receiving operation result
+ * @param {Number} rad the angle to rotate the matrix by
+ * @param {ReadonlyVec3} axis the axis to rotate around
+ * @returns {mat4} out
+ */
+function fromRotation(out, rad, axis) {
+  var x = axis[0],
+    y = axis[1],
+    z = axis[2];
+  var len = Math.sqrt(x * x + y * y + z * z);
+  var s, c, t;
+  if (len < _common_js__WEBPACK_IMPORTED_MODULE_0__.EPSILON) {
+    return null;
+  }
+  len = 1 / len;
+  x *= len;
+  y *= len;
+  z *= len;
+  s = Math.sin(rad);
+  c = Math.cos(rad);
+  t = 1 - c;
+
+  // Perform rotation-specific matrix multiplication
+  out[0] = x * x * t + c;
+  out[1] = y * x * t + z * s;
+  out[2] = z * x * t - y * s;
+  out[3] = 0;
+  out[4] = x * y * t - z * s;
+  out[5] = y * y * t + c;
+  out[6] = z * y * t + x * s;
+  out[7] = 0;
+  out[8] = x * z * t + y * s;
+  out[9] = y * z * t - x * s;
+  out[10] = z * z * t + c;
+  out[11] = 0;
+  out[12] = 0;
+  out[13] = 0;
+  out[14] = 0;
+  out[15] = 1;
+  return out;
+}
+
+/**
+ * Creates a matrix from the given angle around the X axis
+ * This is equivalent to (but much faster than):
+ *
+ *     mat4.identity(dest);
+ *     mat4.rotateX(dest, dest, rad);
+ *
+ * @param {mat4} out mat4 receiving operation result
+ * @param {Number} rad the angle to rotate the matrix by
+ * @returns {mat4} out
+ */
+function fromXRotation(out, rad) {
+  var s = Math.sin(rad);
+  var c = Math.cos(rad);
+
+  // Perform axis-specific matrix multiplication
+  out[0] = 1;
+  out[1] = 0;
+  out[2] = 0;
+  out[3] = 0;
+  out[4] = 0;
+  out[5] = c;
+  out[6] = s;
+  out[7] = 0;
+  out[8] = 0;
+  out[9] = -s;
+  out[10] = c;
+  out[11] = 0;
+  out[12] = 0;
+  out[13] = 0;
+  out[14] = 0;
+  out[15] = 1;
+  return out;
+}
+
+/**
+ * Creates a matrix from the given angle around the Y axis
+ * This is equivalent to (but much faster than):
+ *
+ *     mat4.identity(dest);
+ *     mat4.rotateY(dest, dest, rad);
+ *
+ * @param {mat4} out mat4 receiving operation result
+ * @param {Number} rad the angle to rotate the matrix by
+ * @returns {mat4} out
+ */
+function fromYRotation(out, rad) {
+  var s = Math.sin(rad);
+  var c = Math.cos(rad);
+
+  // Perform axis-specific matrix multiplication
+  out[0] = c;
+  out[1] = 0;
+  out[2] = -s;
+  out[3] = 0;
+  out[4] = 0;
+  out[5] = 1;
+  out[6] = 0;
+  out[7] = 0;
+  out[8] = s;
+  out[9] = 0;
+  out[10] = c;
+  out[11] = 0;
+  out[12] = 0;
+  out[13] = 0;
+  out[14] = 0;
+  out[15] = 1;
+  return out;
+}
+
+/**
+ * Creates a matrix from the given angle around the Z axis
+ * This is equivalent to (but much faster than):
+ *
+ *     mat4.identity(dest);
+ *     mat4.rotateZ(dest, dest, rad);
+ *
+ * @param {mat4} out mat4 receiving operation result
+ * @param {Number} rad the angle to rotate the matrix by
+ * @returns {mat4} out
+ */
+function fromZRotation(out, rad) {
+  var s = Math.sin(rad);
+  var c = Math.cos(rad);
+
+  // Perform axis-specific matrix multiplication
+  out[0] = c;
+  out[1] = s;
+  out[2] = 0;
+  out[3] = 0;
+  out[4] = -s;
+  out[5] = c;
+  out[6] = 0;
+  out[7] = 0;
+  out[8] = 0;
+  out[9] = 0;
+  out[10] = 1;
+  out[11] = 0;
+  out[12] = 0;
+  out[13] = 0;
+  out[14] = 0;
+  out[15] = 1;
+  return out;
+}
+
+/**
+ * Creates a matrix from a quaternion rotation and vector translation
+ * This is equivalent to (but much faster than):
+ *
+ *     mat4.identity(dest);
+ *     mat4.translate(dest, dest, vec);
+ *     let quatMat = mat4.create();
+ *     mat4.fromQuat(quatMat, quat);
+ *     mat4.multiply(dest, dest, quatMat);
+ *
+ * @param {mat4} out mat4 receiving operation result
+ * @param {quat} q Rotation quaternion
+ * @param {ReadonlyVec3} v Translation vector
+ * @returns {mat4} out
+ */
+function fromRotationTranslation(out, q, v) {
+  // Quaternion math
+  var x = q[0],
+    y = q[1],
+    z = q[2],
+    w = q[3];
+  var x2 = x + x;
+  var y2 = y + y;
+  var z2 = z + z;
+  var xx = x * x2;
+  var xy = x * y2;
+  var xz = x * z2;
+  var yy = y * y2;
+  var yz = y * z2;
+  var zz = z * z2;
+  var wx = w * x2;
+  var wy = w * y2;
+  var wz = w * z2;
+  out[0] = 1 - (yy + zz);
+  out[1] = xy + wz;
+  out[2] = xz - wy;
+  out[3] = 0;
+  out[4] = xy - wz;
+  out[5] = 1 - (xx + zz);
+  out[6] = yz + wx;
+  out[7] = 0;
+  out[8] = xz + wy;
+  out[9] = yz - wx;
+  out[10] = 1 - (xx + yy);
+  out[11] = 0;
+  out[12] = v[0];
+  out[13] = v[1];
+  out[14] = v[2];
+  out[15] = 1;
+  return out;
+}
+
+/**
+ * Creates a new mat4 from a dual quat.
+ *
+ * @param {mat4} out Matrix
+ * @param {ReadonlyQuat2} a Dual Quaternion
+ * @returns {mat4} mat4 receiving operation result
+ */
+function fromQuat2(out, a) {
+  var translation = new _common_js__WEBPACK_IMPORTED_MODULE_0__.ARRAY_TYPE(3);
+  var bx = -a[0],
+    by = -a[1],
+    bz = -a[2],
+    bw = a[3],
+    ax = a[4],
+    ay = a[5],
+    az = a[6],
+    aw = a[7];
+  var magnitude = bx * bx + by * by + bz * bz + bw * bw;
+  //Only scale if it makes sense
+  if (magnitude > 0) {
+    translation[0] = (ax * bw + aw * bx + ay * bz - az * by) * 2 / magnitude;
+    translation[1] = (ay * bw + aw * by + az * bx - ax * bz) * 2 / magnitude;
+    translation[2] = (az * bw + aw * bz + ax * by - ay * bx) * 2 / magnitude;
+  } else {
+    translation[0] = (ax * bw + aw * bx + ay * bz - az * by) * 2;
+    translation[1] = (ay * bw + aw * by + az * bx - ax * bz) * 2;
+    translation[2] = (az * bw + aw * bz + ax * by - ay * bx) * 2;
+  }
+  fromRotationTranslation(out, a, translation);
+  return out;
+}
+
+/**
+ * Returns the translation vector component of a transformation
+ *  matrix. If a matrix is built with fromRotationTranslation,
+ *  the returned vector will be the same as the translation vector
+ *  originally supplied.
+ * @param  {vec3} out Vector to receive translation component
+ * @param  {ReadonlyMat4} mat Matrix to be decomposed (input)
+ * @return {vec3} out
+ */
+function getTranslation(out, mat) {
+  out[0] = mat[12];
+  out[1] = mat[13];
+  out[2] = mat[14];
+  return out;
+}
+
+/**
+ * Returns the scaling factor component of a transformation
+ *  matrix. If a matrix is built with fromRotationTranslationScale
+ *  with a normalized Quaternion parameter, the returned vector will be
+ *  the same as the scaling vector
+ *  originally supplied.
+ * @param  {vec3} out Vector to receive scaling factor component
+ * @param  {ReadonlyMat4} mat Matrix to be decomposed (input)
+ * @return {vec3} out
+ */
+function getScaling(out, mat) {
+  var m11 = mat[0];
+  var m12 = mat[1];
+  var m13 = mat[2];
+  var m21 = mat[4];
+  var m22 = mat[5];
+  var m23 = mat[6];
+  var m31 = mat[8];
+  var m32 = mat[9];
+  var m33 = mat[10];
+  out[0] = Math.sqrt(m11 * m11 + m12 * m12 + m13 * m13);
+  out[1] = Math.sqrt(m21 * m21 + m22 * m22 + m23 * m23);
+  out[2] = Math.sqrt(m31 * m31 + m32 * m32 + m33 * m33);
+  return out;
+}
+
+/**
+ * Returns a quaternion representing the rotational component
+ *  of a transformation matrix. If a matrix is built with
+ *  fromRotationTranslation, the returned quaternion will be the
+ *  same as the quaternion originally supplied.
+ * @param {quat} out Quaternion to receive the rotation component
+ * @param {ReadonlyMat4} mat Matrix to be decomposed (input)
+ * @return {quat} out
+ */
+function getRotation(out, mat) {
+  var scaling = new _common_js__WEBPACK_IMPORTED_MODULE_0__.ARRAY_TYPE(3);
+  getScaling(scaling, mat);
+  var is1 = 1 / scaling[0];
+  var is2 = 1 / scaling[1];
+  var is3 = 1 / scaling[2];
+  var sm11 = mat[0] * is1;
+  var sm12 = mat[1] * is2;
+  var sm13 = mat[2] * is3;
+  var sm21 = mat[4] * is1;
+  var sm22 = mat[5] * is2;
+  var sm23 = mat[6] * is3;
+  var sm31 = mat[8] * is1;
+  var sm32 = mat[9] * is2;
+  var sm33 = mat[10] * is3;
+  var trace = sm11 + sm22 + sm33;
+  var S = 0;
+  if (trace > 0) {
+    S = Math.sqrt(trace + 1.0) * 2;
+    out[3] = 0.25 * S;
+    out[0] = (sm23 - sm32) / S;
+    out[1] = (sm31 - sm13) / S;
+    out[2] = (sm12 - sm21) / S;
+  } else if (sm11 > sm22 && sm11 > sm33) {
+    S = Math.sqrt(1.0 + sm11 - sm22 - sm33) * 2;
+    out[3] = (sm23 - sm32) / S;
+    out[0] = 0.25 * S;
+    out[1] = (sm12 + sm21) / S;
+    out[2] = (sm31 + sm13) / S;
+  } else if (sm22 > sm33) {
+    S = Math.sqrt(1.0 + sm22 - sm11 - sm33) * 2;
+    out[3] = (sm31 - sm13) / S;
+    out[0] = (sm12 + sm21) / S;
+    out[1] = 0.25 * S;
+    out[2] = (sm23 + sm32) / S;
+  } else {
+    S = Math.sqrt(1.0 + sm33 - sm11 - sm22) * 2;
+    out[3] = (sm12 - sm21) / S;
+    out[0] = (sm31 + sm13) / S;
+    out[1] = (sm23 + sm32) / S;
+    out[2] = 0.25 * S;
+  }
+  return out;
+}
+
+/**
+ * Decomposes a transformation matrix into its rotation, translation
+ * and scale components. Returns only the rotation component
+ * @param  {quat} out_r Quaternion to receive the rotation component
+ * @param  {vec3} out_t Vector to receive the translation vector
+ * @param  {vec3} out_s Vector to receive the scaling factor
+ * @param  {ReadonlyMat4} mat Matrix to be decomposed (input)
+ * @returns {quat} out_r
+ */
+function decompose(out_r, out_t, out_s, mat) {
+  out_t[0] = mat[12];
+  out_t[1] = mat[13];
+  out_t[2] = mat[14];
+  var m11 = mat[0];
+  var m12 = mat[1];
+  var m13 = mat[2];
+  var m21 = mat[4];
+  var m22 = mat[5];
+  var m23 = mat[6];
+  var m31 = mat[8];
+  var m32 = mat[9];
+  var m33 = mat[10];
+  out_s[0] = Math.sqrt(m11 * m11 + m12 * m12 + m13 * m13);
+  out_s[1] = Math.sqrt(m21 * m21 + m22 * m22 + m23 * m23);
+  out_s[2] = Math.sqrt(m31 * m31 + m32 * m32 + m33 * m33);
+  var is1 = 1 / out_s[0];
+  var is2 = 1 / out_s[1];
+  var is3 = 1 / out_s[2];
+  var sm11 = m11 * is1;
+  var sm12 = m12 * is2;
+  var sm13 = m13 * is3;
+  var sm21 = m21 * is1;
+  var sm22 = m22 * is2;
+  var sm23 = m23 * is3;
+  var sm31 = m31 * is1;
+  var sm32 = m32 * is2;
+  var sm33 = m33 * is3;
+  var trace = sm11 + sm22 + sm33;
+  var S = 0;
+  if (trace > 0) {
+    S = Math.sqrt(trace + 1.0) * 2;
+    out_r[3] = 0.25 * S;
+    out_r[0] = (sm23 - sm32) / S;
+    out_r[1] = (sm31 - sm13) / S;
+    out_r[2] = (sm12 - sm21) / S;
+  } else if (sm11 > sm22 && sm11 > sm33) {
+    S = Math.sqrt(1.0 + sm11 - sm22 - sm33) * 2;
+    out_r[3] = (sm23 - sm32) / S;
+    out_r[0] = 0.25 * S;
+    out_r[1] = (sm12 + sm21) / S;
+    out_r[2] = (sm31 + sm13) / S;
+  } else if (sm22 > sm33) {
+    S = Math.sqrt(1.0 + sm22 - sm11 - sm33) * 2;
+    out_r[3] = (sm31 - sm13) / S;
+    out_r[0] = (sm12 + sm21) / S;
+    out_r[1] = 0.25 * S;
+    out_r[2] = (sm23 + sm32) / S;
+  } else {
+    S = Math.sqrt(1.0 + sm33 - sm11 - sm22) * 2;
+    out_r[3] = (sm12 - sm21) / S;
+    out_r[0] = (sm31 + sm13) / S;
+    out_r[1] = (sm23 + sm32) / S;
+    out_r[2] = 0.25 * S;
+  }
+  return out_r;
+}
+
+/**
+ * Creates a matrix from a quaternion rotation, vector translation and vector scale
+ * This is equivalent to (but much faster than):
+ *
+ *     mat4.identity(dest);
+ *     mat4.translate(dest, dest, vec);
+ *     let quatMat = mat4.create();
+ *     mat4.fromQuat(quatMat, quat);
+ *     mat4.multiply(dest, dest, quatMat);
+ *     mat4.scale(dest, dest, scale)
+ *
+ * @param {mat4} out mat4 receiving operation result
+ * @param {quat} q Rotation quaternion
+ * @param {ReadonlyVec3} v Translation vector
+ * @param {ReadonlyVec3} s Scaling vector
+ * @returns {mat4} out
+ */
+function fromRotationTranslationScale(out, q, v, s) {
+  // Quaternion math
+  var x = q[0],
+    y = q[1],
+    z = q[2],
+    w = q[3];
+  var x2 = x + x;
+  var y2 = y + y;
+  var z2 = z + z;
+  var xx = x * x2;
+  var xy = x * y2;
+  var xz = x * z2;
+  var yy = y * y2;
+  var yz = y * z2;
+  var zz = z * z2;
+  var wx = w * x2;
+  var wy = w * y2;
+  var wz = w * z2;
+  var sx = s[0];
+  var sy = s[1];
+  var sz = s[2];
+  out[0] = (1 - (yy + zz)) * sx;
+  out[1] = (xy + wz) * sx;
+  out[2] = (xz - wy) * sx;
+  out[3] = 0;
+  out[4] = (xy - wz) * sy;
+  out[5] = (1 - (xx + zz)) * sy;
+  out[6] = (yz + wx) * sy;
+  out[7] = 0;
+  out[8] = (xz + wy) * sz;
+  out[9] = (yz - wx) * sz;
+  out[10] = (1 - (xx + yy)) * sz;
+  out[11] = 0;
+  out[12] = v[0];
+  out[13] = v[1];
+  out[14] = v[2];
+  out[15] = 1;
+  return out;
+}
+
+/**
+ * Creates a matrix from a quaternion rotation, vector translation and vector scale, rotating and scaling around the given origin
+ * This is equivalent to (but much faster than):
+ *
+ *     mat4.identity(dest);
+ *     mat4.translate(dest, dest, vec);
+ *     mat4.translate(dest, dest, origin);
+ *     let quatMat = mat4.create();
+ *     mat4.fromQuat(quatMat, quat);
+ *     mat4.multiply(dest, dest, quatMat);
+ *     mat4.scale(dest, dest, scale)
+ *     mat4.translate(dest, dest, negativeOrigin);
+ *
+ * @param {mat4} out mat4 receiving operation result
+ * @param {quat} q Rotation quaternion
+ * @param {ReadonlyVec3} v Translation vector
+ * @param {ReadonlyVec3} s Scaling vector
+ * @param {ReadonlyVec3} o The origin vector around which to scale and rotate
+ * @returns {mat4} out
+ */
+function fromRotationTranslationScaleOrigin(out, q, v, s, o) {
+  // Quaternion math
+  var x = q[0],
+    y = q[1],
+    z = q[2],
+    w = q[3];
+  var x2 = x + x;
+  var y2 = y + y;
+  var z2 = z + z;
+  var xx = x * x2;
+  var xy = x * y2;
+  var xz = x * z2;
+  var yy = y * y2;
+  var yz = y * z2;
+  var zz = z * z2;
+  var wx = w * x2;
+  var wy = w * y2;
+  var wz = w * z2;
+  var sx = s[0];
+  var sy = s[1];
+  var sz = s[2];
+  var ox = o[0];
+  var oy = o[1];
+  var oz = o[2];
+  var out0 = (1 - (yy + zz)) * sx;
+  var out1 = (xy + wz) * sx;
+  var out2 = (xz - wy) * sx;
+  var out4 = (xy - wz) * sy;
+  var out5 = (1 - (xx + zz)) * sy;
+  var out6 = (yz + wx) * sy;
+  var out8 = (xz + wy) * sz;
+  var out9 = (yz - wx) * sz;
+  var out10 = (1 - (xx + yy)) * sz;
+  out[0] = out0;
+  out[1] = out1;
+  out[2] = out2;
+  out[3] = 0;
+  out[4] = out4;
+  out[5] = out5;
+  out[6] = out6;
+  out[7] = 0;
+  out[8] = out8;
+  out[9] = out9;
+  out[10] = out10;
+  out[11] = 0;
+  out[12] = v[0] + ox - (out0 * ox + out4 * oy + out8 * oz);
+  out[13] = v[1] + oy - (out1 * ox + out5 * oy + out9 * oz);
+  out[14] = v[2] + oz - (out2 * ox + out6 * oy + out10 * oz);
+  out[15] = 1;
+  return out;
+}
+
+/**
+ * Calculates a 4x4 matrix from the given quaternion
+ *
+ * @param {mat4} out mat4 receiving operation result
+ * @param {ReadonlyQuat} q Quaternion to create matrix from
+ *
+ * @returns {mat4} out
+ */
+function fromQuat(out, q) {
+  var x = q[0],
+    y = q[1],
+    z = q[2],
+    w = q[3];
+  var x2 = x + x;
+  var y2 = y + y;
+  var z2 = z + z;
+  var xx = x * x2;
+  var yx = y * x2;
+  var yy = y * y2;
+  var zx = z * x2;
+  var zy = z * y2;
+  var zz = z * z2;
+  var wx = w * x2;
+  var wy = w * y2;
+  var wz = w * z2;
+  out[0] = 1 - yy - zz;
+  out[1] = yx + wz;
+  out[2] = zx - wy;
+  out[3] = 0;
+  out[4] = yx - wz;
+  out[5] = 1 - xx - zz;
+  out[6] = zy + wx;
+  out[7] = 0;
+  out[8] = zx + wy;
+  out[9] = zy - wx;
+  out[10] = 1 - xx - yy;
+  out[11] = 0;
+  out[12] = 0;
+  out[13] = 0;
+  out[14] = 0;
+  out[15] = 1;
+  return out;
+}
+
+/**
+ * Generates a frustum matrix with the given bounds
+ *
+ * @param {mat4} out mat4 frustum matrix will be written into
+ * @param {Number} left Left bound of the frustum
+ * @param {Number} right Right bound of the frustum
+ * @param {Number} bottom Bottom bound of the frustum
+ * @param {Number} top Top bound of the frustum
+ * @param {Number} near Near bound of the frustum
+ * @param {Number} far Far bound of the frustum
+ * @returns {mat4} out
+ */
+function frustum(out, left, right, bottom, top, near, far) {
+  var rl = 1 / (right - left);
+  var tb = 1 / (top - bottom);
+  var nf = 1 / (near - far);
+  out[0] = near * 2 * rl;
+  out[1] = 0;
+  out[2] = 0;
+  out[3] = 0;
+  out[4] = 0;
+  out[5] = near * 2 * tb;
+  out[6] = 0;
+  out[7] = 0;
+  out[8] = (right + left) * rl;
+  out[9] = (top + bottom) * tb;
+  out[10] = (far + near) * nf;
+  out[11] = -1;
+  out[12] = 0;
+  out[13] = 0;
+  out[14] = far * near * 2 * nf;
+  out[15] = 0;
+  return out;
+}
+
+/**
+ * Generates a perspective projection matrix with the given bounds.
+ * The near/far clip planes correspond to a normalized device coordinate Z range of [-1, 1],
+ * which matches WebGL/OpenGL's clip volume.
+ * Passing null/undefined/no value for far will generate infinite projection matrix.
+ *
+ * @param {mat4} out mat4 frustum matrix will be written into
+ * @param {number} fovy Vertical field of view in radians
+ * @param {number} aspect Aspect ratio. typically viewport width/height
+ * @param {number} near Near bound of the frustum
+ * @param {number} far Far bound of the frustum, can be null or Infinity
+ * @returns {mat4} out
+ */
+function perspectiveNO(out, fovy, aspect, near, far) {
+  var f = 1.0 / Math.tan(fovy / 2);
+  out[0] = f / aspect;
+  out[1] = 0;
+  out[2] = 0;
+  out[3] = 0;
+  out[4] = 0;
+  out[5] = f;
+  out[6] = 0;
+  out[7] = 0;
+  out[8] = 0;
+  out[9] = 0;
+  out[11] = -1;
+  out[12] = 0;
+  out[13] = 0;
+  out[15] = 0;
+  if (far != null && far !== Infinity) {
+    var nf = 1 / (near - far);
+    out[10] = (far + near) * nf;
+    out[14] = 2 * far * near * nf;
+  } else {
+    out[10] = -1;
+    out[14] = -2 * near;
+  }
+  return out;
+}
+
+/**
+ * Alias for {@link mat4.perspectiveNO}
+ * @function
+ */
+var perspective = perspectiveNO;
+
+/**
+ * Generates a perspective projection matrix suitable for WebGPU with the given bounds.
+ * The near/far clip planes correspond to a normalized device coordinate Z range of [0, 1],
+ * which matches WebGPU/Vulkan/DirectX/Metal's clip volume.
+ * Passing null/undefined/no value for far will generate infinite projection matrix.
+ *
+ * @param {mat4} out mat4 frustum matrix will be written into
+ * @param {number} fovy Vertical field of view in radians
+ * @param {number} aspect Aspect ratio. typically viewport width/height
+ * @param {number} near Near bound of the frustum
+ * @param {number} far Far bound of the frustum, can be null or Infinity
+ * @returns {mat4} out
+ */
+function perspectiveZO(out, fovy, aspect, near, far) {
+  var f = 1.0 / Math.tan(fovy / 2);
+  out[0] = f / aspect;
+  out[1] = 0;
+  out[2] = 0;
+  out[3] = 0;
+  out[4] = 0;
+  out[5] = f;
+  out[6] = 0;
+  out[7] = 0;
+  out[8] = 0;
+  out[9] = 0;
+  out[11] = -1;
+  out[12] = 0;
+  out[13] = 0;
+  out[15] = 0;
+  if (far != null && far !== Infinity) {
+    var nf = 1 / (near - far);
+    out[10] = far * nf;
+    out[14] = far * near * nf;
+  } else {
+    out[10] = -1;
+    out[14] = -near;
+  }
+  return out;
+}
+
+/**
+ * Generates a perspective projection matrix with the given field of view.
+ * This is primarily useful for generating projection matrices to be used
+ * with the still experiemental WebVR API.
+ *
+ * @param {mat4} out mat4 frustum matrix will be written into
+ * @param {Object} fov Object containing the following values: upDegrees, downDegrees, leftDegrees, rightDegrees
+ * @param {number} near Near bound of the frustum
+ * @param {number} far Far bound of the frustum
+ * @returns {mat4} out
+ */
+function perspectiveFromFieldOfView(out, fov, near, far) {
+  var upTan = Math.tan(fov.upDegrees * Math.PI / 180.0);
+  var downTan = Math.tan(fov.downDegrees * Math.PI / 180.0);
+  var leftTan = Math.tan(fov.leftDegrees * Math.PI / 180.0);
+  var rightTan = Math.tan(fov.rightDegrees * Math.PI / 180.0);
+  var xScale = 2.0 / (leftTan + rightTan);
+  var yScale = 2.0 / (upTan + downTan);
+  out[0] = xScale;
+  out[1] = 0.0;
+  out[2] = 0.0;
+  out[3] = 0.0;
+  out[4] = 0.0;
+  out[5] = yScale;
+  out[6] = 0.0;
+  out[7] = 0.0;
+  out[8] = -((leftTan - rightTan) * xScale * 0.5);
+  out[9] = (upTan - downTan) * yScale * 0.5;
+  out[10] = far / (near - far);
+  out[11] = -1.0;
+  out[12] = 0.0;
+  out[13] = 0.0;
+  out[14] = far * near / (near - far);
+  out[15] = 0.0;
+  return out;
+}
+
+/**
+ * Generates a orthogonal projection matrix with the given bounds.
+ * The near/far clip planes correspond to a normalized device coordinate Z range of [-1, 1],
+ * which matches WebGL/OpenGL's clip volume.
+ *
+ * @param {mat4} out mat4 frustum matrix will be written into
+ * @param {number} left Left bound of the frustum
+ * @param {number} right Right bound of the frustum
+ * @param {number} bottom Bottom bound of the frustum
+ * @param {number} top Top bound of the frustum
+ * @param {number} near Near bound of the frustum
+ * @param {number} far Far bound of the frustum
+ * @returns {mat4} out
+ */
+function orthoNO(out, left, right, bottom, top, near, far) {
+  var lr = 1 / (left - right);
+  var bt = 1 / (bottom - top);
+  var nf = 1 / (near - far);
+  out[0] = -2 * lr;
+  out[1] = 0;
+  out[2] = 0;
+  out[3] = 0;
+  out[4] = 0;
+  out[5] = -2 * bt;
+  out[6] = 0;
+  out[7] = 0;
+  out[8] = 0;
+  out[9] = 0;
+  out[10] = 2 * nf;
+  out[11] = 0;
+  out[12] = (left + right) * lr;
+  out[13] = (top + bottom) * bt;
+  out[14] = (far + near) * nf;
+  out[15] = 1;
+  return out;
+}
+
+/**
+ * Alias for {@link mat4.orthoNO}
+ * @function
+ */
+var ortho = orthoNO;
+
+/**
+ * Generates a orthogonal projection matrix with the given bounds.
+ * The near/far clip planes correspond to a normalized device coordinate Z range of [0, 1],
+ * which matches WebGPU/Vulkan/DirectX/Metal's clip volume.
+ *
+ * @param {mat4} out mat4 frustum matrix will be written into
+ * @param {number} left Left bound of the frustum
+ * @param {number} right Right bound of the frustum
+ * @param {number} bottom Bottom bound of the frustum
+ * @param {number} top Top bound of the frustum
+ * @param {number} near Near bound of the frustum
+ * @param {number} far Far bound of the frustum
+ * @returns {mat4} out
+ */
+function orthoZO(out, left, right, bottom, top, near, far) {
+  var lr = 1 / (left - right);
+  var bt = 1 / (bottom - top);
+  var nf = 1 / (near - far);
+  out[0] = -2 * lr;
+  out[1] = 0;
+  out[2] = 0;
+  out[3] = 0;
+  out[4] = 0;
+  out[5] = -2 * bt;
+  out[6] = 0;
+  out[7] = 0;
+  out[8] = 0;
+  out[9] = 0;
+  out[10] = nf;
+  out[11] = 0;
+  out[12] = (left + right) * lr;
+  out[13] = (top + bottom) * bt;
+  out[14] = near * nf;
+  out[15] = 1;
+  return out;
+}
+
+/**
+ * Generates a look-at matrix with the given eye position, focal point, and up axis.
+ * If you want a matrix that actually makes an object look at another object, you should use targetTo instead.
+ *
+ * @param {mat4} out mat4 frustum matrix will be written into
+ * @param {ReadonlyVec3} eye Position of the viewer
+ * @param {ReadonlyVec3} center Point the viewer is looking at
+ * @param {ReadonlyVec3} up vec3 pointing up
+ * @returns {mat4} out
+ */
+function lookAt(out, eye, center, up) {
+  var x0, x1, x2, y0, y1, y2, z0, z1, z2, len;
+  var eyex = eye[0];
+  var eyey = eye[1];
+  var eyez = eye[2];
+  var upx = up[0];
+  var upy = up[1];
+  var upz = up[2];
+  var centerx = center[0];
+  var centery = center[1];
+  var centerz = center[2];
+  if (Math.abs(eyex - centerx) < _common_js__WEBPACK_IMPORTED_MODULE_0__.EPSILON && Math.abs(eyey - centery) < _common_js__WEBPACK_IMPORTED_MODULE_0__.EPSILON && Math.abs(eyez - centerz) < _common_js__WEBPACK_IMPORTED_MODULE_0__.EPSILON) {
+    return identity(out);
+  }
+  z0 = eyex - centerx;
+  z1 = eyey - centery;
+  z2 = eyez - centerz;
+  len = 1 / Math.sqrt(z0 * z0 + z1 * z1 + z2 * z2);
+  z0 *= len;
+  z1 *= len;
+  z2 *= len;
+  x0 = upy * z2 - upz * z1;
+  x1 = upz * z0 - upx * z2;
+  x2 = upx * z1 - upy * z0;
+  len = Math.sqrt(x0 * x0 + x1 * x1 + x2 * x2);
+  if (!len) {
+    x0 = 0;
+    x1 = 0;
+    x2 = 0;
+  } else {
+    len = 1 / len;
+    x0 *= len;
+    x1 *= len;
+    x2 *= len;
+  }
+  y0 = z1 * x2 - z2 * x1;
+  y1 = z2 * x0 - z0 * x2;
+  y2 = z0 * x1 - z1 * x0;
+  len = Math.sqrt(y0 * y0 + y1 * y1 + y2 * y2);
+  if (!len) {
+    y0 = 0;
+    y1 = 0;
+    y2 = 0;
+  } else {
+    len = 1 / len;
+    y0 *= len;
+    y1 *= len;
+    y2 *= len;
+  }
+  out[0] = x0;
+  out[1] = y0;
+  out[2] = z0;
+  out[3] = 0;
+  out[4] = x1;
+  out[5] = y1;
+  out[6] = z1;
+  out[7] = 0;
+  out[8] = x2;
+  out[9] = y2;
+  out[10] = z2;
+  out[11] = 0;
+  out[12] = -(x0 * eyex + x1 * eyey + x2 * eyez);
+  out[13] = -(y0 * eyex + y1 * eyey + y2 * eyez);
+  out[14] = -(z0 * eyex + z1 * eyey + z2 * eyez);
+  out[15] = 1;
+  return out;
+}
+
+/**
+ * Generates a matrix that makes something look at something else.
+ *
+ * @param {mat4} out mat4 frustum matrix will be written into
+ * @param {ReadonlyVec3} eye Position of the viewer
+ * @param {ReadonlyVec3} target Point the viewer is looking at
+ * @param {ReadonlyVec3} up vec3 pointing up
+ * @returns {mat4} out
+ */
+function targetTo(out, eye, target, up) {
+  var eyex = eye[0],
+    eyey = eye[1],
+    eyez = eye[2],
+    upx = up[0],
+    upy = up[1],
+    upz = up[2];
+  var z0 = eyex - target[0],
+    z1 = eyey - target[1],
+    z2 = eyez - target[2];
+  var len = z0 * z0 + z1 * z1 + z2 * z2;
+  if (len > 0) {
+    len = 1 / Math.sqrt(len);
+    z0 *= len;
+    z1 *= len;
+    z2 *= len;
+  }
+  var x0 = upy * z2 - upz * z1,
+    x1 = upz * z0 - upx * z2,
+    x2 = upx * z1 - upy * z0;
+  len = x0 * x0 + x1 * x1 + x2 * x2;
+  if (len > 0) {
+    len = 1 / Math.sqrt(len);
+    x0 *= len;
+    x1 *= len;
+    x2 *= len;
+  }
+  out[0] = x0;
+  out[1] = x1;
+  out[2] = x2;
+  out[3] = 0;
+  out[4] = z1 * x2 - z2 * x1;
+  out[5] = z2 * x0 - z0 * x2;
+  out[6] = z0 * x1 - z1 * x0;
+  out[7] = 0;
+  out[8] = z0;
+  out[9] = z1;
+  out[10] = z2;
+  out[11] = 0;
+  out[12] = eyex;
+  out[13] = eyey;
+  out[14] = eyez;
+  out[15] = 1;
+  return out;
+}
+
+/**
+ * Returns a string representation of a mat4
+ *
+ * @param {ReadonlyMat4} a matrix to represent as a string
+ * @returns {String} string representation of the matrix
+ */
+function str(a) {
+  return "mat4(" + a[0] + ", " + a[1] + ", " + a[2] + ", " + a[3] + ", " + a[4] + ", " + a[5] + ", " + a[6] + ", " + a[7] + ", " + a[8] + ", " + a[9] + ", " + a[10] + ", " + a[11] + ", " + a[12] + ", " + a[13] + ", " + a[14] + ", " + a[15] + ")";
+}
+
+/**
+ * Returns Frobenius norm of a mat4
+ *
+ * @param {ReadonlyMat4} a the matrix to calculate Frobenius norm of
+ * @returns {Number} Frobenius norm
+ */
+function frob(a) {
+  return Math.sqrt(a[0] * a[0] + a[1] * a[1] + a[2] * a[2] + a[3] * a[3] + a[4] * a[4] + a[5] * a[5] + a[6] * a[6] + a[7] * a[7] + a[8] * a[8] + a[9] * a[9] + a[10] * a[10] + a[11] * a[11] + a[12] * a[12] + a[13] * a[13] + a[14] * a[14] + a[15] * a[15]);
+}
+
+/**
+ * Adds two mat4's
+ *
+ * @param {mat4} out the receiving matrix
+ * @param {ReadonlyMat4} a the first operand
+ * @param {ReadonlyMat4} b the second operand
+ * @returns {mat4} out
+ */
+function add(out, a, b) {
+  out[0] = a[0] + b[0];
+  out[1] = a[1] + b[1];
+  out[2] = a[2] + b[2];
+  out[3] = a[3] + b[3];
+  out[4] = a[4] + b[4];
+  out[5] = a[5] + b[5];
+  out[6] = a[6] + b[6];
+  out[7] = a[7] + b[7];
+  out[8] = a[8] + b[8];
+  out[9] = a[9] + b[9];
+  out[10] = a[10] + b[10];
+  out[11] = a[11] + b[11];
+  out[12] = a[12] + b[12];
+  out[13] = a[13] + b[13];
+  out[14] = a[14] + b[14];
+  out[15] = a[15] + b[15];
+  return out;
+}
+
+/**
+ * Subtracts matrix b from matrix a
+ *
+ * @param {mat4} out the receiving matrix
+ * @param {ReadonlyMat4} a the first operand
+ * @param {ReadonlyMat4} b the second operand
+ * @returns {mat4} out
+ */
+function subtract(out, a, b) {
+  out[0] = a[0] - b[0];
+  out[1] = a[1] - b[1];
+  out[2] = a[2] - b[2];
+  out[3] = a[3] - b[3];
+  out[4] = a[4] - b[4];
+  out[5] = a[5] - b[5];
+  out[6] = a[6] - b[6];
+  out[7] = a[7] - b[7];
+  out[8] = a[8] - b[8];
+  out[9] = a[9] - b[9];
+  out[10] = a[10] - b[10];
+  out[11] = a[11] - b[11];
+  out[12] = a[12] - b[12];
+  out[13] = a[13] - b[13];
+  out[14] = a[14] - b[14];
+  out[15] = a[15] - b[15];
+  return out;
+}
+
+/**
+ * Multiply each element of the matrix by a scalar.
+ *
+ * @param {mat4} out the receiving matrix
+ * @param {ReadonlyMat4} a the matrix to scale
+ * @param {Number} b amount to scale the matrix's elements by
+ * @returns {mat4} out
+ */
+function multiplyScalar(out, a, b) {
+  out[0] = a[0] * b;
+  out[1] = a[1] * b;
+  out[2] = a[2] * b;
+  out[3] = a[3] * b;
+  out[4] = a[4] * b;
+  out[5] = a[5] * b;
+  out[6] = a[6] * b;
+  out[7] = a[7] * b;
+  out[8] = a[8] * b;
+  out[9] = a[9] * b;
+  out[10] = a[10] * b;
+  out[11] = a[11] * b;
+  out[12] = a[12] * b;
+  out[13] = a[13] * b;
+  out[14] = a[14] * b;
+  out[15] = a[15] * b;
+  return out;
+}
+
+/**
+ * Adds two mat4's after multiplying each element of the second operand by a scalar value.
+ *
+ * @param {mat4} out the receiving vector
+ * @param {ReadonlyMat4} a the first operand
+ * @param {ReadonlyMat4} b the second operand
+ * @param {Number} scale the amount to scale b's elements by before adding
+ * @returns {mat4} out
+ */
+function multiplyScalarAndAdd(out, a, b, scale) {
+  out[0] = a[0] + b[0] * scale;
+  out[1] = a[1] + b[1] * scale;
+  out[2] = a[2] + b[2] * scale;
+  out[3] = a[3] + b[3] * scale;
+  out[4] = a[4] + b[4] * scale;
+  out[5] = a[5] + b[5] * scale;
+  out[6] = a[6] + b[6] * scale;
+  out[7] = a[7] + b[7] * scale;
+  out[8] = a[8] + b[8] * scale;
+  out[9] = a[9] + b[9] * scale;
+  out[10] = a[10] + b[10] * scale;
+  out[11] = a[11] + b[11] * scale;
+  out[12] = a[12] + b[12] * scale;
+  out[13] = a[13] + b[13] * scale;
+  out[14] = a[14] + b[14] * scale;
+  out[15] = a[15] + b[15] * scale;
+  return out;
+}
+
+/**
+ * Returns whether or not the matrices have exactly the same elements in the same position (when compared with ===)
+ *
+ * @param {ReadonlyMat4} a The first matrix.
+ * @param {ReadonlyMat4} b The second matrix.
+ * @returns {Boolean} True if the matrices are equal, false otherwise.
+ */
+function exactEquals(a, b) {
+  return a[0] === b[0] && a[1] === b[1] && a[2] === b[2] && a[3] === b[3] && a[4] === b[4] && a[5] === b[5] && a[6] === b[6] && a[7] === b[7] && a[8] === b[8] && a[9] === b[9] && a[10] === b[10] && a[11] === b[11] && a[12] === b[12] && a[13] === b[13] && a[14] === b[14] && a[15] === b[15];
+}
+
+/**
+ * Returns whether or not the matrices have approximately the same elements in the same position.
+ *
+ * @param {ReadonlyMat4} a The first matrix.
+ * @param {ReadonlyMat4} b The second matrix.
+ * @returns {Boolean} True if the matrices are equal, false otherwise.
+ */
+function equals(a, b) {
+  var a0 = a[0],
+    a1 = a[1],
+    a2 = a[2],
+    a3 = a[3];
+  var a4 = a[4],
+    a5 = a[5],
+    a6 = a[6],
+    a7 = a[7];
+  var a8 = a[8],
+    a9 = a[9],
+    a10 = a[10],
+    a11 = a[11];
+  var a12 = a[12],
+    a13 = a[13],
+    a14 = a[14],
+    a15 = a[15];
+  var b0 = b[0],
+    b1 = b[1],
+    b2 = b[2],
+    b3 = b[3];
+  var b4 = b[4],
+    b5 = b[5],
+    b6 = b[6],
+    b7 = b[7];
+  var b8 = b[8],
+    b9 = b[9],
+    b10 = b[10],
+    b11 = b[11];
+  var b12 = b[12],
+    b13 = b[13],
+    b14 = b[14],
+    b15 = b[15];
+  return Math.abs(a0 - b0) <= _common_js__WEBPACK_IMPORTED_MODULE_0__.EPSILON * Math.max(1.0, Math.abs(a0), Math.abs(b0)) && Math.abs(a1 - b1) <= _common_js__WEBPACK_IMPORTED_MODULE_0__.EPSILON * Math.max(1.0, Math.abs(a1), Math.abs(b1)) && Math.abs(a2 - b2) <= _common_js__WEBPACK_IMPORTED_MODULE_0__.EPSILON * Math.max(1.0, Math.abs(a2), Math.abs(b2)) && Math.abs(a3 - b3) <= _common_js__WEBPACK_IMPORTED_MODULE_0__.EPSILON * Math.max(1.0, Math.abs(a3), Math.abs(b3)) && Math.abs(a4 - b4) <= _common_js__WEBPACK_IMPORTED_MODULE_0__.EPSILON * Math.max(1.0, Math.abs(a4), Math.abs(b4)) && Math.abs(a5 - b5) <= _common_js__WEBPACK_IMPORTED_MODULE_0__.EPSILON * Math.max(1.0, Math.abs(a5), Math.abs(b5)) && Math.abs(a6 - b6) <= _common_js__WEBPACK_IMPORTED_MODULE_0__.EPSILON * Math.max(1.0, Math.abs(a6), Math.abs(b6)) && Math.abs(a7 - b7) <= _common_js__WEBPACK_IMPORTED_MODULE_0__.EPSILON * Math.max(1.0, Math.abs(a7), Math.abs(b7)) && Math.abs(a8 - b8) <= _common_js__WEBPACK_IMPORTED_MODULE_0__.EPSILON * Math.max(1.0, Math.abs(a8), Math.abs(b8)) && Math.abs(a9 - b9) <= _common_js__WEBPACK_IMPORTED_MODULE_0__.EPSILON * Math.max(1.0, Math.abs(a9), Math.abs(b9)) && Math.abs(a10 - b10) <= _common_js__WEBPACK_IMPORTED_MODULE_0__.EPSILON * Math.max(1.0, Math.abs(a10), Math.abs(b10)) && Math.abs(a11 - b11) <= _common_js__WEBPACK_IMPORTED_MODULE_0__.EPSILON * Math.max(1.0, Math.abs(a11), Math.abs(b11)) && Math.abs(a12 - b12) <= _common_js__WEBPACK_IMPORTED_MODULE_0__.EPSILON * Math.max(1.0, Math.abs(a12), Math.abs(b12)) && Math.abs(a13 - b13) <= _common_js__WEBPACK_IMPORTED_MODULE_0__.EPSILON * Math.max(1.0, Math.abs(a13), Math.abs(b13)) && Math.abs(a14 - b14) <= _common_js__WEBPACK_IMPORTED_MODULE_0__.EPSILON * Math.max(1.0, Math.abs(a14), Math.abs(b14)) && Math.abs(a15 - b15) <= _common_js__WEBPACK_IMPORTED_MODULE_0__.EPSILON * Math.max(1.0, Math.abs(a15), Math.abs(b15));
+}
+
+/**
+ * Alias for {@link mat4.multiply}
+ * @function
+ */
+var mul = multiply;
+
+/**
+ * Alias for {@link mat4.subtract}
+ * @function
+ */
+var sub = subtract;
 
 /***/ }),
 
@@ -2374,2095 +4337,1354 @@ var Module=typeof createLazPerf!="undefined"?createLazPerf:{};var readyPromiseRe
 })();
 if (true)
   module.exports = createLazPerf;
-else {}
+else // removed by dead control flow
+{}
 
 
 /***/ }),
 
-/***/ "./src/styles/main.css":
-/*!*****************************!*\
-  !*** ./src/styles/main.css ***!
-  \*****************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+/***/ "./node_modules/lru-cache/dist/mjs/index.js":
+/*!**************************************************!*\
+  !*** ./node_modules/lru-cache/dist/mjs/index.js ***!
+  \**************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   LRUCache: () => (/* binding */ LRUCache),
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! !../../node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js */ "./node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js");
-/* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _node_modules_style_loader_dist_runtime_styleDomAPI_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !../../node_modules/style-loader/dist/runtime/styleDomAPI.js */ "./node_modules/style-loader/dist/runtime/styleDomAPI.js");
-/* harmony import */ var _node_modules_style_loader_dist_runtime_styleDomAPI_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_styleDomAPI_js__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _node_modules_style_loader_dist_runtime_insertBySelector_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! !../../node_modules/style-loader/dist/runtime/insertBySelector.js */ "./node_modules/style-loader/dist/runtime/insertBySelector.js");
-/* harmony import */ var _node_modules_style_loader_dist_runtime_insertBySelector_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_insertBySelector_js__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _node_modules_style_loader_dist_runtime_setAttributesWithoutAttributes_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! !../../node_modules/style-loader/dist/runtime/setAttributesWithoutAttributes.js */ "./node_modules/style-loader/dist/runtime/setAttributesWithoutAttributes.js");
-/* harmony import */ var _node_modules_style_loader_dist_runtime_setAttributesWithoutAttributes_js__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_setAttributesWithoutAttributes_js__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _node_modules_style_loader_dist_runtime_insertStyleElement_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! !../../node_modules/style-loader/dist/runtime/insertStyleElement.js */ "./node_modules/style-loader/dist/runtime/insertStyleElement.js");
-/* harmony import */ var _node_modules_style_loader_dist_runtime_insertStyleElement_js__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_insertStyleElement_js__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var _node_modules_style_loader_dist_runtime_styleTagTransform_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! !../../node_modules/style-loader/dist/runtime/styleTagTransform.js */ "./node_modules/style-loader/dist/runtime/styleTagTransform.js");
-/* harmony import */ var _node_modules_style_loader_dist_runtime_styleTagTransform_js__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_styleTagTransform_js__WEBPACK_IMPORTED_MODULE_5__);
-/* harmony import */ var _node_modules_css_loader_dist_cjs_js_main_css__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! !!../../node_modules/css-loader/dist/cjs.js!./main.css */ "./node_modules/css-loader/dist/cjs.js!./src/styles/main.css");
-
-      
-      
-      
-      
-      
-      
-      
-      
-      
-
-var options = {};
-
-options.styleTagTransform = (_node_modules_style_loader_dist_runtime_styleTagTransform_js__WEBPACK_IMPORTED_MODULE_5___default());
-options.setAttributes = (_node_modules_style_loader_dist_runtime_setAttributesWithoutAttributes_js__WEBPACK_IMPORTED_MODULE_3___default());
-
-      options.insert = _node_modules_style_loader_dist_runtime_insertBySelector_js__WEBPACK_IMPORTED_MODULE_2___default().bind(null, "head");
-    
-options.domAPI = (_node_modules_style_loader_dist_runtime_styleDomAPI_js__WEBPACK_IMPORTED_MODULE_1___default());
-options.insertStyleElement = (_node_modules_style_loader_dist_runtime_insertStyleElement_js__WEBPACK_IMPORTED_MODULE_4___default());
-
-var update = _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default()(_node_modules_css_loader_dist_cjs_js_main_css__WEBPACK_IMPORTED_MODULE_6__["default"], options);
-
-
-
-
-       /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_css_loader_dist_cjs_js_main_css__WEBPACK_IMPORTED_MODULE_6__["default"] && _node_modules_css_loader_dist_cjs_js_main_css__WEBPACK_IMPORTED_MODULE_6__["default"].locals ? _node_modules_css_loader_dist_cjs_js_main_css__WEBPACK_IMPORTED_MODULE_6__["default"].locals : undefined);
-
-
-/***/ }),
-
-/***/ "./node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js":
-/*!****************************************************************************!*\
-  !*** ./node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js ***!
-  \****************************************************************************/
-/***/ ((module) => {
-
-"use strict";
-
-
-var stylesInDOM = [];
-
-function getIndexByIdentifier(identifier) {
-  var result = -1;
-
-  for (var i = 0; i < stylesInDOM.length; i++) {
-    if (stylesInDOM[i].identifier === identifier) {
-      result = i;
-      break;
-    }
-  }
-
-  return result;
-}
-
-function modulesToDom(list, options) {
-  var idCountMap = {};
-  var identifiers = [];
-
-  for (var i = 0; i < list.length; i++) {
-    var item = list[i];
-    var id = options.base ? item[0] + options.base : item[0];
-    var count = idCountMap[id] || 0;
-    var identifier = "".concat(id, " ").concat(count);
-    idCountMap[id] = count + 1;
-    var indexByIdentifier = getIndexByIdentifier(identifier);
-    var obj = {
-      css: item[1],
-      media: item[2],
-      sourceMap: item[3],
-      supports: item[4],
-      layer: item[5]
-    };
-
-    if (indexByIdentifier !== -1) {
-      stylesInDOM[indexByIdentifier].references++;
-      stylesInDOM[indexByIdentifier].updater(obj);
-    } else {
-      var updater = addElementStyle(obj, options);
-      options.byIndex = i;
-      stylesInDOM.splice(i, 0, {
-        identifier: identifier,
-        updater: updater,
-        references: 1
-      });
-    }
-
-    identifiers.push(identifier);
-  }
-
-  return identifiers;
-}
-
-function addElementStyle(obj, options) {
-  var api = options.domAPI(options);
-  api.update(obj);
-
-  var updater = function updater(newObj) {
-    if (newObj) {
-      if (newObj.css === obj.css && newObj.media === obj.media && newObj.sourceMap === obj.sourceMap && newObj.supports === obj.supports && newObj.layer === obj.layer) {
-        return;
-      }
-
-      api.update(obj = newObj);
-    } else {
-      api.remove();
-    }
-  };
-
-  return updater;
-}
-
-module.exports = function (list, options) {
-  options = options || {};
-  list = list || [];
-  var lastIdentifiers = modulesToDom(list, options);
-  return function update(newList) {
-    newList = newList || [];
-
-    for (var i = 0; i < lastIdentifiers.length; i++) {
-      var identifier = lastIdentifiers[i];
-      var index = getIndexByIdentifier(identifier);
-      stylesInDOM[index].references--;
-    }
-
-    var newLastIdentifiers = modulesToDom(newList, options);
-
-    for (var _i = 0; _i < lastIdentifiers.length; _i++) {
-      var _identifier = lastIdentifiers[_i];
-
-      var _index = getIndexByIdentifier(_identifier);
-
-      if (stylesInDOM[_index].references === 0) {
-        stylesInDOM[_index].updater();
-
-        stylesInDOM.splice(_index, 1);
-      }
-    }
-
-    lastIdentifiers = newLastIdentifiers;
-  };
+/**
+ * @module LRUCache
+ */
+const perf = typeof performance === 'object' &&
+    performance &&
+    typeof performance.now === 'function'
+    ? performance
+    : Date;
+const warned = new Set();
+const emitWarning = (msg, type, code, fn) => {
+    typeof process === 'object' &&
+        process &&
+        typeof process.emitWarning === 'function'
+        ? process.emitWarning(msg, type, code, fn)
+        : console.error(`[${code}] ${type}: ${msg}`);
 };
-
-/***/ }),
-
-/***/ "./node_modules/style-loader/dist/runtime/insertBySelector.js":
-/*!********************************************************************!*\
-  !*** ./node_modules/style-loader/dist/runtime/insertBySelector.js ***!
-  \********************************************************************/
-/***/ ((module) => {
-
-"use strict";
-
-
-var memo = {};
-/* istanbul ignore next  */
-
-function getTarget(target) {
-  if (typeof memo[target] === "undefined") {
-    var styleTarget = document.querySelector(target); // Special case to return head of iframe instead of iframe itself
-
-    if (window.HTMLIFrameElement && styleTarget instanceof window.HTMLIFrameElement) {
-      try {
-        // This will throw an exception if access to iframe is blocked
-        // due to cross-origin restrictions
-        styleTarget = styleTarget.contentDocument.head;
-      } catch (e) {
-        // istanbul ignore next
-        styleTarget = null;
-      }
+const shouldWarn = (code) => !warned.has(code);
+const TYPE = Symbol('type');
+const isPosInt = (n) => n && n === Math.floor(n) && n > 0 && isFinite(n);
+/* c8 ignore start */
+// This is a little bit ridiculous, tbh.
+// The maximum array length is 2^32-1 or thereabouts on most JS impls.
+// And well before that point, you're caching the entire world, I mean,
+// that's ~32GB of just integers for the next/prev links, plus whatever
+// else to hold that many keys and values.  Just filling the memory with
+// zeroes at init time is brutal when you get that big.
+// But why not be complete?
+// Maybe in the future, these limits will have expanded.
+const getUintArray = (max) => !isPosInt(max)
+    ? null
+    : max <= Math.pow(2, 8)
+        ? Uint8Array
+        : max <= Math.pow(2, 16)
+            ? Uint16Array
+            : max <= Math.pow(2, 32)
+                ? Uint32Array
+                : max <= Number.MAX_SAFE_INTEGER
+                    ? ZeroArray
+                    : null;
+/* c8 ignore stop */
+class ZeroArray extends Array {
+    constructor(size) {
+        super(size);
+        this.fill(0);
     }
-
-    memo[target] = styleTarget;
-  }
-
-  return memo[target];
 }
-/* istanbul ignore next  */
-
-
-function insertBySelector(insert, style) {
-  var target = getTarget(insert);
-
-  if (!target) {
-    throw new Error("Couldn't find a style target. This probably means that the value for the 'insert' parameter is invalid.");
-  }
-
-  target.appendChild(style);
-}
-
-module.exports = insertBySelector;
-
-/***/ }),
-
-/***/ "./node_modules/style-loader/dist/runtime/insertStyleElement.js":
-/*!**********************************************************************!*\
-  !*** ./node_modules/style-loader/dist/runtime/insertStyleElement.js ***!
-  \**********************************************************************/
-/***/ ((module) => {
-
-"use strict";
-
-
-/* istanbul ignore next  */
-function insertStyleElement(options) {
-  var element = document.createElement("style");
-  options.setAttributes(element, options.attributes);
-  options.insert(element, options.options);
-  return element;
-}
-
-module.exports = insertStyleElement;
-
-/***/ }),
-
-/***/ "./node_modules/style-loader/dist/runtime/setAttributesWithoutAttributes.js":
-/*!**********************************************************************************!*\
-  !*** ./node_modules/style-loader/dist/runtime/setAttributesWithoutAttributes.js ***!
-  \**********************************************************************************/
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-"use strict";
-
-
-/* istanbul ignore next  */
-function setAttributesWithoutAttributes(styleElement) {
-  var nonce =  true ? __webpack_require__.nc : 0;
-
-  if (nonce) {
-    styleElement.setAttribute("nonce", nonce);
-  }
-}
-
-module.exports = setAttributesWithoutAttributes;
-
-/***/ }),
-
-/***/ "./node_modules/style-loader/dist/runtime/styleDomAPI.js":
-/*!***************************************************************!*\
-  !*** ./node_modules/style-loader/dist/runtime/styleDomAPI.js ***!
-  \***************************************************************/
-/***/ ((module) => {
-
-"use strict";
-
-
-/* istanbul ignore next  */
-function apply(styleElement, options, obj) {
-  var css = "";
-
-  if (obj.supports) {
-    css += "@supports (".concat(obj.supports, ") {");
-  }
-
-  if (obj.media) {
-    css += "@media ".concat(obj.media, " {");
-  }
-
-  var needLayer = typeof obj.layer !== "undefined";
-
-  if (needLayer) {
-    css += "@layer".concat(obj.layer.length > 0 ? " ".concat(obj.layer) : "", " {");
-  }
-
-  css += obj.css;
-
-  if (needLayer) {
-    css += "}";
-  }
-
-  if (obj.media) {
-    css += "}";
-  }
-
-  if (obj.supports) {
-    css += "}";
-  }
-
-  var sourceMap = obj.sourceMap;
-
-  if (sourceMap && typeof btoa !== "undefined") {
-    css += "\n/*# sourceMappingURL=data:application/json;base64,".concat(btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap)))), " */");
-  } // For old IE
-
-  /* istanbul ignore if  */
-
-
-  options.styleTagTransform(css, styleElement, options.options);
-}
-
-function removeStyleElement(styleElement) {
-  // istanbul ignore if
-  if (styleElement.parentNode === null) {
-    return false;
-  }
-
-  styleElement.parentNode.removeChild(styleElement);
-}
-/* istanbul ignore next  */
-
-
-function domAPI(options) {
-  var styleElement = options.insertStyleElement(options);
-  return {
-    update: function update(obj) {
-      apply(styleElement, options, obj);
-    },
-    remove: function remove() {
-      removeStyleElement(styleElement);
+class Stack {
+    heap;
+    length;
+    // private constructor
+    static #constructing = false;
+    static create(max) {
+        const HeapCls = getUintArray(max);
+        if (!HeapCls)
+            return [];
+        Stack.#constructing = true;
+        const s = new Stack(max, HeapCls);
+        Stack.#constructing = false;
+        return s;
     }
-  };
-}
-
-module.exports = domAPI;
-
-/***/ }),
-
-/***/ "./node_modules/style-loader/dist/runtime/styleTagTransform.js":
-/*!*********************************************************************!*\
-  !*** ./node_modules/style-loader/dist/runtime/styleTagTransform.js ***!
-  \*********************************************************************/
-/***/ ((module) => {
-
-"use strict";
-
-
-/* istanbul ignore next  */
-function styleTagTransform(css, styleElement) {
-  if (styleElement.styleSheet) {
-    styleElement.styleSheet.cssText = css;
-  } else {
-    while (styleElement.firstChild) {
-      styleElement.removeChild(styleElement.firstChild);
-    }
-
-    styleElement.appendChild(document.createTextNode(css));
-  }
-}
-
-module.exports = styleTagTransform;
-
-/***/ }),
-
-/***/ "./src/worker/fetcher.worker.js":
-/*!**************************************!*\
-  !*** ./src/worker/fetcher.worker.js ***!
-  \**************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ Worker_fn)
-/* harmony export */ });
-function Worker_fn() {
-  return new Worker(__webpack_require__.p + "bundle.worker.js");
-}
-
-
-/***/ }),
-
-/***/ "./src/helper.js":
-/*!***********************!*\
-  !*** ./src/helper.js ***!
-  \***********************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "fillArray": () => (/* binding */ fillArray),
-/* harmony export */   "fillMidNodes": () => (/* binding */ fillMidNodes)
-/* harmony export */ });
-/* harmony import */ var _octree__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./octree */ "./src/octree.js");
-
-
-function fillArray(points, count, WIDTH, HEIGHT, DEPTH) {
-  for (let i = 0; i < count; i++) {
-    let point = new _octree__WEBPACK_IMPORTED_MODULE_0__.Point(
-      i,
-      Math.floor(Math.random() * WIDTH) - WIDTH / 2,
-      Math.floor(Math.random() * HEIGHT) - HEIGHT / 2,
-      Math.floor(Math.random() * DEPTH) - DEPTH / 2
-    );
-    points.push(point);
-  }
-}
-
-function fillMidNodes(tree) {
-  if (!tree.isDivided) {
-    tree.points.splice(0, 1);
-    return tree.points[0];
-  }
-
-  let children = [
-    tree.minNE,
-    tree.minNW,
-    tree.minSW,
-    tree.minSE,
-    tree.maxNE,
-    tree.maxNW,
-    tree.maxSW,
-    tree.maxSE,
-  ];
-  let result = [];
-  for (let i = 0, _length = children.length; i < _length; i++) {
-    let result1 = fillMidNodes(children[i]);
-    if (result1 != null) {
-      result.push(result1);
-    }
-  }
-  let passIndex = Math.ceil(result.length / 2);
-  let passingValue = result[passIndex];
-  if (tree.level > 0) {
-    result.splice(passIndex, 1);
-  }
-  tree.representativeNodes = [...result];
-  return passingValue;
-}
-
-
-
-
-/***/ }),
-
-/***/ "./src/index.js":
-/*!**********************!*\
-  !*** ./src/index.js ***!
-  \**********************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "bufferMap": () => (/* binding */ bufferMap),
-/* harmony export */   "loadCOPC": () => (/* binding */ loadCOPC),
-/* harmony export */   "retrivePoints": () => (/* binding */ retrivePoints),
-/* harmony export */   "scene_depth": () => (/* binding */ scene_depth),
-/* harmony export */   "scene_height": () => (/* binding */ scene_height),
-/* harmony export */   "scene_width": () => (/* binding */ scene_width),
-/* harmony export */   "toDeleteMap": () => (/* binding */ toDeleteMap),
-/* harmony export */   "wait": () => (/* binding */ wait)
-/* harmony export */ });
-/* harmony import */ var three__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! three */ "./node_modules/three/build/three.module.js");
-/* harmony import */ var _octree__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./octree */ "./src/octree.js");
-/* harmony import */ var three_addons_controls_OrbitControls_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! three/addons/controls/OrbitControls.js */ "./node_modules/three/examples/jsm/controls/OrbitControls.js");
-/* harmony import */ var copc__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! copc */ "./node_modules/copc/lib/index.js");
-/* harmony import */ var copc__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(copc__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _worker_fetcher_worker_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./worker/fetcher.worker.js */ "./src/worker/fetcher.worker.js");
-/* harmony import */ var _webgpu_renderer__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./webgpu/renderer */ "./src/webgpu/renderer.js");
-/* harmony import */ var _passiveloader__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./passiveloader */ "./src/passiveloader.js");
-/* harmony import */ var _private_origin_file_manager__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./private_origin/file_manager */ "./src/private_origin/file_manager.js");
-/* harmony import */ var _styles_main_css__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./styles/main.css */ "./src/styles/main.css");
-/* harmony import */ var _helper__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./helper */ "./src/helper.js");
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-(0,_private_origin_file_manager__WEBPACK_IMPORTED_MODULE_5__.clear)();
-
-// (async () => {
-//   const root = await navigator.storage.getDirectory();
-//   const fileHandle = await root.getFileHandle("0-0-0-0.txt");
-//   await fileHandle.remove();
-//   const fileHandle1 = await root.getFileHandle("1-0-0-0.txt");
-//   await fileHandle1.remove();
-//   // console.log(await doesExist("0-1-0-0"));
-// })();
-
-let bufferMap = {};
-let wait = false;
-let toDeleteMap = {};
-let toDelete = false;
-let postMessageRes = 100;
-let positions = [];
-let colors = [];
-let workerCount = 0;
-const clock = new three__WEBPACK_IMPORTED_MODULE_8__.Clock();
-const workers = new Array(1).fill(null);
-let TotalCount = 0;
-const MAX_WORKERS = navigator.hardwareConcurrency - 1;
-let promises = [];
-let nodePages, nodePagesString;
-let pagesString;
-let camera, proj;
-let copcString;
-let x_min,
-  y_min,
-  z_min,
-  x_max,
-  y_max,
-  z_max,
-  widthx,
-  widthy,
-  widthz,
-  center_x,
-  center_y,
-  center_z,
-  scaleFactor,
-  params,
-  controls;
-
-const canvas = document.getElementById("screen-canvas");
-function isTerminated(worker) {
-  try {
-    worker.postMessage(() => {});
-    return true;
-  } catch (e) {
-    return false;
-  }
-}
-
-function createWorker(data1, data2) {
-  return new Promise((resolve) => {
-    let worker = new _worker_fetcher_worker_js__WEBPACK_IMPORTED_MODULE_2__["default"]();
-    worker.onmessage = (event) => {
-      let postMessageRes = event.data;
-      if (postMessageRes == 200) {
-        worker.postMessage([
-          nodePagesString,
-          pagesString,
-          copcString,
-          data1,
-          data2,
-          [
-            x_min,
-            y_min,
-            z_min,
-            widthx,
-            widthy,
-            widthz,
-            scaleFactor[0],
-            scaleFactor[1],
-            scaleFactor[2],
-          ],
-        ]);
-      } else {
-        workerCount += 1;
-        let position = postMessageRes[0];
-        let color = postMessageRes[1];
-        let localPosition = [];
-        let localColor = [];
-        for (let i = 0; i < position.length; i++) {
-          positions.push(position[i]);
-          localPosition.push(position[i]);
-          colors.push(color[i]);
-          localColor.push(color[i]);
+    constructor(max, HeapCls) {
+        /* c8 ignore start */
+        if (!Stack.#constructing) {
+            throw new TypeError('instantiate Stack using Stack.create(n)');
         }
-        if (workerCount == MAX_WORKERS) {
-          workerCount = 0;
-          promises = [];
+        /* c8 ignore stop */
+        this.heap = new HeapCls(max);
+        this.length = 0;
+    }
+    push(n) {
+        this.heap[this.length++] = n;
+    }
+    pop() {
+        return this.heap[--this.length];
+    }
+}
+/**
+ * Default export, the thing you're using this module to get.
+ *
+ * All properties from the options object (with the exception of
+ * {@link OptionsBase.max} and {@link OptionsBase.maxSize}) are added as
+ * normal public members. (`max` and `maxBase` are read-only getters.)
+ * Changing any of these will alter the defaults for subsequent method calls,
+ * but is otherwise safe.
+ */
+class LRUCache {
+    // properties coming in from the options of these, only max and maxSize
+    // really *need* to be protected. The rest can be modified, as they just
+    // set defaults for various methods.
+    #max;
+    #maxSize;
+    #dispose;
+    #disposeAfter;
+    #fetchMethod;
+    /**
+     * {@link LRUCache.OptionsBase.ttl}
+     */
+    ttl;
+    /**
+     * {@link LRUCache.OptionsBase.ttlResolution}
+     */
+    ttlResolution;
+    /**
+     * {@link LRUCache.OptionsBase.ttlAutopurge}
+     */
+    ttlAutopurge;
+    /**
+     * {@link LRUCache.OptionsBase.updateAgeOnGet}
+     */
+    updateAgeOnGet;
+    /**
+     * {@link LRUCache.OptionsBase.updateAgeOnHas}
+     */
+    updateAgeOnHas;
+    /**
+     * {@link LRUCache.OptionsBase.allowStale}
+     */
+    allowStale;
+    /**
+     * {@link LRUCache.OptionsBase.noDisposeOnSet}
+     */
+    noDisposeOnSet;
+    /**
+     * {@link LRUCache.OptionsBase.noUpdateTTL}
+     */
+    noUpdateTTL;
+    /**
+     * {@link LRUCache.OptionsBase.maxEntrySize}
+     */
+    maxEntrySize;
+    /**
+     * {@link LRUCache.OptionsBase.sizeCalculation}
+     */
+    sizeCalculation;
+    /**
+     * {@link LRUCache.OptionsBase.noDeleteOnFetchRejection}
+     */
+    noDeleteOnFetchRejection;
+    /**
+     * {@link LRUCache.OptionsBase.noDeleteOnStaleGet}
+     */
+    noDeleteOnStaleGet;
+    /**
+     * {@link LRUCache.OptionsBase.allowStaleOnFetchAbort}
+     */
+    allowStaleOnFetchAbort;
+    /**
+     * {@link LRUCache.OptionsBase.allowStaleOnFetchRejection}
+     */
+    allowStaleOnFetchRejection;
+    /**
+     * {@link LRUCache.OptionsBase.ignoreFetchAbort}
+     */
+    ignoreFetchAbort;
+    // computed properties
+    #size;
+    #calculatedSize;
+    #keyMap;
+    #keyList;
+    #valList;
+    #next;
+    #prev;
+    #head;
+    #tail;
+    #free;
+    #disposed;
+    #sizes;
+    #starts;
+    #ttls;
+    #hasDispose;
+    #hasFetchMethod;
+    #hasDisposeAfter;
+    /**
+     * Do not call this method unless you need to inspect the
+     * inner workings of the cache.  If anything returned by this
+     * object is modified in any way, strange breakage may occur.
+     *
+     * These fields are private for a reason!
+     *
+     * @internal
+     */
+    static unsafeExposeInternals(c) {
+        return {
+            // properties
+            starts: c.#starts,
+            ttls: c.#ttls,
+            sizes: c.#sizes,
+            keyMap: c.#keyMap,
+            keyList: c.#keyList,
+            valList: c.#valList,
+            next: c.#next,
+            prev: c.#prev,
+            get head() {
+                return c.#head;
+            },
+            get tail() {
+                return c.#tail;
+            },
+            free: c.#free,
+            // methods
+            isBackgroundFetch: (p) => c.#isBackgroundFetch(p),
+            backgroundFetch: (k, index, options, context) => c.#backgroundFetch(k, index, options, context),
+            moveToTail: (index) => c.#moveToTail(index),
+            indexes: (options) => c.#indexes(options),
+            rindexes: (options) => c.#rindexes(options),
+            isStale: (index) => c.#isStale(index),
+        };
+    }
+    // Protected read-only members
+    /**
+     * {@link LRUCache.OptionsBase.max} (read-only)
+     */
+    get max() {
+        return this.#max;
+    }
+    /**
+     * {@link LRUCache.OptionsBase.maxSize} (read-only)
+     */
+    get maxSize() {
+        return this.#maxSize;
+    }
+    /**
+     * The total computed size of items in the cache (read-only)
+     */
+    get calculatedSize() {
+        return this.#calculatedSize;
+    }
+    /**
+     * The number of items stored in the cache (read-only)
+     */
+    get size() {
+        return this.#size;
+    }
+    /**
+     * {@link LRUCache.OptionsBase.fetchMethod} (read-only)
+     */
+    get fetchMethod() {
+        return this.#fetchMethod;
+    }
+    /**
+     * {@link LRUCache.OptionsBase.dispose} (read-only)
+     */
+    get dispose() {
+        return this.#dispose;
+    }
+    /**
+     * {@link LRUCache.OptionsBase.disposeAfter} (read-only)
+     */
+    get disposeAfter() {
+        return this.#disposeAfter;
+    }
+    constructor(options) {
+        const { max = 0, ttl, ttlResolution = 1, ttlAutopurge, updateAgeOnGet, updateAgeOnHas, allowStale, dispose, disposeAfter, noDisposeOnSet, noUpdateTTL, maxSize = 0, maxEntrySize = 0, sizeCalculation, fetchMethod, noDeleteOnFetchRejection, noDeleteOnStaleGet, allowStaleOnFetchRejection, allowStaleOnFetchAbort, ignoreFetchAbort, } = options;
+        if (max !== 0 && !isPosInt(max)) {
+            throw new TypeError('max option must be a nonnegative integer');
         }
-        worker.terminate();
-        resolve([localPosition, localColor, data1]);
-      }
-    };
-  });
-}
-
-let boxGroup = new three__WEBPACK_IMPORTED_MODULE_8__.Group();
-let scene_width = 1000;
-let scene_height = 1000;
-let scene_depth = 1000;
-let scale = 1;
-let qt;
-let mapCamera,
-  mapSizeX = 128,
-  mapSizeY = 64;
-let _width = window.innerWidth;
-let _height = window.innerHeight;
-let right = 1024,
-  left = -1024,
-  top = 1024,
-  bottom = -1024;
-
-let isIntensityPresent;
-
-function findLevel(qt) {
-  // traverse octre
-  let threshold = 100;
-
-  let cameraPosition = controls.object.position;
-  // remove all bounding box 3d object after disposing before every check
-  for (let i = 0, _length = boxGroup.children.length; i < _length; i++) {
-    boxGroup.children[i].material.dispose();
-    boxGroup.children[i].geometry.dispose();
-  }
-
-  boxGroup.remove(...boxGroup.children);
-
-  function traverseTree(node = qt) {
-    if (node == null) {
-      return null;
-    }
-    boxGroup.add(node.box.mesh);
-    if (!node.isDivided) {
-      return [...node.points, ...node.buffer];
-    }
-    let myDistanceFromCamera = cameraPosition.distanceTo(
-      new three__WEBPACK_IMPORTED_MODULE_8__.Vector3(node.box.x, node.box.y, node.box.z)
-    );
-    if (myDistanceFromCamera > threshold) {
-      return [...node.points, ...node.buffer];
-    }
-    let children = [
-      node.minNE,
-      node.minNW,
-      node.minSW,
-      node.minSE,
-      node.maxNE,
-      node.maxNW,
-      node.maxSW,
-      node.maxSE,
-    ];
-    let results = [...node.points, ...node.buffer];
-    for (let i = 0, _length = children.length; i < _length; i++) {
-      let points = traverseTree(children[i]);
-      results.push(...points);
-    }
-    return results;
-  }
-  return traverseTree();
-}
-function onWindowResize() {
-  camera.aspect = window.innerWidth / window.innerHeight;
-  camera.updateProjectionMatrix();
-  renderer.setSize(window.innerWidth, window.innerHeight);
-}
-
-function sleep(ms) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-}
-
-let keyCountMap;
-
-const createBuffer = (positions, colors) => {
-  let size = positions.length;
-  let positionBuffer = _webgpu_renderer__WEBPACK_IMPORTED_MODULE_3__.device.createBuffer({
-    label: `${size}`,
-    size: size * 4,
-    usage: GPUBufferUsage.VERTEX,
-    mappedAtCreation: true,
-  });
-
-  let positionMappedArray = new Float32Array(positionBuffer.getMappedRange());
-  positionMappedArray.set(positions);
-  positionBuffer.unmap();
-
-  let colorBuffer = _webgpu_renderer__WEBPACK_IMPORTED_MODULE_3__.device.createBuffer({
-    label: `${size}`,
-    size: size * 4,
-    usage: GPUBufferUsage.VERTEX,
-    mappedAtCreation: true,
-  });
-
-  let colorMappedArray = new Float32Array(colorBuffer.getMappedRange());
-  colorMappedArray.set(colors);
-  colorBuffer.unmap();
-  return [positionBuffer, colorBuffer];
-};
-
-const syncThread = async () => {
-  await Promise.all(promises).then(async (response) => {
-    for (let i = 0, _length = response.length; i < _length; i++) {
-      let data = response[i];
-      let fileName = data[2];
-      let data_json = {
-        position: data[0],
-        color: data[1],
-      };
-      let data_json_stringify = JSON.stringify(data_json);
-      (0,_private_origin_file_manager__WEBPACK_IMPORTED_MODULE_5__.write)(fileName, data_json_stringify);
-      let [positionBuffer, colorBuffer] = createBuffer(data[0], data[1]);
-      bufferMap[data[2]] = {
-        position: positionBuffer,
-        color: colorBuffer,
-      };
-    }
-    // console.log(bufferMap);
-    // console.log("one chunk finish");
-  });
-};
-
-async function filterkeyCountMap(keyMap) {
-  let newKeyMap = [];
-  let newBufferMap = {};
-  for (const key in toDeleteMap) {
-    toDeleteMap[key].position.destroy();
-    toDeleteMap[key].color.destroy();
-    delete toDeleteMap[key];
-  }
-  let existingBuffers = Object.keys(bufferMap);
-  let toDeleteArray = existingBuffers.reduce((acc, val) => {
-    acc[val] = true;
-    return acc;
-  }, {});
-
-  console.log(existingBuffers);
-
-  for (let i = 0; i < keyMap.length; i += 2) {
-    if (!(keyMap[i] in bufferMap)) {
-      newKeyMap.push(keyMap[i], keyMap[i + 1]);
-    } else {
-      newBufferMap[keyMap[i]] = {
-        position: bufferMap[keyMap[i]].position,
-        color: bufferMap[keyMap[i]].color,
-      };
-      delete toDeleteArray[keyMap[i]];
-    }
-  }
-
-  let filteredElements = [];
-  for (let i = 0; i < newKeyMap.length; i += 2) {
-    let Exist = await (0,_private_origin_file_manager__WEBPACK_IMPORTED_MODULE_5__.doesExist)(newKeyMap[i]);
-    if (Exist) {
-      let data = await (0,_private_origin_file_manager__WEBPACK_IMPORTED_MODULE_5__.read)(newKeyMap[i]);
-      let [positionBuffer, colorBuffer] = createBuffer(
-        data.position,
-        data.color
-      );
-      newBufferMap[newKeyMap[i]] = {
-        position: positionBuffer,
-        color: colorBuffer,
-      };
-    } else {
-      filteredElements.push(newKeyMap[i], newKeyMap[i + 1]);
-    }
-  }
-
-  for (let key in toDeleteArray) {
-    toDeleteMap[key] = {
-      position: bufferMap[key].position,
-      color: bufferMap[key].position,
-    };
-  }
-  bufferMap = newBufferMap;
-  console.log(filteredElements);
-  return filteredElements;
-  //filter and delete unwanted bufferMap
-}
-
-async function retrivePoints(projectionViewMatrix) {
-  let keyCountMap = (0,_passiveloader__WEBPACK_IMPORTED_MODULE_4__.traverseTreeWrapper)(
-    nodePages,
-    [0, 0, 0, 0],
-    center_x,
-    center_y,
-    center_z,
-    [0.5 * widthx, 0.5 * widthy, 0.5 * widthz],
-    scaleFactor,
-    camera,
-    projectionViewMatrix
-  );
-
-  keyCountMap = await filterkeyCountMap(keyCountMap);
-  clock.getDelta();
-  let totalNodes = keyCountMap.length / 2;
-  let doneCount = 0;
-  for (let m = 0; m < keyCountMap.length; ) {
-    let remaining = totalNodes - doneCount;
-    let numbWorker = Math.min(MAX_WORKERS, remaining);
-    for (let i = 0; i < numbWorker; i++) {
-      // console.log("i am entering first time");
-      promises.push(createWorker(keyCountMap[m], keyCountMap[m + 1]));
-      doneCount++;
-      m += 2;
-      if (doneCount % MAX_WORKERS == 0 || doneCount == totalNodes) {
-        await syncThread();
-        // console.log(doneCount, "i am done");
-      }
-    }
-  }
-  console.log("it finished at", clock.getDelta());
-}
-
-async function createCameraProj() {
-  camera = new three__WEBPACK_IMPORTED_MODULE_8__.PerspectiveCamera(
-    75,
-    window.innerWidth / window.innerHeight,
-    0.1,
-    8000
-  );
-  camera.position.z = 100;
-
-  controls = new three_addons_controls_OrbitControls_js__WEBPACK_IMPORTED_MODULE_9__.OrbitControls(camera, canvas);
-  controls.maxAzimuthAngle = 0.25 * Math.PI;
-  proj = mat4.perspective(
-    mat4.create(),
-    (90 * Math.PI) / 180.0,
-    canvas.width / canvas.height,
-    0.1,
-    8000
-  );
-}
-
-async function loadCOPC() {
-  clock.getDelta();
-  // https://viewer.copc.io/?copc=https://s3.amazonaws.com/data.entwine.io/millsite.copc.laz
-  // https://github.com/PDAL/data/blob/master/autzen/autzen-classified.copc.laz
-  // let filename = "https://s3.amazonaws.com/data.entwine.io/millsite.copc.laz";
-  const filename = "https://s3.amazonaws.com/data.entwine.io/millsite.copc.laz";
-  const copc = await copc__WEBPACK_IMPORTED_MODULE_1__.Copc.create(filename);
-  scaleFactor = copc.header.scale;
-  console.log(copc)
-  copcString = JSON.stringify(copc);
-  // scale = copc.header.scale[0];
-  [x_min, y_min, z_min, x_max, y_max, z_max] = copc.info.cube;
-  scaleFactor = [1, 1, 1];
-  widthx = Math.abs(x_max - x_min);
-  widthy = Math.abs(y_max - y_min);
-  widthz = Math.abs(z_max - z_min);
-  params = [widthx, widthy, widthz, x_min, y_min, z_min];
-  center_x = ((x_min + x_max) / 2 - x_min - 0.5 * widthx) * scaleFactor[0];
-  center_y = ((y_min + y_max) / 2 - y_min - 0.5 * widthy) * scaleFactor[1];
-  center_z = ((z_min + z_max) / 2 - z_min - 0.5 * widthz) * scaleFactor[2];
-  // center is moved to origin and we dont need to do this but for sake for checking the cordinate system, i am doing this
-  const { nodes: nodePages1, pages: pages } = await copc__WEBPACK_IMPORTED_MODULE_1__.Copc.loadHierarchyPage(
-    filename,
-    copc.info.rootHierarchyPage
-  );
-  nodePages = nodePages1;
-  nodePagesString = JSON.stringify(nodePages);
-  pagesString = JSON.stringify(pages);
-}
-
-(async () => {
-  await createCameraProj();
-  console.log("file reading start");
-  await loadCOPC();
-  console.log("initialize the uniform buffers");
-  let projViewMatrix = await (0,_webgpu_renderer__WEBPACK_IMPORTED_MODULE_3__.stages)(camera, proj, params);
-  console.log("data loading start");
-  await retrivePoints(projViewMatrix);
-  console.log("data loaded");
-  await (0,_webgpu_renderer__WEBPACK_IMPORTED_MODULE_3__.renderWrapper)();
-  console.log("render done");
-})();
-// render by WebGPU
-// console.log(colors);
-// renderStages(positions, colors);
-// ----------------------------------------------------------------------------
-// geometry.setAttribute(
-//   "position",
-//   new THREE.Float32BufferAttribute(positions, 3)
-// );
-// geometry.setAttribute("color", new THREE.Float32BufferAttribute(colors, 3));
-// var material = new THREE.PointsMaterial({ size: 2, vertexColors: true });
-// let p = new THREE.Points(geometry, material);
-// scene.add(p);
-// -----------------------------------------------------------------------------
-
-
-
-
-/***/ }),
-
-/***/ "./src/octree.js":
-/*!***********************!*\
-  !*** ./src/octree.js ***!
-  \***********************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "Box": () => (/* binding */ Box),
-/* harmony export */   "Octree": () => (/* binding */ Octree),
-/* harmony export */   "Point": () => (/* binding */ Point)
-/* harmony export */ });
-/* harmony import */ var three__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! three */ "./node_modules/three/build/three.module.js");
-
-let MAX_BOUNDARY_X = 8;
-let MAX_BOUNDARY_Y = 8;
-let MAX_BOUNDARY_Z = 8;
-// color
-const white = new three__WEBPACK_IMPORTED_MODULE_0__.Color(0xffffff);
-const red = new three__WEBPACK_IMPORTED_MODULE_0__.Color(0xff0000);
-const green = new three__WEBPACK_IMPORTED_MODULE_0__.Color(0xc5e908);
-const blue = new three__WEBPACK_IMPORTED_MODULE_0__.Color(0x0000ff);
-const yellow = new three__WEBPACK_IMPORTED_MODULE_0__.Color(0xe69b00);
-const grey = new three__WEBPACK_IMPORTED_MODULE_0__.Color(0xe0a387);
-const illusion = new three__WEBPACK_IMPORTED_MODULE_0__.Color(0xf1a784);
-
-const colors = [yellow, red, illusion, blue, green, grey, illusion];
-// -------------------------------------
-
-class Point {
-  constructor(index, x, y, z) {
-    this.index = index;
-    this.x = x;
-    this.y = y;
-    this.z = z;
-    let mesh = new three__WEBPACK_IMPORTED_MODULE_0__.Mesh(
-      new three__WEBPACK_IMPORTED_MODULE_0__.BoxGeometry(5, 5, 5),
-      new three__WEBPACK_IMPORTED_MODULE_0__.MeshBasicMaterial({ color: 0xff0000 })
-    );
-    mesh.position.set(x, y, z);
-    mesh.updateMatrix();
-    mesh.matrixAutoUpdate = false;
-    this.mesh = mesh;
-  }
-}
-
-class Box {
-  constructor(label, x, y, z, width, level) {
-    this.label = label;
-    this.x = x;
-    this.y = y;
-    this.z = z;
-    this.width = width;
-    let mesh = new three__WEBPACK_IMPORTED_MODULE_0__.Mesh(
-      new three__WEBPACK_IMPORTED_MODULE_0__.BoxGeometry(width, width, width),
-      new three__WEBPACK_IMPORTED_MODULE_0__.MeshBasicMaterial({ color: colors[level % 7], wireframe: true })
-    );
-    mesh.position.set(x, y, z);
-    mesh.updateMatrix();
-    mesh.matrixAutoUpdate = false;
-    this.mesh = mesh;
-    // scene.add(mesh);
-  }
-
-  bound(point) {
-    if (this.x + this.width * 0.5 == 0.5 * MAX_BOUNDARY_X) {
-      return (
-        point.x >= this.x - this.width * 0.5 &&
-        point.x <= this.x + this.width * 0.5 &&
-        point.y < this.y + this.width * 0.5 &&
-        point.y >= this.y - this.width * 0.5 &&
-        point.z >= this.z - this.width * 0.5 &&
-        point.z < this.z + this.width * 0.5
-      );
-    }
-    if (this.y + this.width * 0.5 == 0.5 * MAX_BOUNDARY_Y) {
-      return (
-        point.x >= this.x - this.width * 0.5 &&
-        point.x < this.x + this.width * 0.5 &&
-        point.y <= this.y + this.width * 0.5 &&
-        point.y >= this.y - this.width * 0.5 &&
-        point.z >= this.z - this.width * 0.5 &&
-        point.z < this.z + this.width * 0.5
-      );
-    }
-    if (this.z + this.width * 0.5 == 0.5 * MAX_BOUNDARY_Z) {
-      return (
-        point.x >= this.x - this.width * 0.5 &&
-        point.x < this.x + this.width * 0.5 &&
-        point.y < this.y + this.width * 0.5 &&
-        point.y >= this.y - this.width * 0.5 &&
-        point.z >= this.z - this.width * 0.5 &&
-        point.z <= this.z + this.width * 0.5
-      );
-    } else {
-      return (
-        point.x >= this.x - this.width * 0.5 &&
-        point.x < this.x + this.width * 0.5 &&
-        point.y < this.y + this.width * 0.5 &&
-        point.y >= this.y - this.width * 0.5 &&
-        point.z >= this.z - this.width * 0.5 &&
-        point.z < this.z + this.width * 0.5
-      );
-    }
-  }
-}
-
-class Octree {
-  constructor(box, level = 0) {
-    this.box = box;
-    this.minNE = null;
-    this.minNW = null;
-    this.minSW = null;
-    this.minSE = null;
-    this.maxNE = null;
-    this.maxNW = null;
-    this.maxSW = null;
-    this.maxSE = null;
-    this.isDivided = false;
-    // this.representativeNodes = [];
-    this.points = [];
-    this.buffer = [];
-    this.level = level;
-    this.parent = null;
-  }
-
-  // function findRepresentiveNode(){
-  //   let children = [this.minNE, this.minNW, this.minSW, this.minSE, this.maxNE, this.maxNW, this.maxSW, this.maxSE]
-  //   children.forEach((element, index)=>{
-  //     if(element != null && element.length>0){
-  //       this.representativeNodes.push(element.nodes[0])
-  //     }
-  //   })
-  // }
-
-  partition() {
-    let x = this.box.x;
-    let y = this.box.y;
-    let z = this.box.z;
-    let newWidth = this.box.width * 0.5;
-    let level = this.level + 1;
-    let maxNE_Box = new Box(
-      "maxNE",
-      x + newWidth * 0.5,
-      y + 0.5 * newWidth,
-      z - 0.5 * newWidth,
-      newWidth,
-      level
-    );
-    let maxNW_Box = new Box(
-      "maxNW",
-      x - newWidth * 0.5,
-      y + 0.5 * newWidth,
-      z - 0.5 * newWidth,
-      newWidth,
-      level
-    );
-    let maxSW_Box = new Box(
-      "maxSW",
-      x - newWidth * 0.5,
-      y - 0.5 * newWidth,
-      z - 0.5 * newWidth,
-      newWidth,
-      level
-    );
-    let maxSE_Box = new Box(
-      "maxSE",
-      x + newWidth * 0.5,
-      y - 0.5 * newWidth,
-      z - 0.5 * newWidth,
-      newWidth,
-      level
-    );
-
-    let minNE_Box = new Box(
-      "minNE",
-      x + newWidth * 0.5,
-      y + 0.5 * newWidth,
-      z + 0.5 * newWidth,
-      newWidth,
-      level
-    );
-    let minNW_Box = new Box(
-      "minNW",
-      x - newWidth * 0.5,
-      y + 0.5 * newWidth,
-      z + 0.5 * newWidth,
-      newWidth,
-      level
-    );
-    let minSW_Box = new Box(
-      "minSW",
-      x - newWidth * 0.5,
-      y - 0.5 * newWidth,
-      z + 0.5 * newWidth,
-      newWidth,
-      level
-    );
-    let minSE_Box = new Box(
-      "minSE",
-      x + newWidth * 0.5,
-      y - 0.5 * newWidth,
-      z + 0.5 * newWidth,
-      newWidth,
-      level
-    );
-
-    this.minNE = new Octree(minNE_Box, level);
-    this.minNW = new Octree(minNW_Box, level);
-    this.minSW = new Octree(minSW_Box, level);
-    this.minSE = new Octree(minSE_Box, level);
-    this.maxNE = new Octree(maxNE_Box, level);
-    this.maxNW = new Octree(maxNW_Box, level);
-    this.maxSW = new Octree(maxSW_Box, level);
-    this.maxSE = new Octree(maxSE_Box, level);
-    this.isDivided = true;
-  }
-
-  insert(point) {
-    if (!this.box.bound(point)) {
-      // console.log(
-      //   "out of boundary",
-      //   "for node",
-      //   point.x,
-      //   point.y,
-      //   point.z,
-      //   "for box",
-      //   this.box.x,
-      //   this.box.y,
-      //   this.box.z,
-      //   this.box.width * 0.5,
-      //   this.box.label
-      // );
-      return false;
-    }
-    if (this.points.length < tree.leafCapacity && !this.isDivided) {
-      // this.updateRepresentativeNode();
-      this.points.push(point.index);
-      // this.sortNode();
-      return true;
-    } else if (this.buffer.length < tree.bufferCapacity && !this.isDivided) {
-      this.buffer.push(point.index);
-      return true;
-    } else {
-      if (!this.isDivided) {
-        this.partition();
-        this.buffer.forEach((existingPoint, index) => {
-          if (
-            existingPoint.x == point.x &&
-            existingPoint.y == point.y &&
-            existingPoint.z == point.z
-          ) {
-            console.log("repetitive node not allowed");
-            return false;
-          }
-          this.minNE.insert(existingPoint) ||
-            this.minNW.insert(existingPoint) ||
-            this.minSE.insert(existingPoint) ||
-            this.minSW.insert(existingPoint) ||
-            this.maxNE.insert(existingPoint) ||
-            this.maxNW.insert(existingPoint) ||
-            this.maxSW.insert(existingPoint) ||
-            this.maxSE.insert(existingPoint);
-        });
-        this.buffer = [];
-      }
-      return (
-        this.minNE.insert(point) ||
-        this.minNW.insert(point) ||
-        this.minSE.insert(point) ||
-        this.minSW.insert(point) ||
-        this.maxNE.insert(point) ||
-        this.maxNW.insert(point) ||
-        this.maxSW.insert(point) ||
-        this.maxSE.insert(point)
-      );
-    }
-  }
-}
-
-
-
-
-/***/ }),
-
-/***/ "./src/passiveloader.js":
-/*!******************************!*\
-  !*** ./src/passiveloader.js ***!
-  \******************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "traverseTreeWrapper": () => (/* binding */ traverseTreeWrapper)
-/* harmony export */ });
-/* harmony import */ var _utils_loader__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./utils/loader */ "./src/utils/loader.js");
-
-
-
-let direction = [
-  [0, 0, 0],
-  [0, 0, 1],
-  [0, 1, 0],
-  [0, 1, 1],
-  [1, 0, 0],
-  [1, 0, 1],
-  [1, 1, 0],
-  [1, 1, 1],
-];
-
-let cameraFocalLength = (0,_utils_loader__WEBPACK_IMPORTED_MODULE_0__.computeFocalLength)(90);
-
-async function* lazyLoad(offsetMap, url) {
-  while (offsetMap.length > 0) {
-    let fetchStart = offsetMap.pop();
-    let bytesofPointData = offsetMap.pop();
-    let fetchEnd = fetchStart + bytesofPointData;
-    let response = await fetch(url, {
-      headers: {
-        "content-type": "multipart/byteranges",
-        Range: `bytes=${fetchStart}-${fetchEnd}`,
-      },
-    });
-    let buffer = await response.arrayBuffer();
-    let view = new DataView(buffer);
-  }
-}
-
-function isLeadfNode(root, nodePages) {
-  let [level, x, y, z] = root;
-  for (let i = 0; i < direction.length; i++) {
-    let [dx, dy, dz] = direction[i];
-    let newLevel = level + 1;
-    let key = `${newLevel}-${2 * x + dx}-${2 * y + dy}-${2 * z + dz}`;
-    if (key in nodePages) {
-      return false;
-    }
-  }
-  return true;
-}
-
-// function calculateSSE(
-//   distance,
-//   center_x,
-//   center_y,
-//   center_z,
-//   [width_x, width_y, width_z],
-//   camera,
-//   proj
-// ) {
-//   const box = new THREE.Box3(
-//     new THREE.Vector3(
-//       center_x - width_x / 2,
-//       center_y - width_y / 2,
-//       center_z - width_z / 2
-//     ),
-//     new THREE.Vector3(
-//       center_x + width_x / 2,
-//       center_y + width_y / 2,
-//       center_z + width_z / 2
-//     )
-//   );
-//   console.log(proj);
-//   const boxScreen = box
-//     .clone()
-//     .applyMatrix4(new THREE.Matrix4().fromArray(camera.invCamera))
-//     .applyMatrix4(new THREE.Matrix4().fromArray(proj));
-//   const boxSize = boxScreen.getSize(new THREE.Vector3()).length();
-//   console.log(boxScreen);
-//   const error = boxSize / distance;
-//   return error;
-// }
-let canvas = document.getElementById("screen-canvas");
-let screenWidth = window.innerWidth;
-let screenHeight = window.innerHeight;
-let fovRADIAN = Math.PI / 2;
-
-//create a view frustum based on viewProjectionMatrix
-//check containsBox
-
-// transforming center of bounding sphere from world space to screen space
-function isRendered(center, radius, distance, projViewMatrix) {
-  let minPoint = [center[0] - radius, center[1] - radius, center[2] - radius];
-  let maxPoint = [center[0] + radius, center[1] + radius, center[2] + radius];
-  let frustum = new Frustum(projViewMatrix);
-  if (!frustum.containsBox([...minPoint, ...maxPoint])) {
-    console.log("out of frustum");
-    return false;
-  }
-  let projectedRadius =
-    (radius * screenHeight) / (distance * (2 * Math.tan(fovRADIAN / 2.0)));
-  // console.log(screenHeight, projectedRadius, Math.abs(projectedRadius) > 150);
-  return Math.abs(projectedRadius) > 150;
-}
-
-function traverseTreeWrapper(
-  nodePages,
-  root,
-  center_x,
-  center_y,
-  center_z,
-  width,
-  scale,
-  camera,
-  projViewMatrix
-) {
-  let cameraPosition = camera.position.toArray();
-  function traverseTree(root, center_x, center_y, center_z, width) {
-    // console.log(center_x, center_y, center_z, width);
-    let [level, x, y, z] = root;
-    let newLevel = level + 1;
-    let key = level + "-" + x + "-" + y + "-" + z;
-    let distance = Math.sqrt(
-      Math.pow(Math.abs(cameraPosition[0] - center_x), 2) +
-        Math.pow(Math.abs(cameraPosition[1] - center_y), 2) +
-        Math.pow(Math.abs(cameraPosition[2] - center_z), 2)
-    );
-    if (
-      !isRendered(
-        [center_x, center_y, center_z],
-        Math.max(...width),
-        distance,
-        projViewMatrix
-      )
-    ) {
-      return [];
-    }
-    let x_left = center_x - width[0] / 2;
-    let x_right = center_x + width[0] / 2;
-    let y_top = center_y + width[1] / 2;
-    let y_bottom = center_y - width[1] / 2;
-    let z_near = center_z - width[2] / 2;
-    let z_far = center_z + width[2] / 2;
-
-    let result = [key, nodePages[key].pointCount];
-    direction.forEach((element, index) => {
-      let [dx, dy, dz] = element;
-      let key = `${newLevel}-${2 * x + dx}-${2 * y + dy}-${2 * z + dz}`;
-      if (!(key in nodePages && nodePages[key].pointCount > 0)) {
-        return [];
-      }
-      center_x = x_left;
-      center_y = y_bottom;
-      center_z = z_near;
-      if (dx == 1) {
-        center_x = x_right;
-      }
-      if (dy == 1) {
-        center_y = y_top;
-      }
-      if (dz == 1) {
-        center_z = z_far;
-      }
-      // console.log([width[0] / 2, width[1] / 2, width[2] / 2]);
-      let result1 = traverseTree(
-        [newLevel, 2 * x + dx, 2 * y + dy, 2 * z + dz],
-        center_x,
-        center_y,
-        center_z,
-        [width[0] / 2, width[1] / 2, width[2] / 2]
-      );
-      result.push(...result1);
-    });
-    return result;
-  }
-  let finalPoints = traverseTree(root, center_x, center_y, center_z, [
-    width[0] * scale[0],
-    width[1] * scale[1],
-    width[2] * scale[2],
-  ]);
-  return finalPoints;
-}
-
-
-
-
-/***/ }),
-
-/***/ "./src/private_origin/file_manager.js":
-/*!********************************************!*\
-  !*** ./src/private_origin/file_manager.js ***!
-  \********************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "clear": () => (/* binding */ clear),
-/* harmony export */   "doesExist": () => (/* binding */ doesExist),
-/* harmony export */   "read": () => (/* binding */ read),
-/* harmony export */   "write": () => (/* binding */ write)
-/* harmony export */ });
-let total_ops = 0;
-let used_ops = 0;
-navigator.webkitPersistentStorage.queryUsageAndQuota(
-  function (used, total) {
-    total_ops = total;
-    used_ops = used;
-  },
-  function (error) {
-    console.error("Error getting origin-private file system size:", error);
-  }
-);
-
-let available_ops = total_ops - used_ops;
-
-let clear = async () => {
-  const root = await navigator.storage.getDirectory();
-  const fileNames = await root.keys();
-  const files = Array.from(fileNames);
-  for (const fileName of files) {
-    const fileHandle = await root.getFileHandle("0-0-0-0");
-    await fileHandle.remove();
-  }
-};
-
-let write = async (fileName, textToWrite) => {
-  const root = await navigator.storage.getDirectory();
-  const fileHandle = await root.getFileHandle(`${fileName}.txt`, {
-    create: true,
-  });
-  const writableStream = await fileHandle.createWritable();
-  await writableStream.write(textToWrite);
-  await writableStream.close();
-};
-
-let read = async (fileName) => {
-  const root = await navigator.storage.getDirectory();
-  const fileHandle = await root.getFileHandle(`${fileName}.txt`, {
-    create: false,
-  });
-  let file = await fileHandle.getFile();
-  let content = await file.text();
-  if (content) {
-    return JSON.parse(content);
-  }
-  return null;
-};
-
-let doesExist = async (fileName) => {
-  try {
-    let fileToCheck = `${fileName}.txt`;
-    const root = await navigator.storage.getDirectory();
-    const fileHandle = await root.getFileHandle(fileToCheck);
-    const permissionStatus = await fileHandle.queryPermission();
-    return true;
-  } catch (error) {
-    if (error.name === "NotFoundError") {
-      console.log("file not found");
-      return false;
-    } else {
-      console.error("Error checking if file exists:", error);
-      return false;
-    }
-  }
-};
-
-
-
-
-/***/ }),
-
-/***/ "./src/shaders/renderShader.js":
-/*!*************************************!*\
-  !*** ./src/shaders/renderShader.js ***!
-  \*************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "fs": () => (/* binding */ fs),
-/* harmony export */   "vs": () => (/* binding */ vs)
-/* harmony export */ });
-let vs = `
-    struct VertexInput {
-        @location(0) position: vec3<f32>,
-        @location(1) color: vec3<f32>
-    };
-
-    struct VertexOut {
-        @builtin(position) position: vec4<f32>,
-        @location(0) color: vec4<f32>
-    };
-
-
-    struct paramsUniform {
-        width_x:f32,
-        width_y:f32,
-        width_z:f32,
-        x_min: f32,
-        y_min: f32,
-        z_min: f32,
-        current_Axis: f32
-    };
-
-    struct cmapUniform {
-        colors: array<vec4<f32>, 10>
-    };
-
-    @group(0) @binding(0) var<uniform> MVP_Matrix: mat4x4<f32>;
-    @group(0) @binding(1) var<uniform> cMap: cmapUniform;
-    @group(0) @binding(2) var<uniform> params: paramsUniform;
-
-    const direction = array<vec2<f32>, 4>(
-        vec2<f32>(-1, -1),
-        vec2<f32>(1, -1),
-        vec2<f32>(-1, 1),
-        vec2<f32>(1, 1)
-    );
-    
-    @vertex
-    fn main(in: VertexInput, @builtin(instance_index) inst_index:u32)->VertexOut{
-        var out:VertexOut;
-        var cMapIndex:i32; 
-        var radius:f32 = 2.0;
-        var position:vec3<f32> = in.position - vec3(params.x_min, params.y_min, params.z_min) - 0.5*vec3(params.width_x, params.width_y, params.width_z);
-        if(params.current_Axis == 2.0){
-            cMapIndex = i32(abs(in.position.z - params.z_min)/params.width_z *9);
+        const UintArray = max ? getUintArray(max) : Array;
+        if (!UintArray) {
+            throw new Error('invalid max value: ' + max);
         }
-        else if(params.current_Axis == 1.0){
-            cMapIndex = i32(abs(in.position.y - params.y_min)/params.width_y *9);
+        this.#max = max;
+        this.#maxSize = maxSize;
+        this.maxEntrySize = maxEntrySize || this.#maxSize;
+        this.sizeCalculation = sizeCalculation;
+        if (this.sizeCalculation) {
+            if (!this.#maxSize && !this.maxEntrySize) {
+                throw new TypeError('cannot set sizeCalculation without setting maxSize or maxEntrySize');
+            }
+            if (typeof this.sizeCalculation !== 'function') {
+                throw new TypeError('sizeCalculation set to non-function');
+            }
+        }
+        if (fetchMethod !== undefined &&
+            typeof fetchMethod !== 'function') {
+            throw new TypeError('fetchMethod must be a function if specified');
+        }
+        this.#fetchMethod = fetchMethod;
+        this.#hasFetchMethod = !!fetchMethod;
+        this.#keyMap = new Map();
+        this.#keyList = new Array(max).fill(undefined);
+        this.#valList = new Array(max).fill(undefined);
+        this.#next = new UintArray(max);
+        this.#prev = new UintArray(max);
+        this.#head = 0;
+        this.#tail = 0;
+        this.#free = Stack.create(max);
+        this.#size = 0;
+        this.#calculatedSize = 0;
+        if (typeof dispose === 'function') {
+            this.#dispose = dispose;
+        }
+        if (typeof disposeAfter === 'function') {
+            this.#disposeAfter = disposeAfter;
+            this.#disposed = [];
         }
         else {
-            cMapIndex = i32(abs(in.position.x - params.x_min)/params.width_x *9);
+            this.#disposeAfter = undefined;
+            this.#disposed = undefined;
         }
-        let cmapped = cMap.colors[cMapIndex];
-        out.color = vec4(cmapped.x, cmapped.y, cmapped.z, in.color.x);
-        position = position + vec3<f32>(direction[inst_index], 1.0)*radius;
-        out.position = MVP_Matrix* vec4<f32>(position, 1.0);
-        return out;
+        this.#hasDispose = !!this.#dispose;
+        this.#hasDisposeAfter = !!this.#disposeAfter;
+        this.noDisposeOnSet = !!noDisposeOnSet;
+        this.noUpdateTTL = !!noUpdateTTL;
+        this.noDeleteOnFetchRejection = !!noDeleteOnFetchRejection;
+        this.allowStaleOnFetchRejection = !!allowStaleOnFetchRejection;
+        this.allowStaleOnFetchAbort = !!allowStaleOnFetchAbort;
+        this.ignoreFetchAbort = !!ignoreFetchAbort;
+        // NB: maxEntrySize is set to maxSize if it's set
+        if (this.maxEntrySize !== 0) {
+            if (this.#maxSize !== 0) {
+                if (!isPosInt(this.#maxSize)) {
+                    throw new TypeError('maxSize must be a positive integer if specified');
+                }
+            }
+            if (!isPosInt(this.maxEntrySize)) {
+                throw new TypeError('maxEntrySize must be a positive integer if specified');
+            }
+            this.#initializeSizeTracking();
+        }
+        this.allowStale = !!allowStale;
+        this.noDeleteOnStaleGet = !!noDeleteOnStaleGet;
+        this.updateAgeOnGet = !!updateAgeOnGet;
+        this.updateAgeOnHas = !!updateAgeOnHas;
+        this.ttlResolution =
+            isPosInt(ttlResolution) || ttlResolution === 0
+                ? ttlResolution
+                : 1;
+        this.ttlAutopurge = !!ttlAutopurge;
+        this.ttl = ttl || 0;
+        if (this.ttl) {
+            if (!isPosInt(this.ttl)) {
+                throw new TypeError('ttl must be a positive integer if specified');
+            }
+            this.#initializeTTLTracking();
+        }
+        // do not allow completely unbounded caches
+        if (this.#max === 0 && this.ttl === 0 && this.#maxSize === 0) {
+            throw new TypeError('At least one of max, maxSize, or ttl is required');
+        }
+        if (!this.ttlAutopurge && !this.#max && !this.#maxSize) {
+            const code = 'LRU_CACHE_UNBOUNDED';
+            if (shouldWarn(code)) {
+                warned.add(code);
+                const msg = 'TTL caching without ttlAutopurge, max, or maxSize can ' +
+                    'result in unbounded memory consumption.';
+                emitWarning(msg, 'UnboundedCacheWarning', code, LRUCache);
+            }
+        }
     }
-`;
-
-let fs = `
-struct VertexOut {
-    @builtin(position) position: vec4<f32>,
-    @location(0) color: vec4<f32>
-};
-
-@fragment
-fn main(in:VertexOut)->@location(0) vec4<f32>{
-    return in.color;
-}
-`;
-
-
-
-
-/***/ }),
-
-/***/ "./src/utils/loader.js":
-/*!*****************************!*\
-  !*** ./src/utils/loader.js ***!
-  \*****************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "computeFocalLength": () => (/* binding */ computeFocalLength),
-/* harmony export */   "computeSSE": () => (/* binding */ computeSSE)
-/* harmony export */ });
-class Loader {
-  constructor(url) {
-    this.url = url;
-  }
-  async loadHeader() {
-    // loadheader
-    let loaderByteSize = 549;
-  }
-}
-
-function computeFocalLength(angle) {
-  let canvas = document.getElementById("screen-canvas");
-  let angleRadian = (angle * Math.PI) / 180;
-  return canvas.clientHeight * 0.5 * (1 / Math.tan(angleRadian / 2));
-}
-
-function computeSSE(width, distance, focalLength) {
-  return (width / distance) * focalLength;
-}
-
-
-
-
-/***/ }),
-
-/***/ "./src/webgpu/renderer.js":
-/*!********************************!*\
-  !*** ./src/webgpu/renderer.js ***!
-  \********************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "device": () => (/* binding */ device),
-/* harmony export */   "renderStages": () => (/* binding */ renderStages),
-/* harmony export */   "renderWrapper": () => (/* binding */ renderWrapper),
-/* harmony export */   "stages": () => (/* binding */ stages)
-/* harmony export */ });
-/* harmony import */ var _shaders_renderShader_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../shaders/renderShader.js */ "./src/shaders/renderShader.js");
-/* harmony import */ var _index_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../index.js */ "./src/index.js");
-/* harmony import */ var three_examples_jsm_libs_stats_module__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! three/examples/jsm/libs/stats.module */ "./node_modules/three/examples/jsm/libs/stats.module.js");
-
-
-
-
-let adapter = null;
-let device = null;
-let worldViewProj = mat4.create();
-var projView = mat4.create();
-let proj;
-let camera;
-let context = null;
-let swapChainFormat = "bgra8unorm";
-let renderPipeline;
-let mvp_BG;
-let positionBuffer;
-let colorBuffer;
-let MVP_Buffer;
-var lasInfoBuffer;
-let commandEncoder;
-let renderPassDescriptor;
-let renderDepthTexture;
-let canvas;
-let numPoints;
-let positions, colors;
-let keyMap = {
-  isDown: false,
-  dragging: false,
-};
-let debounceTimeOutId = null;
-let colorMapBuffer;
-let paramsBuffer;
-let currentAxis = 2;
-let param;
-const stats = (0,three_examples_jsm_libs_stats_module__WEBPACK_IMPORTED_MODULE_2__["default"])();
-document.body.appendChild(stats.dom);
-
-function throttle(callback, interval) {
-  let enableCall = true;
-  return function (...args) {
-    if (!enableCall) return;
-    console.log("called now");
-    enableCall = false;
-    callback.apply(this, args);
-    setTimeout(() => (enableCall = true), interval);
-  };
-}
-
-let throttleTreeTravel = throttle(_index_js__WEBPACK_IMPORTED_MODULE_1__.retrivePoints, 2000);
-
-function configureSwapChain(device) {
-  context.configure({
-    device: device,
-    format: swapChainFormat,
-    usage: GPUTextureUsage.RenderAttachment,
-    alphaMode: "premultiplied",
-  });
-}
-
-function goToFallback() {
-  console.error("unable to start webgpu");
-  return;
-}
-
-function recoverFromDeviceLoss(data) {
-  console.log("device is lost");
-}
-
-(() => {
-  const selectColormap = document.getElementById("colormap-axis");
-  selectColormap.addEventListener("change", (event) => {
-    const axis = parseInt(event.target.value);
-    if (axis != currentAxis) {
-      currentAxis = axis;
-      updateAxis();
+    /**
+     * Return the remaining TTL time for a given entry key
+     */
+    getRemainingTTL(key) {
+        return this.#keyMap.has(key) ? Infinity : 0;
     }
-  });
-})();
-
-async function updateAxis() {
-  param[param.length - 1] = currentAxis;
-  const stagingBuffer = device.createBuffer({
-    usage: GPUBufferUsage.MAP_WRITE | GPUBufferUsage.COPY_SRC,
-    size: 28,
-    mappedAtCreation: true,
-  });
-
-  const stagingData = new Float32Array(stagingBuffer.getMappedRange());
-  stagingData.set(param);
-  stagingBuffer.unmap();
-  const copyEncoder = device.createCommandEncoder();
-  copyEncoder.copyBufferToBuffer(stagingBuffer, 24, paramsBuffer, 24, 4);
-  device.queue.submit([copyEncoder.finish()]);
-}
-
-async function init() {
-  adapter = await navigator.gpu.requestAdapter();
-  if (!adapter) return goToFallback();
-  device = await adapter.requestDevice();
-  if (!device) return goToFallback();
-  // device.lost.then(recoverFromDeviceLoss);
-
-  canvas = document.getElementById("screen-canvas");
-  context = canvas.getContext("webgpu");
-  if (!context) {
-    console.error("coould not get context from the canvas");
-    return;
-  }
-  canvas.width = window.innerWidth * (window.devicePixelRatio || 1);
-  canvas.height = window.innerHeight * (window.devicePixelRatio || 1);
-
-  swapChainFormat = navigator.gpu.getPreferredCanvasFormat();
-  configureSwapChain(device);
-  canvas.addEventListener("mousedown", (e) => {
-    if (e.buttons == 1 || e.buttons == 2) {
-      keyMap["isDown"] = true;
+    #initializeTTLTracking() {
+        const ttls = new ZeroArray(this.#max);
+        const starts = new ZeroArray(this.#max);
+        this.#ttls = ttls;
+        this.#starts = starts;
+        this.#setItemTTL = (index, ttl, start = perf.now()) => {
+            starts[index] = ttl !== 0 ? start : 0;
+            ttls[index] = ttl;
+            if (ttl !== 0 && this.ttlAutopurge) {
+                const t = setTimeout(() => {
+                    if (this.#isStale(index)) {
+                        this.delete(this.#keyList[index]);
+                    }
+                }, ttl + 1);
+                // unref() not supported on all platforms
+                /* c8 ignore start */
+                if (t.unref) {
+                    t.unref();
+                }
+                /* c8 ignore stop */
+            }
+        };
+        this.#updateItemAge = index => {
+            starts[index] = ttls[index] !== 0 ? perf.now() : 0;
+        };
+        this.#statusTTL = (status, index) => {
+            if (ttls[index]) {
+                const ttl = ttls[index];
+                const start = starts[index];
+                status.ttl = ttl;
+                status.start = start;
+                status.now = cachedNow || getNow();
+                status.remainingTTL = status.now + ttl - start;
+            }
+        };
+        // debounce calls to perf.now() to 1s so we're not hitting
+        // that costly call repeatedly.
+        let cachedNow = 0;
+        const getNow = () => {
+            const n = perf.now();
+            if (this.ttlResolution > 0) {
+                cachedNow = n;
+                const t = setTimeout(() => (cachedNow = 0), this.ttlResolution);
+                // not available on all platforms
+                /* c8 ignore start */
+                if (t.unref) {
+                    t.unref();
+                }
+                /* c8 ignore stop */
+            }
+            return n;
+        };
+        this.getRemainingTTL = key => {
+            const index = this.#keyMap.get(key);
+            if (index === undefined) {
+                return 0;
+            }
+            return ttls[index] === 0 || starts[index] === 0
+                ? Infinity
+                : starts[index] + ttls[index] - (cachedNow || getNow());
+        };
+        this.#isStale = index => {
+            return (ttls[index] !== 0 &&
+                starts[index] !== 0 &&
+                (cachedNow || getNow()) - starts[index] > ttls[index]);
+        };
     }
-  });
-
-  window.addEventListener("mouseup", (e) => {
-    keyMap["isDown"] = false;
-  });
-
-  canvas.addEventListener("mousemove", () => {
-    if (keyMap["isDown"] == true) {
-      throttleTreeTravel(projView);
+    // conditionally set private methods related to TTL
+    #updateItemAge = () => { };
+    #statusTTL = () => { };
+    #setItemTTL = () => { };
+    /* c8 ignore stop */
+    #isStale = () => false;
+    #initializeSizeTracking() {
+        const sizes = new ZeroArray(this.#max);
+        this.#calculatedSize = 0;
+        this.#sizes = sizes;
+        this.#removeItemSize = index => {
+            this.#calculatedSize -= sizes[index];
+            sizes[index] = 0;
+        };
+        this.#requireSize = (k, v, size, sizeCalculation) => {
+            // provisionally accept background fetches.
+            // actual value size will be checked when they return.
+            if (this.#isBackgroundFetch(v)) {
+                return 0;
+            }
+            if (!isPosInt(size)) {
+                if (sizeCalculation) {
+                    if (typeof sizeCalculation !== 'function') {
+                        throw new TypeError('sizeCalculation must be a function');
+                    }
+                    size = sizeCalculation(v, k);
+                    if (!isPosInt(size)) {
+                        throw new TypeError('sizeCalculation return invalid (expect positive integer)');
+                    }
+                }
+                else {
+                    throw new TypeError('invalid size value (must be positive integer). ' +
+                        'When maxSize or maxEntrySize is used, sizeCalculation ' +
+                        'or size must be set.');
+                }
+            }
+            return size;
+        };
+        this.#addItemSize = (index, size, status) => {
+            sizes[index] = size;
+            if (this.#maxSize) {
+                const maxSize = this.#maxSize - sizes[index];
+                while (this.#calculatedSize > maxSize) {
+                    this.#evict(true);
+                }
+            }
+            this.#calculatedSize += sizes[index];
+            if (status) {
+                status.entrySize = size;
+                status.totalCalculatedSize = this.#calculatedSize;
+            }
+        };
     }
-  });
-
-  window.addEventListener("wheel", () => {
-    throttleTreeTravel(projView);
-  });
-}
-
-async function intRenderPipeline() {
-  let Vertex_Buffer_Descriptor = [{}];
-  let vs_module = device.createShaderModule({
-    label: "vertex shader",
-    code: _shaders_renderShader_js__WEBPACK_IMPORTED_MODULE_0__.vs,
-  });
-
-  let fs_module = device.createShaderModule({
-    label: "fragment shader",
-    code: _shaders_renderShader_js__WEBPACK_IMPORTED_MODULE_0__.fs,
-  });
-
-  let positionAttribute_Desc = {
-    shaderLocation: 0,
-    offset: 0,
-    format: "float32x3",
-  };
-
-  let colorAttribute_Desc = {
-    shaderLocation: 1,
-    offset: 0,
-    format: "float32x3",
-  };
-
-  let Vertex_Shader_Descriptor = {
-    module: vs_module,
-    entryPoint: "main",
-    buffers: [
-      {
-        arrayStride: 12,
-        attributes: [positionAttribute_Desc],
-      },
-      {
-        arrayStride: 12,
-        attributes: [colorAttribute_Desc],
-      },
-    ],
-  };
-
-  let Fragment_Shader_Descriptor = {
-    module: fs_module,
-    entryPoint: "main",
-    targets: [{ format: swapChainFormat }],
-  };
-
-  let Depth_Stencil_Descriptor = {
-    format: "depth24plus-stencil8",
-    depthWriteEnabled: true,
-    depthCompare: "less",
-  };
-
-  let Primitive_Descriptor = {
-    topology: "point-list",
-    cullMode: "none",
-    frontFace: "ccw",
-  };
-
-  renderPipeline = await device.createRenderPipeline({
-    label: "render pipeline",
-    layout: "auto",
-    vertex: Vertex_Shader_Descriptor,
-    fragment: Fragment_Shader_Descriptor,
-    depthStencil: Depth_Stencil_Descriptor,
-    primitive: Primitive_Descriptor,
-  });
-}
-
-async function initVertexBuffer() {
-  let totalNumberOfPoints = numPoints;
-  console.log(totalNumberOfPoints);
-  positionBuffer = device.createBuffer({
-    label: "vertex position buffer",
-    size: totalNumberOfPoints * 12,
-    usage: GPUBufferUsage.VERTEX,
-    mappedAtCreation: true,
-  });
-
-  let mapArrayPosition = new Float32Array(positionBuffer.getMappedRange());
-  mapArrayPosition.set(positions);
-  positionBuffer.unmap();
-
-  colorBuffer = device.createBuffer({
-    label: "vertex color buffer",
-    size: totalNumberOfPoints * 12,
-    usage: GPUBufferUsage.VERTEX,
-    mappedAtCreation: true,
-  });
-
-  let mapArrayColor = new Float32Array(colorBuffer.getMappedRange());
-  mapArrayColor.set(colors);
-  colorBuffer.unmap();
-}
-
-function initUniform(cam, projMatrix, params) {
-  camera = cam;
-  proj = projMatrix;
-  param = params;
-  params.push(currentAxis);
-  // params
-  paramsBuffer = device.createBuffer({
-    size: 7 * 4,
-    usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST,
-    mappedAtCreation: true,
-  });
-  let mapArray_params = new Float32Array(paramsBuffer.getMappedRange());
-
-  mapArray_params.set(params);
-  paramsBuffer.unmap();
-
-  function get1DArray(arr) {
-    return +arr.join().split(",");
-  }
-  // create colormap
-  let hsv_colors = [
-    [1, 0, 0, 0.0],
-    [0.0, 1.0, 0, 0.0],
-    [0.97, 1, 0.01, 0.0],
-    [0, 0.99, 0.04, 0.0],
-    [0, 0.98, 0.52, 0.0],
-    [0, 0.98, 1, 0.0],
-    [0.01, 0.49, 1, 0.0],
-    [0.03, 0, 0.99, 0.0],
-    [1, 0, 0.96, 0.0],
-    [1, 0, 0.49, 0.0],
-  ];
-
-  colorMapBuffer = device.createBuffer({
-    size: 160,
-    usage: GPUBufferUsage.UNIFORM,
-    mappedAtCreation: true,
-  });
-
-  let mapArray = new Float32Array(colorMapBuffer.getMappedRange());
-  hsv_colors = hsv_colors.flat();
-  mapArray.set(hsv_colors);
-  colorMapBuffer.unmap();
-
-  MVP_Buffer = device.createBuffer({
-    size: 16 * 4,
-    usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST,
-  });
-
-  const viewMatrix = new Float32Array(16);
-  viewMatrix.set(camera.matrixWorldInverse.elements);
-  projView = mat4.mul(projView, proj, viewMatrix);
-  return projView;
-}
-
-async function createBindGroups() {
-  mvp_BG = device.createBindGroup({
-    label: "uniform bindgroup - rendering",
-    layout: renderPipeline.getBindGroupLayout(0),
-    entries: [
-      {
-        binding: 0,
-        resource: {
-          buffer: MVP_Buffer,
-        },
-      },
-      {
-        binding: 1,
-        resource: {
-          buffer: colorMapBuffer,
-        },
-      },
-      {
-        binding: 2,
-        resource: {
-          buffer: paramsBuffer,
-        },
-      },
-    ],
-  });
-}
-
-async function createDepthBuffer() {
-  renderDepthTexture = device.createTexture({
-    size: [canvas.width, canvas.height, 1],
-    format: "depth24plus-stencil8",
-    usage: GPUTextureUsage.RENDER_ATTACHMENT,
-  });
-}
-
-async function encodedCommand() {
-  // create render pass descriptor
-
-  let colorAttachment = {
-    view: context.getCurrentTexture().createView(),
-    clearValue: { r: 1.0, g: 1.0, b: 1.0, a: 1.0 },
-    loadOp: "clear",
-    storeOp: "store",
-  };
-
-  let depthAttachment = {
-    view: renderDepthTexture.createView(),
-    depthLoadOp: "clear",
-    depthClearValue: 1.0,
-    depthStoreOp: "store",
-    stencilLoadOp: "clear",
-    stencilClearValue: 0,
-    stencilStoreOp: "store",
-  };
-
-  renderPassDescriptor = {
-    colorAttachments: [colorAttachment],
-    depthStencilAttachment: depthAttachment,
-  };
-}
-
-async function update(timestamp) {
-  {
-    // update worldViewProj
-    let proj = mat4.create();
-    let view = mat4.create();
-
-    {
-      // proj
-      const aspect = Math.abs(canvas.width / canvas.height);
-      mat4.perspective(proj, 90, aspect, 0.1, 1000.0);
+    #removeItemSize = _i => { };
+    #addItemSize = (_i, _s, _st) => { };
+    #requireSize = (_k, _v, size, sizeCalculation) => {
+        if (size || sizeCalculation) {
+            throw new TypeError('cannot set size without setting maxSize or maxEntrySize on cache');
+        }
+        return 0;
+    };
+    *#indexes({ allowStale = this.allowStale } = {}) {
+        if (this.#size) {
+            for (let i = this.#tail; true;) {
+                if (!this.#isValidIndex(i)) {
+                    break;
+                }
+                if (allowStale || !this.#isStale(i)) {
+                    yield i;
+                }
+                if (i === this.#head) {
+                    break;
+                }
+                else {
+                    i = this.#prev[i];
+                }
+            }
+        }
     }
-
-    {
-      // view
-      let target = vec3.fromValues(2, 5, 0);
-      // let r = 50;
-      // let x = r * Math.sin(timestamp / 10) + target[0];
-      // let y = r * Math.cos(timestamp / 10) + target[1];
-      // let z = 10;
-
-      let position = vec3.fromValues(5, 100, 100);
-      let up = vec3.fromValues(0, 0, 1);
-      mat4.lookAt(view, position, target, up);
+    *#rindexes({ allowStale = this.allowStale } = {}) {
+        if (this.#size) {
+            for (let i = this.#head; true;) {
+                if (!this.#isValidIndex(i)) {
+                    break;
+                }
+                if (allowStale || !this.#isStale(i)) {
+                    yield i;
+                }
+                if (i === this.#tail) {
+                    break;
+                }
+                else {
+                    i = this.#next[i];
+                }
+            }
+        }
     }
-    const view_matrix = camera.matrixWorldInverse;
-    mat4.multiply(worldViewProj, proj, view_matrix);
-  }
-}
-
-async function stages(camera, proj, params) {
-  await init();
-  await intRenderPipeline();
-  let projectionViewMatrix = await initUniform(camera, proj, params);
-  console.log(projectionViewMatrix);
-  return projectionViewMatrix;
-}
-
-// ---------------------------------------------------------------------------
-// i guess i am not using this
-
-async function renderStages(position, color) {
-  console.log(" i am insider another render");
-  numPoints = position.length / 3;
-  positions = position;
-  colors = color;
-  console.log(positions);
-  await initVertexBuffer();
-  await createBindGroups();
-  await createDepthBuffer();
-  requestAnimationFrame(render2);
-}
-// -----------------------------------------------------------------------------
-
-async function renderWrapper() {
-  await createBindGroups();
-  await createDepthBuffer();
-  requestAnimationFrame(render);
-
-  function render2(timestamp) {
-    commandEncoder = device.createCommandEncoder();
-    projView = mat4.mul(projView, proj, camera.camera);
-    // update(timestamp);
-    encodedCommand();
-
-    // device.queue.writeBuffer(MVP_Buffer, 0, worldViewProj, 16);
-
-    let wvStagingBuffer = device.createBuffer({
-      size: 4 * 16,
-      usage: GPUBufferUsage.COPY_SRC,
-      mappedAtCreation: true,
-    });
-    const stagingUniformData = new Float32Array(
-      wvStagingBuffer.getMappedRange()
-    );
-    stagingUniformData.set(projView);
-    wvStagingBuffer.unmap();
-    commandEncoder.copyBufferToBuffer(wvStagingBuffer, 0, MVP_Buffer, 0, 64);
-    let renderPass = commandEncoder.beginRenderPass(renderPassDescriptor);
-    renderPass.setPipeline(renderPipeline);
-    renderPass.setViewport(0, 0, canvas.width, canvas.height, 0.0, 1.0);
-    renderPass.setBindGroup(0, mvp_BG);
-    renderPass.setVertexBuffer(0, positionBuffer);
-    renderPass.setVertexBuffer(1, colorBuffer);
-    renderPass.draw(numPoints, 1, 0, 0);
-    renderPass.end();
-    device.queue.submit([commandEncoder.finish()]);
-    requestAnimationFrame(render);
-  }
-
-  function render(timestamp) {
-    stats.update();
-    var startTime = performance.now();
-    commandEncoder = device.createCommandEncoder();
-    const viewMatrix = new Float32Array(16);
-    viewMatrix.set(camera.matrixWorldInverse.elements);
-    projView = mat4.mul(projView, proj, viewMatrix);
-    // update(timestamp);
-    encodedCommand();
-
-    // device.queue.writeBuffer(MVP_Buffer, 0, worldViewProj, 16);
-
-    let wvStagingBuffer = device.createBuffer({
-      size: 4 * 16,
-      usage: GPUBufferUsage.COPY_SRC,
-      mappedAtCreation: true,
-    });
-    const stagingUniformData = new Float32Array(
-      wvStagingBuffer.getMappedRange()
-    );
-    stagingUniformData.set(projView);
-    wvStagingBuffer.unmap();
-    commandEncoder.copyBufferToBuffer(wvStagingBuffer, 0, MVP_Buffer, 0, 64);
-    let renderPass = commandEncoder.beginRenderPass(renderPassDescriptor);
-    renderPass.setPipeline(renderPipeline);
-    renderPass.setViewport(0, 0, canvas.width, canvas.height, 0.0, 1.0);
-    renderPass.setBindGroup(0, mvp_BG);
-    for (let key in _index_js__WEBPACK_IMPORTED_MODULE_1__.bufferMap) {
-      renderPass.setVertexBuffer(0, _index_js__WEBPACK_IMPORTED_MODULE_1__.bufferMap[key].position);
-      renderPass.setVertexBuffer(1, _index_js__WEBPACK_IMPORTED_MODULE_1__.bufferMap[key].color);
-      // console.log("length is", +bufferMap[key].position.label / 3);
-      numPoints = +_index_js__WEBPACK_IMPORTED_MODULE_1__.bufferMap[key].position.label / 3;
-      renderPass.draw(numPoints, 4, 0, 0);
+    #isValidIndex(index) {
+        return (index !== undefined &&
+            this.#keyMap.get(this.#keyList[index]) === index);
     }
-    renderPass.end();
-    device.queue.submit([commandEncoder.finish()]);
-    var endTime = performance.now();
-    requestAnimationFrame(render);
-  }
+    /**
+     * Return a generator yielding `[key, value]` pairs,
+     * in order from most recently used to least recently used.
+     */
+    *entries() {
+        for (const i of this.#indexes()) {
+            if (this.#valList[i] !== undefined &&
+                this.#keyList[i] !== undefined &&
+                !this.#isBackgroundFetch(this.#valList[i])) {
+                yield [this.#keyList[i], this.#valList[i]];
+            }
+        }
+    }
+    /**
+     * Inverse order version of {@link LRUCache.entries}
+     *
+     * Return a generator yielding `[key, value]` pairs,
+     * in order from least recently used to most recently used.
+     */
+    *rentries() {
+        for (const i of this.#rindexes()) {
+            if (this.#valList[i] !== undefined &&
+                this.#keyList[i] !== undefined &&
+                !this.#isBackgroundFetch(this.#valList[i])) {
+                yield [this.#keyList[i], this.#valList[i]];
+            }
+        }
+    }
+    /**
+     * Return a generator yielding the keys in the cache,
+     * in order from most recently used to least recently used.
+     */
+    *keys() {
+        for (const i of this.#indexes()) {
+            const k = this.#keyList[i];
+            if (k !== undefined &&
+                !this.#isBackgroundFetch(this.#valList[i])) {
+                yield k;
+            }
+        }
+    }
+    /**
+     * Inverse order version of {@link LRUCache.keys}
+     *
+     * Return a generator yielding the keys in the cache,
+     * in order from least recently used to most recently used.
+     */
+    *rkeys() {
+        for (const i of this.#rindexes()) {
+            const k = this.#keyList[i];
+            if (k !== undefined &&
+                !this.#isBackgroundFetch(this.#valList[i])) {
+                yield k;
+            }
+        }
+    }
+    /**
+     * Return a generator yielding the values in the cache,
+     * in order from most recently used to least recently used.
+     */
+    *values() {
+        for (const i of this.#indexes()) {
+            const v = this.#valList[i];
+            if (v !== undefined &&
+                !this.#isBackgroundFetch(this.#valList[i])) {
+                yield this.#valList[i];
+            }
+        }
+    }
+    /**
+     * Inverse order version of {@link LRUCache.values}
+     *
+     * Return a generator yielding the values in the cache,
+     * in order from least recently used to most recently used.
+     */
+    *rvalues() {
+        for (const i of this.#rindexes()) {
+            const v = this.#valList[i];
+            if (v !== undefined &&
+                !this.#isBackgroundFetch(this.#valList[i])) {
+                yield this.#valList[i];
+            }
+        }
+    }
+    /**
+     * Iterating over the cache itself yields the same results as
+     * {@link LRUCache.entries}
+     */
+    [Symbol.iterator]() {
+        return this.entries();
+    }
+    /**
+     * Find a value for which the supplied fn method returns a truthy value,
+     * similar to Array.find().  fn is called as fn(value, key, cache).
+     */
+    find(fn, getOptions = {}) {
+        for (const i of this.#indexes()) {
+            const v = this.#valList[i];
+            const value = this.#isBackgroundFetch(v)
+                ? v.__staleWhileFetching
+                : v;
+            if (value === undefined)
+                continue;
+            if (fn(value, this.#keyList[i], this)) {
+                return this.get(this.#keyList[i], getOptions);
+            }
+        }
+    }
+    /**
+     * Call the supplied function on each item in the cache, in order from
+     * most recently used to least recently used.  fn is called as
+     * fn(value, key, cache).  Does not update age or recenty of use.
+     * Does not iterate over stale values.
+     */
+    forEach(fn, thisp = this) {
+        for (const i of this.#indexes()) {
+            const v = this.#valList[i];
+            const value = this.#isBackgroundFetch(v)
+                ? v.__staleWhileFetching
+                : v;
+            if (value === undefined)
+                continue;
+            fn.call(thisp, value, this.#keyList[i], this);
+        }
+    }
+    /**
+     * The same as {@link LRUCache.forEach} but items are iterated over in
+     * reverse order.  (ie, less recently used items are iterated over first.)
+     */
+    rforEach(fn, thisp = this) {
+        for (const i of this.#rindexes()) {
+            const v = this.#valList[i];
+            const value = this.#isBackgroundFetch(v)
+                ? v.__staleWhileFetching
+                : v;
+            if (value === undefined)
+                continue;
+            fn.call(thisp, value, this.#keyList[i], this);
+        }
+    }
+    /**
+     * Delete any stale entries. Returns true if anything was removed,
+     * false otherwise.
+     */
+    purgeStale() {
+        let deleted = false;
+        for (const i of this.#rindexes({ allowStale: true })) {
+            if (this.#isStale(i)) {
+                this.delete(this.#keyList[i]);
+                deleted = true;
+            }
+        }
+        return deleted;
+    }
+    /**
+     * Return an array of [key, {@link LRUCache.Entry}] tuples which can be
+     * passed to cache.load()
+     */
+    dump() {
+        const arr = [];
+        for (const i of this.#indexes({ allowStale: true })) {
+            const key = this.#keyList[i];
+            const v = this.#valList[i];
+            const value = this.#isBackgroundFetch(v)
+                ? v.__staleWhileFetching
+                : v;
+            if (value === undefined || key === undefined)
+                continue;
+            const entry = { value };
+            if (this.#ttls && this.#starts) {
+                entry.ttl = this.#ttls[i];
+                // always dump the start relative to a portable timestamp
+                // it's ok for this to be a bit slow, it's a rare operation.
+                const age = perf.now() - this.#starts[i];
+                entry.start = Math.floor(Date.now() - age);
+            }
+            if (this.#sizes) {
+                entry.size = this.#sizes[i];
+            }
+            arr.unshift([key, entry]);
+        }
+        return arr;
+    }
+    /**
+     * Reset the cache and load in the items in entries in the order listed.
+     * Note that the shape of the resulting cache may be different if the
+     * same options are not used in both caches.
+     */
+    load(arr) {
+        this.clear();
+        for (const [key, entry] of arr) {
+            if (entry.start) {
+                // entry.start is a portable timestamp, but we may be using
+                // node's performance.now(), so calculate the offset, so that
+                // we get the intended remaining TTL, no matter how long it's
+                // been on ice.
+                //
+                // it's ok for this to be a bit slow, it's a rare operation.
+                const age = Date.now() - entry.start;
+                entry.start = perf.now() - age;
+            }
+            this.set(key, entry.value, entry);
+        }
+    }
+    /**
+     * Add a value to the cache.
+     */
+    set(k, v, setOptions = {}) {
+        const { ttl = this.ttl, start, noDisposeOnSet = this.noDisposeOnSet, sizeCalculation = this.sizeCalculation, status, } = setOptions;
+        let { noUpdateTTL = this.noUpdateTTL } = setOptions;
+        const size = this.#requireSize(k, v, setOptions.size || 0, sizeCalculation);
+        // if the item doesn't fit, don't do anything
+        // NB: maxEntrySize set to maxSize by default
+        if (this.maxEntrySize && size > this.maxEntrySize) {
+            if (status) {
+                status.set = 'miss';
+                status.maxEntrySizeExceeded = true;
+            }
+            // have to delete, in case something is there already.
+            this.delete(k);
+            return this;
+        }
+        let index = this.#size === 0 ? undefined : this.#keyMap.get(k);
+        if (index === undefined) {
+            // addition
+            index = (this.#size === 0
+                ? this.#tail
+                : this.#free.length !== 0
+                    ? this.#free.pop()
+                    : this.#size === this.#max
+                        ? this.#evict(false)
+                        : this.#size);
+            this.#keyList[index] = k;
+            this.#valList[index] = v;
+            this.#keyMap.set(k, index);
+            this.#next[this.#tail] = index;
+            this.#prev[index] = this.#tail;
+            this.#tail = index;
+            this.#size++;
+            this.#addItemSize(index, size, status);
+            if (status)
+                status.set = 'add';
+            noUpdateTTL = false;
+        }
+        else {
+            // update
+            this.#moveToTail(index);
+            const oldVal = this.#valList[index];
+            if (v !== oldVal) {
+                if (this.#hasFetchMethod && this.#isBackgroundFetch(oldVal)) {
+                    oldVal.__abortController.abort(new Error('replaced'));
+                }
+                else if (!noDisposeOnSet) {
+                    if (this.#hasDispose) {
+                        this.#dispose?.(oldVal, k, 'set');
+                    }
+                    if (this.#hasDisposeAfter) {
+                        this.#disposed?.push([oldVal, k, 'set']);
+                    }
+                }
+                this.#removeItemSize(index);
+                this.#addItemSize(index, size, status);
+                this.#valList[index] = v;
+                if (status) {
+                    status.set = 'replace';
+                    const oldValue = oldVal && this.#isBackgroundFetch(oldVal)
+                        ? oldVal.__staleWhileFetching
+                        : oldVal;
+                    if (oldValue !== undefined)
+                        status.oldValue = oldValue;
+                }
+            }
+            else if (status) {
+                status.set = 'update';
+            }
+        }
+        if (ttl !== 0 && !this.#ttls) {
+            this.#initializeTTLTracking();
+        }
+        if (this.#ttls) {
+            if (!noUpdateTTL) {
+                this.#setItemTTL(index, ttl, start);
+            }
+            if (status)
+                this.#statusTTL(status, index);
+        }
+        if (!noDisposeOnSet && this.#hasDisposeAfter && this.#disposed) {
+            const dt = this.#disposed;
+            let task;
+            while ((task = dt?.shift())) {
+                this.#disposeAfter?.(...task);
+            }
+        }
+        return this;
+    }
+    /**
+     * Evict the least recently used item, returning its value or
+     * `undefined` if cache is empty.
+     */
+    pop() {
+        try {
+            while (this.#size) {
+                const val = this.#valList[this.#head];
+                this.#evict(true);
+                if (this.#isBackgroundFetch(val)) {
+                    if (val.__staleWhileFetching) {
+                        return val.__staleWhileFetching;
+                    }
+                }
+                else if (val !== undefined) {
+                    return val;
+                }
+            }
+        }
+        finally {
+            if (this.#hasDisposeAfter && this.#disposed) {
+                const dt = this.#disposed;
+                let task;
+                while ((task = dt?.shift())) {
+                    this.#disposeAfter?.(...task);
+                }
+            }
+        }
+    }
+    #evict(free) {
+        const head = this.#head;
+        const k = this.#keyList[head];
+        const v = this.#valList[head];
+        if (this.#hasFetchMethod && this.#isBackgroundFetch(v)) {
+            v.__abortController.abort(new Error('evicted'));
+        }
+        else if (this.#hasDispose || this.#hasDisposeAfter) {
+            if (this.#hasDispose) {
+                this.#dispose?.(v, k, 'evict');
+            }
+            if (this.#hasDisposeAfter) {
+                this.#disposed?.push([v, k, 'evict']);
+            }
+        }
+        this.#removeItemSize(head);
+        // if we aren't about to use the index, then null these out
+        if (free) {
+            this.#keyList[head] = undefined;
+            this.#valList[head] = undefined;
+            this.#free.push(head);
+        }
+        if (this.#size === 1) {
+            this.#head = this.#tail = 0;
+            this.#free.length = 0;
+        }
+        else {
+            this.#head = this.#next[head];
+        }
+        this.#keyMap.delete(k);
+        this.#size--;
+        return head;
+    }
+    /**
+     * Check if a key is in the cache, without updating the recency of use.
+     * Will return false if the item is stale, even though it is technically
+     * in the cache.
+     *
+     * Will not update item age unless
+     * {@link LRUCache.OptionsBase.updateAgeOnHas} is set.
+     */
+    has(k, hasOptions = {}) {
+        const { updateAgeOnHas = this.updateAgeOnHas, status } = hasOptions;
+        const index = this.#keyMap.get(k);
+        if (index !== undefined) {
+            const v = this.#valList[index];
+            if (this.#isBackgroundFetch(v) &&
+                v.__staleWhileFetching === undefined) {
+                return false;
+            }
+            if (!this.#isStale(index)) {
+                if (updateAgeOnHas) {
+                    this.#updateItemAge(index);
+                }
+                if (status) {
+                    status.has = 'hit';
+                    this.#statusTTL(status, index);
+                }
+                return true;
+            }
+            else if (status) {
+                status.has = 'stale';
+                this.#statusTTL(status, index);
+            }
+        }
+        else if (status) {
+            status.has = 'miss';
+        }
+        return false;
+    }
+    /**
+     * Like {@link LRUCache#get} but doesn't update recency or delete stale
+     * items.
+     *
+     * Returns `undefined` if the item is stale, unless
+     * {@link LRUCache.OptionsBase.allowStale} is set.
+     */
+    peek(k, peekOptions = {}) {
+        const { allowStale = this.allowStale } = peekOptions;
+        const index = this.#keyMap.get(k);
+        if (index !== undefined &&
+            (allowStale || !this.#isStale(index))) {
+            const v = this.#valList[index];
+            // either stale and allowed, or forcing a refresh of non-stale value
+            return this.#isBackgroundFetch(v) ? v.__staleWhileFetching : v;
+        }
+    }
+    #backgroundFetch(k, index, options, context) {
+        const v = index === undefined ? undefined : this.#valList[index];
+        if (this.#isBackgroundFetch(v)) {
+            return v;
+        }
+        const ac = new AbortController();
+        const { signal } = options;
+        // when/if our AC signals, then stop listening to theirs.
+        signal?.addEventListener('abort', () => ac.abort(signal.reason), {
+            signal: ac.signal,
+        });
+        const fetchOpts = {
+            signal: ac.signal,
+            options,
+            context,
+        };
+        const cb = (v, updateCache = false) => {
+            const { aborted } = ac.signal;
+            const ignoreAbort = options.ignoreFetchAbort && v !== undefined;
+            if (options.status) {
+                if (aborted && !updateCache) {
+                    options.status.fetchAborted = true;
+                    options.status.fetchError = ac.signal.reason;
+                    if (ignoreAbort)
+                        options.status.fetchAbortIgnored = true;
+                }
+                else {
+                    options.status.fetchResolved = true;
+                }
+            }
+            if (aborted && !ignoreAbort && !updateCache) {
+                return fetchFail(ac.signal.reason);
+            }
+            // either we didn't abort, and are still here, or we did, and ignored
+            const bf = p;
+            if (this.#valList[index] === p) {
+                if (v === undefined) {
+                    if (bf.__staleWhileFetching) {
+                        this.#valList[index] = bf.__staleWhileFetching;
+                    }
+                    else {
+                        this.delete(k);
+                    }
+                }
+                else {
+                    if (options.status)
+                        options.status.fetchUpdated = true;
+                    this.set(k, v, fetchOpts.options);
+                }
+            }
+            return v;
+        };
+        const eb = (er) => {
+            if (options.status) {
+                options.status.fetchRejected = true;
+                options.status.fetchError = er;
+            }
+            return fetchFail(er);
+        };
+        const fetchFail = (er) => {
+            const { aborted } = ac.signal;
+            const allowStaleAborted = aborted && options.allowStaleOnFetchAbort;
+            const allowStale = allowStaleAborted || options.allowStaleOnFetchRejection;
+            const noDelete = allowStale || options.noDeleteOnFetchRejection;
+            const bf = p;
+            if (this.#valList[index] === p) {
+                // if we allow stale on fetch rejections, then we need to ensure that
+                // the stale value is not removed from the cache when the fetch fails.
+                const del = !noDelete || bf.__staleWhileFetching === undefined;
+                if (del) {
+                    this.delete(k);
+                }
+                else if (!allowStaleAborted) {
+                    // still replace the *promise* with the stale value,
+                    // since we are done with the promise at this point.
+                    // leave it untouched if we're still waiting for an
+                    // aborted background fetch that hasn't yet returned.
+                    this.#valList[index] = bf.__staleWhileFetching;
+                }
+            }
+            if (allowStale) {
+                if (options.status && bf.__staleWhileFetching !== undefined) {
+                    options.status.returnedStale = true;
+                }
+                return bf.__staleWhileFetching;
+            }
+            else if (bf.__returned === bf) {
+                throw er;
+            }
+        };
+        const pcall = (res, rej) => {
+            const fmp = this.#fetchMethod?.(k, v, fetchOpts);
+            if (fmp && fmp instanceof Promise) {
+                fmp.then(v => res(v), rej);
+            }
+            // ignored, we go until we finish, regardless.
+            // defer check until we are actually aborting,
+            // so fetchMethod can override.
+            ac.signal.addEventListener('abort', () => {
+                if (!options.ignoreFetchAbort ||
+                    options.allowStaleOnFetchAbort) {
+                    res();
+                    // when it eventually resolves, update the cache.
+                    if (options.allowStaleOnFetchAbort) {
+                        res = v => cb(v, true);
+                    }
+                }
+            });
+        };
+        if (options.status)
+            options.status.fetchDispatched = true;
+        const p = new Promise(pcall).then(cb, eb);
+        const bf = Object.assign(p, {
+            __abortController: ac,
+            __staleWhileFetching: v,
+            __returned: undefined,
+        });
+        if (index === undefined) {
+            // internal, don't expose status.
+            this.set(k, bf, { ...fetchOpts.options, status: undefined });
+            index = this.#keyMap.get(k);
+        }
+        else {
+            this.#valList[index] = bf;
+        }
+        return bf;
+    }
+    #isBackgroundFetch(p) {
+        if (!this.#hasFetchMethod)
+            return false;
+        const b = p;
+        return (!!b &&
+            b instanceof Promise &&
+            b.hasOwnProperty('__staleWhileFetching') &&
+            b.__abortController instanceof AbortController);
+    }
+    async fetch(k, fetchOptions = {}) {
+        const { 
+        // get options
+        allowStale = this.allowStale, updateAgeOnGet = this.updateAgeOnGet, noDeleteOnStaleGet = this.noDeleteOnStaleGet, 
+        // set options
+        ttl = this.ttl, noDisposeOnSet = this.noDisposeOnSet, size = 0, sizeCalculation = this.sizeCalculation, noUpdateTTL = this.noUpdateTTL, 
+        // fetch exclusive options
+        noDeleteOnFetchRejection = this.noDeleteOnFetchRejection, allowStaleOnFetchRejection = this.allowStaleOnFetchRejection, ignoreFetchAbort = this.ignoreFetchAbort, allowStaleOnFetchAbort = this.allowStaleOnFetchAbort, context, forceRefresh = false, status, signal, } = fetchOptions;
+        if (!this.#hasFetchMethod) {
+            if (status)
+                status.fetch = 'get';
+            return this.get(k, {
+                allowStale,
+                updateAgeOnGet,
+                noDeleteOnStaleGet,
+                status,
+            });
+        }
+        const options = {
+            allowStale,
+            updateAgeOnGet,
+            noDeleteOnStaleGet,
+            ttl,
+            noDisposeOnSet,
+            size,
+            sizeCalculation,
+            noUpdateTTL,
+            noDeleteOnFetchRejection,
+            allowStaleOnFetchRejection,
+            allowStaleOnFetchAbort,
+            ignoreFetchAbort,
+            status,
+            signal,
+        };
+        let index = this.#keyMap.get(k);
+        if (index === undefined) {
+            if (status)
+                status.fetch = 'miss';
+            const p = this.#backgroundFetch(k, index, options, context);
+            return (p.__returned = p);
+        }
+        else {
+            // in cache, maybe already fetching
+            const v = this.#valList[index];
+            if (this.#isBackgroundFetch(v)) {
+                const stale = allowStale && v.__staleWhileFetching !== undefined;
+                if (status) {
+                    status.fetch = 'inflight';
+                    if (stale)
+                        status.returnedStale = true;
+                }
+                return stale ? v.__staleWhileFetching : (v.__returned = v);
+            }
+            // if we force a refresh, that means do NOT serve the cached value,
+            // unless we are already in the process of refreshing the cache.
+            const isStale = this.#isStale(index);
+            if (!forceRefresh && !isStale) {
+                if (status)
+                    status.fetch = 'hit';
+                this.#moveToTail(index);
+                if (updateAgeOnGet) {
+                    this.#updateItemAge(index);
+                }
+                if (status)
+                    this.#statusTTL(status, index);
+                return v;
+            }
+            // ok, it is stale or a forced refresh, and not already fetching.
+            // refresh the cache.
+            const p = this.#backgroundFetch(k, index, options, context);
+            const hasStale = p.__staleWhileFetching !== undefined;
+            const staleVal = hasStale && allowStale;
+            if (status) {
+                status.fetch = isStale ? 'stale' : 'refresh';
+                if (staleVal && isStale)
+                    status.returnedStale = true;
+            }
+            return staleVal ? p.__staleWhileFetching : (p.__returned = p);
+        }
+    }
+    /**
+     * Return a value from the cache. Will update the recency of the cache
+     * entry found.
+     *
+     * If the key is not found, get() will return `undefined`.
+     */
+    get(k, getOptions = {}) {
+        const { allowStale = this.allowStale, updateAgeOnGet = this.updateAgeOnGet, noDeleteOnStaleGet = this.noDeleteOnStaleGet, status, } = getOptions;
+        const index = this.#keyMap.get(k);
+        if (index !== undefined) {
+            const value = this.#valList[index];
+            const fetching = this.#isBackgroundFetch(value);
+            if (status)
+                this.#statusTTL(status, index);
+            if (this.#isStale(index)) {
+                if (status)
+                    status.get = 'stale';
+                // delete only if not an in-flight background fetch
+                if (!fetching) {
+                    if (!noDeleteOnStaleGet) {
+                        this.delete(k);
+                    }
+                    if (status && allowStale)
+                        status.returnedStale = true;
+                    return allowStale ? value : undefined;
+                }
+                else {
+                    if (status &&
+                        allowStale &&
+                        value.__staleWhileFetching !== undefined) {
+                        status.returnedStale = true;
+                    }
+                    return allowStale ? value.__staleWhileFetching : undefined;
+                }
+            }
+            else {
+                if (status)
+                    status.get = 'hit';
+                // if we're currently fetching it, we don't actually have it yet
+                // it's not stale, which means this isn't a staleWhileRefetching.
+                // If it's not stale, and fetching, AND has a __staleWhileFetching
+                // value, then that means the user fetched with {forceRefresh:true},
+                // so it's safe to return that value.
+                if (fetching) {
+                    return value.__staleWhileFetching;
+                }
+                this.#moveToTail(index);
+                if (updateAgeOnGet) {
+                    this.#updateItemAge(index);
+                }
+                return value;
+            }
+        }
+        else if (status) {
+            status.get = 'miss';
+        }
+    }
+    #connect(p, n) {
+        this.#prev[n] = p;
+        this.#next[p] = n;
+    }
+    #moveToTail(index) {
+        // if tail already, nothing to do
+        // if head, move head to next[index]
+        // else
+        //   move next[prev[index]] to next[index] (head has no prev)
+        //   move prev[next[index]] to prev[index]
+        // prev[index] = tail
+        // next[tail] = index
+        // tail = index
+        if (index !== this.#tail) {
+            if (index === this.#head) {
+                this.#head = this.#next[index];
+            }
+            else {
+                this.#connect(this.#prev[index], this.#next[index]);
+            }
+            this.#connect(this.#tail, index);
+            this.#tail = index;
+        }
+    }
+    /**
+     * Deletes a key out of the cache.
+     * Returns true if the key was deleted, false otherwise.
+     */
+    delete(k) {
+        let deleted = false;
+        if (this.#size !== 0) {
+            const index = this.#keyMap.get(k);
+            if (index !== undefined) {
+                deleted = true;
+                if (this.#size === 1) {
+                    this.clear();
+                }
+                else {
+                    this.#removeItemSize(index);
+                    const v = this.#valList[index];
+                    if (this.#isBackgroundFetch(v)) {
+                        v.__abortController.abort(new Error('deleted'));
+                    }
+                    else if (this.#hasDispose || this.#hasDisposeAfter) {
+                        if (this.#hasDispose) {
+                            this.#dispose?.(v, k, 'delete');
+                        }
+                        if (this.#hasDisposeAfter) {
+                            this.#disposed?.push([v, k, 'delete']);
+                        }
+                    }
+                    this.#keyMap.delete(k);
+                    this.#keyList[index] = undefined;
+                    this.#valList[index] = undefined;
+                    if (index === this.#tail) {
+                        this.#tail = this.#prev[index];
+                    }
+                    else if (index === this.#head) {
+                        this.#head = this.#next[index];
+                    }
+                    else {
+                        this.#next[this.#prev[index]] = this.#next[index];
+                        this.#prev[this.#next[index]] = this.#prev[index];
+                    }
+                    this.#size--;
+                    this.#free.push(index);
+                }
+            }
+        }
+        if (this.#hasDisposeAfter && this.#disposed?.length) {
+            const dt = this.#disposed;
+            let task;
+            while ((task = dt?.shift())) {
+                this.#disposeAfter?.(...task);
+            }
+        }
+        return deleted;
+    }
+    /**
+     * Clear the cache entirely, throwing away all values.
+     */
+    clear() {
+        for (const index of this.#rindexes({ allowStale: true })) {
+            const v = this.#valList[index];
+            if (this.#isBackgroundFetch(v)) {
+                v.__abortController.abort(new Error('deleted'));
+            }
+            else {
+                const k = this.#keyList[index];
+                if (this.#hasDispose) {
+                    this.#dispose?.(v, k, 'delete');
+                }
+                if (this.#hasDisposeAfter) {
+                    this.#disposed?.push([v, k, 'delete']);
+                }
+            }
+        }
+        this.#keyMap.clear();
+        this.#valList.fill(undefined);
+        this.#keyList.fill(undefined);
+        if (this.#ttls && this.#starts) {
+            this.#ttls.fill(0);
+            this.#starts.fill(0);
+        }
+        if (this.#sizes) {
+            this.#sizes.fill(0);
+        }
+        this.#head = 0;
+        this.#tail = 0;
+        this.#free.length = 0;
+        this.#calculatedSize = 0;
+        this.#size = 0;
+        if (this.#hasDisposeAfter && this.#disposed) {
+            const dt = this.#disposed;
+            let task;
+            while ((task = dt?.shift())) {
+                this.#disposeAfter?.(...task);
+            }
+        }
+    }
 }
-
-
-
-
-/***/ }),
-
-/***/ "?3dd1":
-/*!********************!*\
-  !*** fs (ignored) ***!
-  \********************/
-/***/ (() => {
-
-/* (ignored) */
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (LRUCache);
+//# sourceMappingURL=index.js.map
 
 /***/ }),
 
@@ -4475,414 +5697,414 @@ async function renderWrapper() {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "ACESFilmicToneMapping": () => (/* binding */ ACESFilmicToneMapping),
-/* harmony export */   "AddEquation": () => (/* binding */ AddEquation),
-/* harmony export */   "AddOperation": () => (/* binding */ AddOperation),
-/* harmony export */   "AdditiveAnimationBlendMode": () => (/* binding */ AdditiveAnimationBlendMode),
-/* harmony export */   "AdditiveBlending": () => (/* binding */ AdditiveBlending),
-/* harmony export */   "AlphaFormat": () => (/* binding */ AlphaFormat),
-/* harmony export */   "AlwaysDepth": () => (/* binding */ AlwaysDepth),
-/* harmony export */   "AlwaysStencilFunc": () => (/* binding */ AlwaysStencilFunc),
-/* harmony export */   "AmbientLight": () => (/* binding */ AmbientLight),
-/* harmony export */   "AmbientLightProbe": () => (/* binding */ AmbientLightProbe),
-/* harmony export */   "AnimationClip": () => (/* binding */ AnimationClip),
-/* harmony export */   "AnimationLoader": () => (/* binding */ AnimationLoader),
-/* harmony export */   "AnimationMixer": () => (/* binding */ AnimationMixer),
-/* harmony export */   "AnimationObjectGroup": () => (/* binding */ AnimationObjectGroup),
-/* harmony export */   "AnimationUtils": () => (/* binding */ AnimationUtils),
-/* harmony export */   "ArcCurve": () => (/* binding */ ArcCurve),
-/* harmony export */   "ArrayCamera": () => (/* binding */ ArrayCamera),
-/* harmony export */   "ArrowHelper": () => (/* binding */ ArrowHelper),
-/* harmony export */   "Audio": () => (/* binding */ Audio),
-/* harmony export */   "AudioAnalyser": () => (/* binding */ AudioAnalyser),
-/* harmony export */   "AudioContext": () => (/* binding */ AudioContext),
-/* harmony export */   "AudioListener": () => (/* binding */ AudioListener),
-/* harmony export */   "AudioLoader": () => (/* binding */ AudioLoader),
-/* harmony export */   "AxesHelper": () => (/* binding */ AxesHelper),
-/* harmony export */   "BackSide": () => (/* binding */ BackSide),
-/* harmony export */   "BasicDepthPacking": () => (/* binding */ BasicDepthPacking),
-/* harmony export */   "BasicShadowMap": () => (/* binding */ BasicShadowMap),
-/* harmony export */   "Bone": () => (/* binding */ Bone),
-/* harmony export */   "BooleanKeyframeTrack": () => (/* binding */ BooleanKeyframeTrack),
-/* harmony export */   "Box2": () => (/* binding */ Box2),
-/* harmony export */   "Box3": () => (/* binding */ Box3),
-/* harmony export */   "Box3Helper": () => (/* binding */ Box3Helper),
-/* harmony export */   "BoxBufferGeometry": () => (/* binding */ BoxBufferGeometry),
-/* harmony export */   "BoxGeometry": () => (/* binding */ BoxGeometry),
-/* harmony export */   "BoxHelper": () => (/* binding */ BoxHelper),
-/* harmony export */   "BufferAttribute": () => (/* binding */ BufferAttribute),
-/* harmony export */   "BufferGeometry": () => (/* binding */ BufferGeometry),
-/* harmony export */   "BufferGeometryLoader": () => (/* binding */ BufferGeometryLoader),
-/* harmony export */   "ByteType": () => (/* binding */ ByteType),
-/* harmony export */   "Cache": () => (/* binding */ Cache),
-/* harmony export */   "Camera": () => (/* binding */ Camera),
-/* harmony export */   "CameraHelper": () => (/* binding */ CameraHelper),
-/* harmony export */   "CanvasTexture": () => (/* binding */ CanvasTexture),
-/* harmony export */   "CapsuleBufferGeometry": () => (/* binding */ CapsuleBufferGeometry),
-/* harmony export */   "CapsuleGeometry": () => (/* binding */ CapsuleGeometry),
-/* harmony export */   "CatmullRomCurve3": () => (/* binding */ CatmullRomCurve3),
-/* harmony export */   "CineonToneMapping": () => (/* binding */ CineonToneMapping),
-/* harmony export */   "CircleBufferGeometry": () => (/* binding */ CircleBufferGeometry),
-/* harmony export */   "CircleGeometry": () => (/* binding */ CircleGeometry),
-/* harmony export */   "ClampToEdgeWrapping": () => (/* binding */ ClampToEdgeWrapping),
-/* harmony export */   "Clock": () => (/* binding */ Clock),
-/* harmony export */   "Color": () => (/* binding */ Color),
-/* harmony export */   "ColorKeyframeTrack": () => (/* binding */ ColorKeyframeTrack),
-/* harmony export */   "ColorManagement": () => (/* binding */ ColorManagement),
-/* harmony export */   "CompressedArrayTexture": () => (/* binding */ CompressedArrayTexture),
-/* harmony export */   "CompressedTexture": () => (/* binding */ CompressedTexture),
-/* harmony export */   "CompressedTextureLoader": () => (/* binding */ CompressedTextureLoader),
-/* harmony export */   "ConeBufferGeometry": () => (/* binding */ ConeBufferGeometry),
-/* harmony export */   "ConeGeometry": () => (/* binding */ ConeGeometry),
-/* harmony export */   "CubeCamera": () => (/* binding */ CubeCamera),
-/* harmony export */   "CubeReflectionMapping": () => (/* binding */ CubeReflectionMapping),
-/* harmony export */   "CubeRefractionMapping": () => (/* binding */ CubeRefractionMapping),
-/* harmony export */   "CubeTexture": () => (/* binding */ CubeTexture),
-/* harmony export */   "CubeTextureLoader": () => (/* binding */ CubeTextureLoader),
-/* harmony export */   "CubeUVReflectionMapping": () => (/* binding */ CubeUVReflectionMapping),
-/* harmony export */   "CubicBezierCurve": () => (/* binding */ CubicBezierCurve),
-/* harmony export */   "CubicBezierCurve3": () => (/* binding */ CubicBezierCurve3),
-/* harmony export */   "CubicInterpolant": () => (/* binding */ CubicInterpolant),
-/* harmony export */   "CullFaceBack": () => (/* binding */ CullFaceBack),
-/* harmony export */   "CullFaceFront": () => (/* binding */ CullFaceFront),
-/* harmony export */   "CullFaceFrontBack": () => (/* binding */ CullFaceFrontBack),
-/* harmony export */   "CullFaceNone": () => (/* binding */ CullFaceNone),
-/* harmony export */   "Curve": () => (/* binding */ Curve),
-/* harmony export */   "CurvePath": () => (/* binding */ CurvePath),
-/* harmony export */   "CustomBlending": () => (/* binding */ CustomBlending),
-/* harmony export */   "CustomToneMapping": () => (/* binding */ CustomToneMapping),
-/* harmony export */   "CylinderBufferGeometry": () => (/* binding */ CylinderBufferGeometry),
-/* harmony export */   "CylinderGeometry": () => (/* binding */ CylinderGeometry),
-/* harmony export */   "Cylindrical": () => (/* binding */ Cylindrical),
-/* harmony export */   "Data3DTexture": () => (/* binding */ Data3DTexture),
-/* harmony export */   "DataArrayTexture": () => (/* binding */ DataArrayTexture),
-/* harmony export */   "DataTexture": () => (/* binding */ DataTexture),
-/* harmony export */   "DataTexture2DArray": () => (/* binding */ DataTexture2DArray),
-/* harmony export */   "DataTexture3D": () => (/* binding */ DataTexture3D),
-/* harmony export */   "DataTextureLoader": () => (/* binding */ DataTextureLoader),
-/* harmony export */   "DataUtils": () => (/* binding */ DataUtils),
-/* harmony export */   "DecrementStencilOp": () => (/* binding */ DecrementStencilOp),
-/* harmony export */   "DecrementWrapStencilOp": () => (/* binding */ DecrementWrapStencilOp),
-/* harmony export */   "DefaultLoadingManager": () => (/* binding */ DefaultLoadingManager),
-/* harmony export */   "DepthFormat": () => (/* binding */ DepthFormat),
-/* harmony export */   "DepthStencilFormat": () => (/* binding */ DepthStencilFormat),
-/* harmony export */   "DepthTexture": () => (/* binding */ DepthTexture),
-/* harmony export */   "DirectionalLight": () => (/* binding */ DirectionalLight),
-/* harmony export */   "DirectionalLightHelper": () => (/* binding */ DirectionalLightHelper),
-/* harmony export */   "DiscreteInterpolant": () => (/* binding */ DiscreteInterpolant),
-/* harmony export */   "DodecahedronBufferGeometry": () => (/* binding */ DodecahedronBufferGeometry),
-/* harmony export */   "DodecahedronGeometry": () => (/* binding */ DodecahedronGeometry),
-/* harmony export */   "DoubleSide": () => (/* binding */ DoubleSide),
-/* harmony export */   "DstAlphaFactor": () => (/* binding */ DstAlphaFactor),
-/* harmony export */   "DstColorFactor": () => (/* binding */ DstColorFactor),
-/* harmony export */   "DynamicCopyUsage": () => (/* binding */ DynamicCopyUsage),
-/* harmony export */   "DynamicDrawUsage": () => (/* binding */ DynamicDrawUsage),
-/* harmony export */   "DynamicReadUsage": () => (/* binding */ DynamicReadUsage),
-/* harmony export */   "EdgesGeometry": () => (/* binding */ EdgesGeometry),
-/* harmony export */   "EllipseCurve": () => (/* binding */ EllipseCurve),
-/* harmony export */   "EqualDepth": () => (/* binding */ EqualDepth),
-/* harmony export */   "EqualStencilFunc": () => (/* binding */ EqualStencilFunc),
-/* harmony export */   "EquirectangularReflectionMapping": () => (/* binding */ EquirectangularReflectionMapping),
-/* harmony export */   "EquirectangularRefractionMapping": () => (/* binding */ EquirectangularRefractionMapping),
-/* harmony export */   "Euler": () => (/* binding */ Euler),
-/* harmony export */   "EventDispatcher": () => (/* binding */ EventDispatcher),
-/* harmony export */   "ExtrudeBufferGeometry": () => (/* binding */ ExtrudeBufferGeometry),
-/* harmony export */   "ExtrudeGeometry": () => (/* binding */ ExtrudeGeometry),
-/* harmony export */   "FileLoader": () => (/* binding */ FileLoader),
-/* harmony export */   "Float16BufferAttribute": () => (/* binding */ Float16BufferAttribute),
-/* harmony export */   "Float32BufferAttribute": () => (/* binding */ Float32BufferAttribute),
-/* harmony export */   "Float64BufferAttribute": () => (/* binding */ Float64BufferAttribute),
-/* harmony export */   "FloatType": () => (/* binding */ FloatType),
-/* harmony export */   "Fog": () => (/* binding */ Fog),
-/* harmony export */   "FogExp2": () => (/* binding */ FogExp2),
-/* harmony export */   "FramebufferTexture": () => (/* binding */ FramebufferTexture),
-/* harmony export */   "FrontSide": () => (/* binding */ FrontSide),
-/* harmony export */   "Frustum": () => (/* binding */ Frustum),
-/* harmony export */   "GLBufferAttribute": () => (/* binding */ GLBufferAttribute),
-/* harmony export */   "GLSL1": () => (/* binding */ GLSL1),
-/* harmony export */   "GLSL3": () => (/* binding */ GLSL3),
-/* harmony export */   "GreaterDepth": () => (/* binding */ GreaterDepth),
-/* harmony export */   "GreaterEqualDepth": () => (/* binding */ GreaterEqualDepth),
-/* harmony export */   "GreaterEqualStencilFunc": () => (/* binding */ GreaterEqualStencilFunc),
-/* harmony export */   "GreaterStencilFunc": () => (/* binding */ GreaterStencilFunc),
-/* harmony export */   "GridHelper": () => (/* binding */ GridHelper),
-/* harmony export */   "Group": () => (/* binding */ Group),
-/* harmony export */   "HalfFloatType": () => (/* binding */ HalfFloatType),
-/* harmony export */   "HemisphereLight": () => (/* binding */ HemisphereLight),
-/* harmony export */   "HemisphereLightHelper": () => (/* binding */ HemisphereLightHelper),
-/* harmony export */   "HemisphereLightProbe": () => (/* binding */ HemisphereLightProbe),
-/* harmony export */   "IcosahedronBufferGeometry": () => (/* binding */ IcosahedronBufferGeometry),
-/* harmony export */   "IcosahedronGeometry": () => (/* binding */ IcosahedronGeometry),
-/* harmony export */   "ImageBitmapLoader": () => (/* binding */ ImageBitmapLoader),
-/* harmony export */   "ImageLoader": () => (/* binding */ ImageLoader),
-/* harmony export */   "ImageUtils": () => (/* binding */ ImageUtils),
-/* harmony export */   "ImmediateRenderObject": () => (/* binding */ ImmediateRenderObject),
-/* harmony export */   "IncrementStencilOp": () => (/* binding */ IncrementStencilOp),
-/* harmony export */   "IncrementWrapStencilOp": () => (/* binding */ IncrementWrapStencilOp),
-/* harmony export */   "InstancedBufferAttribute": () => (/* binding */ InstancedBufferAttribute),
-/* harmony export */   "InstancedBufferGeometry": () => (/* binding */ InstancedBufferGeometry),
-/* harmony export */   "InstancedInterleavedBuffer": () => (/* binding */ InstancedInterleavedBuffer),
-/* harmony export */   "InstancedMesh": () => (/* binding */ InstancedMesh),
-/* harmony export */   "Int16BufferAttribute": () => (/* binding */ Int16BufferAttribute),
-/* harmony export */   "Int32BufferAttribute": () => (/* binding */ Int32BufferAttribute),
-/* harmony export */   "Int8BufferAttribute": () => (/* binding */ Int8BufferAttribute),
-/* harmony export */   "IntType": () => (/* binding */ IntType),
-/* harmony export */   "InterleavedBuffer": () => (/* binding */ InterleavedBuffer),
-/* harmony export */   "InterleavedBufferAttribute": () => (/* binding */ InterleavedBufferAttribute),
-/* harmony export */   "Interpolant": () => (/* binding */ Interpolant),
-/* harmony export */   "InterpolateDiscrete": () => (/* binding */ InterpolateDiscrete),
-/* harmony export */   "InterpolateLinear": () => (/* binding */ InterpolateLinear),
-/* harmony export */   "InterpolateSmooth": () => (/* binding */ InterpolateSmooth),
-/* harmony export */   "InvertStencilOp": () => (/* binding */ InvertStencilOp),
-/* harmony export */   "KeepStencilOp": () => (/* binding */ KeepStencilOp),
-/* harmony export */   "KeyframeTrack": () => (/* binding */ KeyframeTrack),
-/* harmony export */   "LOD": () => (/* binding */ LOD),
-/* harmony export */   "LatheBufferGeometry": () => (/* binding */ LatheBufferGeometry),
-/* harmony export */   "LatheGeometry": () => (/* binding */ LatheGeometry),
-/* harmony export */   "Layers": () => (/* binding */ Layers),
-/* harmony export */   "LessDepth": () => (/* binding */ LessDepth),
-/* harmony export */   "LessEqualDepth": () => (/* binding */ LessEqualDepth),
-/* harmony export */   "LessEqualStencilFunc": () => (/* binding */ LessEqualStencilFunc),
-/* harmony export */   "LessStencilFunc": () => (/* binding */ LessStencilFunc),
-/* harmony export */   "Light": () => (/* binding */ Light),
-/* harmony export */   "LightProbe": () => (/* binding */ LightProbe),
-/* harmony export */   "Line": () => (/* binding */ Line),
-/* harmony export */   "Line3": () => (/* binding */ Line3),
-/* harmony export */   "LineBasicMaterial": () => (/* binding */ LineBasicMaterial),
-/* harmony export */   "LineCurve": () => (/* binding */ LineCurve),
-/* harmony export */   "LineCurve3": () => (/* binding */ LineCurve3),
-/* harmony export */   "LineDashedMaterial": () => (/* binding */ LineDashedMaterial),
-/* harmony export */   "LineLoop": () => (/* binding */ LineLoop),
-/* harmony export */   "LineSegments": () => (/* binding */ LineSegments),
-/* harmony export */   "LinearEncoding": () => (/* binding */ LinearEncoding),
-/* harmony export */   "LinearFilter": () => (/* binding */ LinearFilter),
-/* harmony export */   "LinearInterpolant": () => (/* binding */ LinearInterpolant),
-/* harmony export */   "LinearMipMapLinearFilter": () => (/* binding */ LinearMipMapLinearFilter),
-/* harmony export */   "LinearMipMapNearestFilter": () => (/* binding */ LinearMipMapNearestFilter),
-/* harmony export */   "LinearMipmapLinearFilter": () => (/* binding */ LinearMipmapLinearFilter),
-/* harmony export */   "LinearMipmapNearestFilter": () => (/* binding */ LinearMipmapNearestFilter),
-/* harmony export */   "LinearSRGBColorSpace": () => (/* binding */ LinearSRGBColorSpace),
-/* harmony export */   "LinearToneMapping": () => (/* binding */ LinearToneMapping),
-/* harmony export */   "Loader": () => (/* binding */ Loader),
-/* harmony export */   "LoaderUtils": () => (/* binding */ LoaderUtils),
-/* harmony export */   "LoadingManager": () => (/* binding */ LoadingManager),
-/* harmony export */   "LoopOnce": () => (/* binding */ LoopOnce),
-/* harmony export */   "LoopPingPong": () => (/* binding */ LoopPingPong),
-/* harmony export */   "LoopRepeat": () => (/* binding */ LoopRepeat),
-/* harmony export */   "LuminanceAlphaFormat": () => (/* binding */ LuminanceAlphaFormat),
-/* harmony export */   "LuminanceFormat": () => (/* binding */ LuminanceFormat),
-/* harmony export */   "MOUSE": () => (/* binding */ MOUSE),
-/* harmony export */   "Material": () => (/* binding */ Material),
-/* harmony export */   "MaterialLoader": () => (/* binding */ MaterialLoader),
-/* harmony export */   "MathUtils": () => (/* binding */ MathUtils),
-/* harmony export */   "Matrix3": () => (/* binding */ Matrix3),
-/* harmony export */   "Matrix4": () => (/* binding */ Matrix4),
-/* harmony export */   "MaxEquation": () => (/* binding */ MaxEquation),
-/* harmony export */   "Mesh": () => (/* binding */ Mesh),
-/* harmony export */   "MeshBasicMaterial": () => (/* binding */ MeshBasicMaterial),
-/* harmony export */   "MeshDepthMaterial": () => (/* binding */ MeshDepthMaterial),
-/* harmony export */   "MeshDistanceMaterial": () => (/* binding */ MeshDistanceMaterial),
-/* harmony export */   "MeshLambertMaterial": () => (/* binding */ MeshLambertMaterial),
-/* harmony export */   "MeshMatcapMaterial": () => (/* binding */ MeshMatcapMaterial),
-/* harmony export */   "MeshNormalMaterial": () => (/* binding */ MeshNormalMaterial),
-/* harmony export */   "MeshPhongMaterial": () => (/* binding */ MeshPhongMaterial),
-/* harmony export */   "MeshPhysicalMaterial": () => (/* binding */ MeshPhysicalMaterial),
-/* harmony export */   "MeshStandardMaterial": () => (/* binding */ MeshStandardMaterial),
-/* harmony export */   "MeshToonMaterial": () => (/* binding */ MeshToonMaterial),
-/* harmony export */   "MinEquation": () => (/* binding */ MinEquation),
-/* harmony export */   "MirroredRepeatWrapping": () => (/* binding */ MirroredRepeatWrapping),
-/* harmony export */   "MixOperation": () => (/* binding */ MixOperation),
-/* harmony export */   "MultiplyBlending": () => (/* binding */ MultiplyBlending),
-/* harmony export */   "MultiplyOperation": () => (/* binding */ MultiplyOperation),
-/* harmony export */   "NearestFilter": () => (/* binding */ NearestFilter),
-/* harmony export */   "NearestMipMapLinearFilter": () => (/* binding */ NearestMipMapLinearFilter),
-/* harmony export */   "NearestMipMapNearestFilter": () => (/* binding */ NearestMipMapNearestFilter),
-/* harmony export */   "NearestMipmapLinearFilter": () => (/* binding */ NearestMipmapLinearFilter),
-/* harmony export */   "NearestMipmapNearestFilter": () => (/* binding */ NearestMipmapNearestFilter),
-/* harmony export */   "NeverDepth": () => (/* binding */ NeverDepth),
-/* harmony export */   "NeverStencilFunc": () => (/* binding */ NeverStencilFunc),
-/* harmony export */   "NoBlending": () => (/* binding */ NoBlending),
-/* harmony export */   "NoColorSpace": () => (/* binding */ NoColorSpace),
-/* harmony export */   "NoToneMapping": () => (/* binding */ NoToneMapping),
-/* harmony export */   "NormalAnimationBlendMode": () => (/* binding */ NormalAnimationBlendMode),
-/* harmony export */   "NormalBlending": () => (/* binding */ NormalBlending),
-/* harmony export */   "NotEqualDepth": () => (/* binding */ NotEqualDepth),
-/* harmony export */   "NotEqualStencilFunc": () => (/* binding */ NotEqualStencilFunc),
-/* harmony export */   "NumberKeyframeTrack": () => (/* binding */ NumberKeyframeTrack),
-/* harmony export */   "Object3D": () => (/* binding */ Object3D),
-/* harmony export */   "ObjectLoader": () => (/* binding */ ObjectLoader),
-/* harmony export */   "ObjectSpaceNormalMap": () => (/* binding */ ObjectSpaceNormalMap),
-/* harmony export */   "OctahedronBufferGeometry": () => (/* binding */ OctahedronBufferGeometry),
-/* harmony export */   "OctahedronGeometry": () => (/* binding */ OctahedronGeometry),
-/* harmony export */   "OneFactor": () => (/* binding */ OneFactor),
-/* harmony export */   "OneMinusDstAlphaFactor": () => (/* binding */ OneMinusDstAlphaFactor),
-/* harmony export */   "OneMinusDstColorFactor": () => (/* binding */ OneMinusDstColorFactor),
-/* harmony export */   "OneMinusSrcAlphaFactor": () => (/* binding */ OneMinusSrcAlphaFactor),
-/* harmony export */   "OneMinusSrcColorFactor": () => (/* binding */ OneMinusSrcColorFactor),
-/* harmony export */   "OrthographicCamera": () => (/* binding */ OrthographicCamera),
-/* harmony export */   "PCFShadowMap": () => (/* binding */ PCFShadowMap),
-/* harmony export */   "PCFSoftShadowMap": () => (/* binding */ PCFSoftShadowMap),
-/* harmony export */   "PMREMGenerator": () => (/* binding */ PMREMGenerator),
-/* harmony export */   "Path": () => (/* binding */ Path),
-/* harmony export */   "PerspectiveCamera": () => (/* binding */ PerspectiveCamera),
-/* harmony export */   "Plane": () => (/* binding */ Plane),
-/* harmony export */   "PlaneBufferGeometry": () => (/* binding */ PlaneBufferGeometry),
-/* harmony export */   "PlaneGeometry": () => (/* binding */ PlaneGeometry),
-/* harmony export */   "PlaneHelper": () => (/* binding */ PlaneHelper),
-/* harmony export */   "PointLight": () => (/* binding */ PointLight),
-/* harmony export */   "PointLightHelper": () => (/* binding */ PointLightHelper),
-/* harmony export */   "Points": () => (/* binding */ Points),
-/* harmony export */   "PointsMaterial": () => (/* binding */ PointsMaterial),
-/* harmony export */   "PolarGridHelper": () => (/* binding */ PolarGridHelper),
-/* harmony export */   "PolyhedronBufferGeometry": () => (/* binding */ PolyhedronBufferGeometry),
-/* harmony export */   "PolyhedronGeometry": () => (/* binding */ PolyhedronGeometry),
-/* harmony export */   "PositionalAudio": () => (/* binding */ PositionalAudio),
-/* harmony export */   "PropertyBinding": () => (/* binding */ PropertyBinding),
-/* harmony export */   "PropertyMixer": () => (/* binding */ PropertyMixer),
-/* harmony export */   "QuadraticBezierCurve": () => (/* binding */ QuadraticBezierCurve),
-/* harmony export */   "QuadraticBezierCurve3": () => (/* binding */ QuadraticBezierCurve3),
-/* harmony export */   "Quaternion": () => (/* binding */ Quaternion),
-/* harmony export */   "QuaternionKeyframeTrack": () => (/* binding */ QuaternionKeyframeTrack),
-/* harmony export */   "QuaternionLinearInterpolant": () => (/* binding */ QuaternionLinearInterpolant),
-/* harmony export */   "REVISION": () => (/* binding */ REVISION),
-/* harmony export */   "RGBADepthPacking": () => (/* binding */ RGBADepthPacking),
-/* harmony export */   "RGBAFormat": () => (/* binding */ RGBAFormat),
-/* harmony export */   "RGBAIntegerFormat": () => (/* binding */ RGBAIntegerFormat),
-/* harmony export */   "RGBA_ASTC_10x10_Format": () => (/* binding */ RGBA_ASTC_10x10_Format),
-/* harmony export */   "RGBA_ASTC_10x5_Format": () => (/* binding */ RGBA_ASTC_10x5_Format),
-/* harmony export */   "RGBA_ASTC_10x6_Format": () => (/* binding */ RGBA_ASTC_10x6_Format),
-/* harmony export */   "RGBA_ASTC_10x8_Format": () => (/* binding */ RGBA_ASTC_10x8_Format),
-/* harmony export */   "RGBA_ASTC_12x10_Format": () => (/* binding */ RGBA_ASTC_12x10_Format),
-/* harmony export */   "RGBA_ASTC_12x12_Format": () => (/* binding */ RGBA_ASTC_12x12_Format),
-/* harmony export */   "RGBA_ASTC_4x4_Format": () => (/* binding */ RGBA_ASTC_4x4_Format),
-/* harmony export */   "RGBA_ASTC_5x4_Format": () => (/* binding */ RGBA_ASTC_5x4_Format),
-/* harmony export */   "RGBA_ASTC_5x5_Format": () => (/* binding */ RGBA_ASTC_5x5_Format),
-/* harmony export */   "RGBA_ASTC_6x5_Format": () => (/* binding */ RGBA_ASTC_6x5_Format),
-/* harmony export */   "RGBA_ASTC_6x6_Format": () => (/* binding */ RGBA_ASTC_6x6_Format),
-/* harmony export */   "RGBA_ASTC_8x5_Format": () => (/* binding */ RGBA_ASTC_8x5_Format),
-/* harmony export */   "RGBA_ASTC_8x6_Format": () => (/* binding */ RGBA_ASTC_8x6_Format),
-/* harmony export */   "RGBA_ASTC_8x8_Format": () => (/* binding */ RGBA_ASTC_8x8_Format),
-/* harmony export */   "RGBA_BPTC_Format": () => (/* binding */ RGBA_BPTC_Format),
-/* harmony export */   "RGBA_ETC2_EAC_Format": () => (/* binding */ RGBA_ETC2_EAC_Format),
-/* harmony export */   "RGBA_PVRTC_2BPPV1_Format": () => (/* binding */ RGBA_PVRTC_2BPPV1_Format),
-/* harmony export */   "RGBA_PVRTC_4BPPV1_Format": () => (/* binding */ RGBA_PVRTC_4BPPV1_Format),
-/* harmony export */   "RGBA_S3TC_DXT1_Format": () => (/* binding */ RGBA_S3TC_DXT1_Format),
-/* harmony export */   "RGBA_S3TC_DXT3_Format": () => (/* binding */ RGBA_S3TC_DXT3_Format),
-/* harmony export */   "RGBA_S3TC_DXT5_Format": () => (/* binding */ RGBA_S3TC_DXT5_Format),
-/* harmony export */   "RGBFormat": () => (/* binding */ RGBFormat),
-/* harmony export */   "RGB_ETC1_Format": () => (/* binding */ RGB_ETC1_Format),
-/* harmony export */   "RGB_ETC2_Format": () => (/* binding */ RGB_ETC2_Format),
-/* harmony export */   "RGB_PVRTC_2BPPV1_Format": () => (/* binding */ RGB_PVRTC_2BPPV1_Format),
-/* harmony export */   "RGB_PVRTC_4BPPV1_Format": () => (/* binding */ RGB_PVRTC_4BPPV1_Format),
-/* harmony export */   "RGB_S3TC_DXT1_Format": () => (/* binding */ RGB_S3TC_DXT1_Format),
-/* harmony export */   "RGFormat": () => (/* binding */ RGFormat),
-/* harmony export */   "RGIntegerFormat": () => (/* binding */ RGIntegerFormat),
-/* harmony export */   "RawShaderMaterial": () => (/* binding */ RawShaderMaterial),
-/* harmony export */   "Ray": () => (/* binding */ Ray),
-/* harmony export */   "Raycaster": () => (/* binding */ Raycaster),
-/* harmony export */   "RectAreaLight": () => (/* binding */ RectAreaLight),
-/* harmony export */   "RedFormat": () => (/* binding */ RedFormat),
-/* harmony export */   "RedIntegerFormat": () => (/* binding */ RedIntegerFormat),
-/* harmony export */   "ReinhardToneMapping": () => (/* binding */ ReinhardToneMapping),
-/* harmony export */   "RepeatWrapping": () => (/* binding */ RepeatWrapping),
-/* harmony export */   "ReplaceStencilOp": () => (/* binding */ ReplaceStencilOp),
-/* harmony export */   "ReverseSubtractEquation": () => (/* binding */ ReverseSubtractEquation),
-/* harmony export */   "RingBufferGeometry": () => (/* binding */ RingBufferGeometry),
-/* harmony export */   "RingGeometry": () => (/* binding */ RingGeometry),
-/* harmony export */   "SRGBColorSpace": () => (/* binding */ SRGBColorSpace),
-/* harmony export */   "Scene": () => (/* binding */ Scene),
-/* harmony export */   "ShaderChunk": () => (/* binding */ ShaderChunk),
-/* harmony export */   "ShaderLib": () => (/* binding */ ShaderLib),
-/* harmony export */   "ShaderMaterial": () => (/* binding */ ShaderMaterial),
-/* harmony export */   "ShadowMaterial": () => (/* binding */ ShadowMaterial),
-/* harmony export */   "Shape": () => (/* binding */ Shape),
-/* harmony export */   "ShapeBufferGeometry": () => (/* binding */ ShapeBufferGeometry),
-/* harmony export */   "ShapeGeometry": () => (/* binding */ ShapeGeometry),
-/* harmony export */   "ShapePath": () => (/* binding */ ShapePath),
-/* harmony export */   "ShapeUtils": () => (/* binding */ ShapeUtils),
-/* harmony export */   "ShortType": () => (/* binding */ ShortType),
-/* harmony export */   "Skeleton": () => (/* binding */ Skeleton),
-/* harmony export */   "SkeletonHelper": () => (/* binding */ SkeletonHelper),
-/* harmony export */   "SkinnedMesh": () => (/* binding */ SkinnedMesh),
-/* harmony export */   "Source": () => (/* binding */ Source),
-/* harmony export */   "Sphere": () => (/* binding */ Sphere),
-/* harmony export */   "SphereBufferGeometry": () => (/* binding */ SphereBufferGeometry),
-/* harmony export */   "SphereGeometry": () => (/* binding */ SphereGeometry),
-/* harmony export */   "Spherical": () => (/* binding */ Spherical),
-/* harmony export */   "SphericalHarmonics3": () => (/* binding */ SphericalHarmonics3),
-/* harmony export */   "SplineCurve": () => (/* binding */ SplineCurve),
-/* harmony export */   "SpotLight": () => (/* binding */ SpotLight),
-/* harmony export */   "SpotLightHelper": () => (/* binding */ SpotLightHelper),
-/* harmony export */   "Sprite": () => (/* binding */ Sprite),
-/* harmony export */   "SpriteMaterial": () => (/* binding */ SpriteMaterial),
-/* harmony export */   "SrcAlphaFactor": () => (/* binding */ SrcAlphaFactor),
-/* harmony export */   "SrcAlphaSaturateFactor": () => (/* binding */ SrcAlphaSaturateFactor),
-/* harmony export */   "SrcColorFactor": () => (/* binding */ SrcColorFactor),
-/* harmony export */   "StaticCopyUsage": () => (/* binding */ StaticCopyUsage),
-/* harmony export */   "StaticDrawUsage": () => (/* binding */ StaticDrawUsage),
-/* harmony export */   "StaticReadUsage": () => (/* binding */ StaticReadUsage),
-/* harmony export */   "StereoCamera": () => (/* binding */ StereoCamera),
-/* harmony export */   "StreamCopyUsage": () => (/* binding */ StreamCopyUsage),
-/* harmony export */   "StreamDrawUsage": () => (/* binding */ StreamDrawUsage),
-/* harmony export */   "StreamReadUsage": () => (/* binding */ StreamReadUsage),
-/* harmony export */   "StringKeyframeTrack": () => (/* binding */ StringKeyframeTrack),
-/* harmony export */   "SubtractEquation": () => (/* binding */ SubtractEquation),
-/* harmony export */   "SubtractiveBlending": () => (/* binding */ SubtractiveBlending),
-/* harmony export */   "TOUCH": () => (/* binding */ TOUCH),
-/* harmony export */   "TangentSpaceNormalMap": () => (/* binding */ TangentSpaceNormalMap),
-/* harmony export */   "TetrahedronBufferGeometry": () => (/* binding */ TetrahedronBufferGeometry),
-/* harmony export */   "TetrahedronGeometry": () => (/* binding */ TetrahedronGeometry),
-/* harmony export */   "Texture": () => (/* binding */ Texture),
-/* harmony export */   "TextureLoader": () => (/* binding */ TextureLoader),
-/* harmony export */   "TorusBufferGeometry": () => (/* binding */ TorusBufferGeometry),
-/* harmony export */   "TorusGeometry": () => (/* binding */ TorusGeometry),
-/* harmony export */   "TorusKnotBufferGeometry": () => (/* binding */ TorusKnotBufferGeometry),
-/* harmony export */   "TorusKnotGeometry": () => (/* binding */ TorusKnotGeometry),
-/* harmony export */   "Triangle": () => (/* binding */ Triangle),
-/* harmony export */   "TriangleFanDrawMode": () => (/* binding */ TriangleFanDrawMode),
-/* harmony export */   "TriangleStripDrawMode": () => (/* binding */ TriangleStripDrawMode),
-/* harmony export */   "TrianglesDrawMode": () => (/* binding */ TrianglesDrawMode),
-/* harmony export */   "TubeBufferGeometry": () => (/* binding */ TubeBufferGeometry),
-/* harmony export */   "TubeGeometry": () => (/* binding */ TubeGeometry),
-/* harmony export */   "TwoPassDoubleSide": () => (/* binding */ TwoPassDoubleSide),
-/* harmony export */   "UVMapping": () => (/* binding */ UVMapping),
-/* harmony export */   "Uint16BufferAttribute": () => (/* binding */ Uint16BufferAttribute),
-/* harmony export */   "Uint32BufferAttribute": () => (/* binding */ Uint32BufferAttribute),
-/* harmony export */   "Uint8BufferAttribute": () => (/* binding */ Uint8BufferAttribute),
-/* harmony export */   "Uint8ClampedBufferAttribute": () => (/* binding */ Uint8ClampedBufferAttribute),
-/* harmony export */   "Uniform": () => (/* binding */ Uniform),
-/* harmony export */   "UniformsGroup": () => (/* binding */ UniformsGroup),
-/* harmony export */   "UniformsLib": () => (/* binding */ UniformsLib),
-/* harmony export */   "UniformsUtils": () => (/* binding */ UniformsUtils),
-/* harmony export */   "UnsignedByteType": () => (/* binding */ UnsignedByteType),
-/* harmony export */   "UnsignedInt248Type": () => (/* binding */ UnsignedInt248Type),
-/* harmony export */   "UnsignedIntType": () => (/* binding */ UnsignedIntType),
-/* harmony export */   "UnsignedShort4444Type": () => (/* binding */ UnsignedShort4444Type),
-/* harmony export */   "UnsignedShort5551Type": () => (/* binding */ UnsignedShort5551Type),
-/* harmony export */   "UnsignedShortType": () => (/* binding */ UnsignedShortType),
-/* harmony export */   "VSMShadowMap": () => (/* binding */ VSMShadowMap),
-/* harmony export */   "Vector2": () => (/* binding */ Vector2),
-/* harmony export */   "Vector3": () => (/* binding */ Vector3),
-/* harmony export */   "Vector4": () => (/* binding */ Vector4),
-/* harmony export */   "VectorKeyframeTrack": () => (/* binding */ VectorKeyframeTrack),
-/* harmony export */   "VideoTexture": () => (/* binding */ VideoTexture),
-/* harmony export */   "WebGL1Renderer": () => (/* binding */ WebGL1Renderer),
-/* harmony export */   "WebGL3DRenderTarget": () => (/* binding */ WebGL3DRenderTarget),
-/* harmony export */   "WebGLArrayRenderTarget": () => (/* binding */ WebGLArrayRenderTarget),
-/* harmony export */   "WebGLCubeRenderTarget": () => (/* binding */ WebGLCubeRenderTarget),
-/* harmony export */   "WebGLMultipleRenderTargets": () => (/* binding */ WebGLMultipleRenderTargets),
-/* harmony export */   "WebGLMultisampleRenderTarget": () => (/* binding */ WebGLMultisampleRenderTarget),
-/* harmony export */   "WebGLRenderTarget": () => (/* binding */ WebGLRenderTarget),
-/* harmony export */   "WebGLRenderer": () => (/* binding */ WebGLRenderer),
-/* harmony export */   "WebGLUtils": () => (/* binding */ WebGLUtils),
-/* harmony export */   "WireframeGeometry": () => (/* binding */ WireframeGeometry),
-/* harmony export */   "WrapAroundEnding": () => (/* binding */ WrapAroundEnding),
-/* harmony export */   "ZeroCurvatureEnding": () => (/* binding */ ZeroCurvatureEnding),
-/* harmony export */   "ZeroFactor": () => (/* binding */ ZeroFactor),
-/* harmony export */   "ZeroSlopeEnding": () => (/* binding */ ZeroSlopeEnding),
-/* harmony export */   "ZeroStencilOp": () => (/* binding */ ZeroStencilOp),
-/* harmony export */   "_SRGBAFormat": () => (/* binding */ _SRGBAFormat),
-/* harmony export */   "sRGBEncoding": () => (/* binding */ sRGBEncoding)
+/* harmony export */   ACESFilmicToneMapping: () => (/* binding */ ACESFilmicToneMapping),
+/* harmony export */   AddEquation: () => (/* binding */ AddEquation),
+/* harmony export */   AddOperation: () => (/* binding */ AddOperation),
+/* harmony export */   AdditiveAnimationBlendMode: () => (/* binding */ AdditiveAnimationBlendMode),
+/* harmony export */   AdditiveBlending: () => (/* binding */ AdditiveBlending),
+/* harmony export */   AlphaFormat: () => (/* binding */ AlphaFormat),
+/* harmony export */   AlwaysDepth: () => (/* binding */ AlwaysDepth),
+/* harmony export */   AlwaysStencilFunc: () => (/* binding */ AlwaysStencilFunc),
+/* harmony export */   AmbientLight: () => (/* binding */ AmbientLight),
+/* harmony export */   AmbientLightProbe: () => (/* binding */ AmbientLightProbe),
+/* harmony export */   AnimationClip: () => (/* binding */ AnimationClip),
+/* harmony export */   AnimationLoader: () => (/* binding */ AnimationLoader),
+/* harmony export */   AnimationMixer: () => (/* binding */ AnimationMixer),
+/* harmony export */   AnimationObjectGroup: () => (/* binding */ AnimationObjectGroup),
+/* harmony export */   AnimationUtils: () => (/* binding */ AnimationUtils),
+/* harmony export */   ArcCurve: () => (/* binding */ ArcCurve),
+/* harmony export */   ArrayCamera: () => (/* binding */ ArrayCamera),
+/* harmony export */   ArrowHelper: () => (/* binding */ ArrowHelper),
+/* harmony export */   Audio: () => (/* binding */ Audio),
+/* harmony export */   AudioAnalyser: () => (/* binding */ AudioAnalyser),
+/* harmony export */   AudioContext: () => (/* binding */ AudioContext),
+/* harmony export */   AudioListener: () => (/* binding */ AudioListener),
+/* harmony export */   AudioLoader: () => (/* binding */ AudioLoader),
+/* harmony export */   AxesHelper: () => (/* binding */ AxesHelper),
+/* harmony export */   BackSide: () => (/* binding */ BackSide),
+/* harmony export */   BasicDepthPacking: () => (/* binding */ BasicDepthPacking),
+/* harmony export */   BasicShadowMap: () => (/* binding */ BasicShadowMap),
+/* harmony export */   Bone: () => (/* binding */ Bone),
+/* harmony export */   BooleanKeyframeTrack: () => (/* binding */ BooleanKeyframeTrack),
+/* harmony export */   Box2: () => (/* binding */ Box2),
+/* harmony export */   Box3: () => (/* binding */ Box3),
+/* harmony export */   Box3Helper: () => (/* binding */ Box3Helper),
+/* harmony export */   BoxBufferGeometry: () => (/* binding */ BoxBufferGeometry),
+/* harmony export */   BoxGeometry: () => (/* binding */ BoxGeometry),
+/* harmony export */   BoxHelper: () => (/* binding */ BoxHelper),
+/* harmony export */   BufferAttribute: () => (/* binding */ BufferAttribute),
+/* harmony export */   BufferGeometry: () => (/* binding */ BufferGeometry),
+/* harmony export */   BufferGeometryLoader: () => (/* binding */ BufferGeometryLoader),
+/* harmony export */   ByteType: () => (/* binding */ ByteType),
+/* harmony export */   Cache: () => (/* binding */ Cache),
+/* harmony export */   Camera: () => (/* binding */ Camera),
+/* harmony export */   CameraHelper: () => (/* binding */ CameraHelper),
+/* harmony export */   CanvasTexture: () => (/* binding */ CanvasTexture),
+/* harmony export */   CapsuleBufferGeometry: () => (/* binding */ CapsuleBufferGeometry),
+/* harmony export */   CapsuleGeometry: () => (/* binding */ CapsuleGeometry),
+/* harmony export */   CatmullRomCurve3: () => (/* binding */ CatmullRomCurve3),
+/* harmony export */   CineonToneMapping: () => (/* binding */ CineonToneMapping),
+/* harmony export */   CircleBufferGeometry: () => (/* binding */ CircleBufferGeometry),
+/* harmony export */   CircleGeometry: () => (/* binding */ CircleGeometry),
+/* harmony export */   ClampToEdgeWrapping: () => (/* binding */ ClampToEdgeWrapping),
+/* harmony export */   Clock: () => (/* binding */ Clock),
+/* harmony export */   Color: () => (/* binding */ Color),
+/* harmony export */   ColorKeyframeTrack: () => (/* binding */ ColorKeyframeTrack),
+/* harmony export */   ColorManagement: () => (/* binding */ ColorManagement),
+/* harmony export */   CompressedArrayTexture: () => (/* binding */ CompressedArrayTexture),
+/* harmony export */   CompressedTexture: () => (/* binding */ CompressedTexture),
+/* harmony export */   CompressedTextureLoader: () => (/* binding */ CompressedTextureLoader),
+/* harmony export */   ConeBufferGeometry: () => (/* binding */ ConeBufferGeometry),
+/* harmony export */   ConeGeometry: () => (/* binding */ ConeGeometry),
+/* harmony export */   CubeCamera: () => (/* binding */ CubeCamera),
+/* harmony export */   CubeReflectionMapping: () => (/* binding */ CubeReflectionMapping),
+/* harmony export */   CubeRefractionMapping: () => (/* binding */ CubeRefractionMapping),
+/* harmony export */   CubeTexture: () => (/* binding */ CubeTexture),
+/* harmony export */   CubeTextureLoader: () => (/* binding */ CubeTextureLoader),
+/* harmony export */   CubeUVReflectionMapping: () => (/* binding */ CubeUVReflectionMapping),
+/* harmony export */   CubicBezierCurve: () => (/* binding */ CubicBezierCurve),
+/* harmony export */   CubicBezierCurve3: () => (/* binding */ CubicBezierCurve3),
+/* harmony export */   CubicInterpolant: () => (/* binding */ CubicInterpolant),
+/* harmony export */   CullFaceBack: () => (/* binding */ CullFaceBack),
+/* harmony export */   CullFaceFront: () => (/* binding */ CullFaceFront),
+/* harmony export */   CullFaceFrontBack: () => (/* binding */ CullFaceFrontBack),
+/* harmony export */   CullFaceNone: () => (/* binding */ CullFaceNone),
+/* harmony export */   Curve: () => (/* binding */ Curve),
+/* harmony export */   CurvePath: () => (/* binding */ CurvePath),
+/* harmony export */   CustomBlending: () => (/* binding */ CustomBlending),
+/* harmony export */   CustomToneMapping: () => (/* binding */ CustomToneMapping),
+/* harmony export */   CylinderBufferGeometry: () => (/* binding */ CylinderBufferGeometry),
+/* harmony export */   CylinderGeometry: () => (/* binding */ CylinderGeometry),
+/* harmony export */   Cylindrical: () => (/* binding */ Cylindrical),
+/* harmony export */   Data3DTexture: () => (/* binding */ Data3DTexture),
+/* harmony export */   DataArrayTexture: () => (/* binding */ DataArrayTexture),
+/* harmony export */   DataTexture: () => (/* binding */ DataTexture),
+/* harmony export */   DataTexture2DArray: () => (/* binding */ DataTexture2DArray),
+/* harmony export */   DataTexture3D: () => (/* binding */ DataTexture3D),
+/* harmony export */   DataTextureLoader: () => (/* binding */ DataTextureLoader),
+/* harmony export */   DataUtils: () => (/* binding */ DataUtils),
+/* harmony export */   DecrementStencilOp: () => (/* binding */ DecrementStencilOp),
+/* harmony export */   DecrementWrapStencilOp: () => (/* binding */ DecrementWrapStencilOp),
+/* harmony export */   DefaultLoadingManager: () => (/* binding */ DefaultLoadingManager),
+/* harmony export */   DepthFormat: () => (/* binding */ DepthFormat),
+/* harmony export */   DepthStencilFormat: () => (/* binding */ DepthStencilFormat),
+/* harmony export */   DepthTexture: () => (/* binding */ DepthTexture),
+/* harmony export */   DirectionalLight: () => (/* binding */ DirectionalLight),
+/* harmony export */   DirectionalLightHelper: () => (/* binding */ DirectionalLightHelper),
+/* harmony export */   DiscreteInterpolant: () => (/* binding */ DiscreteInterpolant),
+/* harmony export */   DodecahedronBufferGeometry: () => (/* binding */ DodecahedronBufferGeometry),
+/* harmony export */   DodecahedronGeometry: () => (/* binding */ DodecahedronGeometry),
+/* harmony export */   DoubleSide: () => (/* binding */ DoubleSide),
+/* harmony export */   DstAlphaFactor: () => (/* binding */ DstAlphaFactor),
+/* harmony export */   DstColorFactor: () => (/* binding */ DstColorFactor),
+/* harmony export */   DynamicCopyUsage: () => (/* binding */ DynamicCopyUsage),
+/* harmony export */   DynamicDrawUsage: () => (/* binding */ DynamicDrawUsage),
+/* harmony export */   DynamicReadUsage: () => (/* binding */ DynamicReadUsage),
+/* harmony export */   EdgesGeometry: () => (/* binding */ EdgesGeometry),
+/* harmony export */   EllipseCurve: () => (/* binding */ EllipseCurve),
+/* harmony export */   EqualDepth: () => (/* binding */ EqualDepth),
+/* harmony export */   EqualStencilFunc: () => (/* binding */ EqualStencilFunc),
+/* harmony export */   EquirectangularReflectionMapping: () => (/* binding */ EquirectangularReflectionMapping),
+/* harmony export */   EquirectangularRefractionMapping: () => (/* binding */ EquirectangularRefractionMapping),
+/* harmony export */   Euler: () => (/* binding */ Euler),
+/* harmony export */   EventDispatcher: () => (/* binding */ EventDispatcher),
+/* harmony export */   ExtrudeBufferGeometry: () => (/* binding */ ExtrudeBufferGeometry),
+/* harmony export */   ExtrudeGeometry: () => (/* binding */ ExtrudeGeometry),
+/* harmony export */   FileLoader: () => (/* binding */ FileLoader),
+/* harmony export */   Float16BufferAttribute: () => (/* binding */ Float16BufferAttribute),
+/* harmony export */   Float32BufferAttribute: () => (/* binding */ Float32BufferAttribute),
+/* harmony export */   Float64BufferAttribute: () => (/* binding */ Float64BufferAttribute),
+/* harmony export */   FloatType: () => (/* binding */ FloatType),
+/* harmony export */   Fog: () => (/* binding */ Fog),
+/* harmony export */   FogExp2: () => (/* binding */ FogExp2),
+/* harmony export */   FramebufferTexture: () => (/* binding */ FramebufferTexture),
+/* harmony export */   FrontSide: () => (/* binding */ FrontSide),
+/* harmony export */   Frustum: () => (/* binding */ Frustum),
+/* harmony export */   GLBufferAttribute: () => (/* binding */ GLBufferAttribute),
+/* harmony export */   GLSL1: () => (/* binding */ GLSL1),
+/* harmony export */   GLSL3: () => (/* binding */ GLSL3),
+/* harmony export */   GreaterDepth: () => (/* binding */ GreaterDepth),
+/* harmony export */   GreaterEqualDepth: () => (/* binding */ GreaterEqualDepth),
+/* harmony export */   GreaterEqualStencilFunc: () => (/* binding */ GreaterEqualStencilFunc),
+/* harmony export */   GreaterStencilFunc: () => (/* binding */ GreaterStencilFunc),
+/* harmony export */   GridHelper: () => (/* binding */ GridHelper),
+/* harmony export */   Group: () => (/* binding */ Group),
+/* harmony export */   HalfFloatType: () => (/* binding */ HalfFloatType),
+/* harmony export */   HemisphereLight: () => (/* binding */ HemisphereLight),
+/* harmony export */   HemisphereLightHelper: () => (/* binding */ HemisphereLightHelper),
+/* harmony export */   HemisphereLightProbe: () => (/* binding */ HemisphereLightProbe),
+/* harmony export */   IcosahedronBufferGeometry: () => (/* binding */ IcosahedronBufferGeometry),
+/* harmony export */   IcosahedronGeometry: () => (/* binding */ IcosahedronGeometry),
+/* harmony export */   ImageBitmapLoader: () => (/* binding */ ImageBitmapLoader),
+/* harmony export */   ImageLoader: () => (/* binding */ ImageLoader),
+/* harmony export */   ImageUtils: () => (/* binding */ ImageUtils),
+/* harmony export */   ImmediateRenderObject: () => (/* binding */ ImmediateRenderObject),
+/* harmony export */   IncrementStencilOp: () => (/* binding */ IncrementStencilOp),
+/* harmony export */   IncrementWrapStencilOp: () => (/* binding */ IncrementWrapStencilOp),
+/* harmony export */   InstancedBufferAttribute: () => (/* binding */ InstancedBufferAttribute),
+/* harmony export */   InstancedBufferGeometry: () => (/* binding */ InstancedBufferGeometry),
+/* harmony export */   InstancedInterleavedBuffer: () => (/* binding */ InstancedInterleavedBuffer),
+/* harmony export */   InstancedMesh: () => (/* binding */ InstancedMesh),
+/* harmony export */   Int16BufferAttribute: () => (/* binding */ Int16BufferAttribute),
+/* harmony export */   Int32BufferAttribute: () => (/* binding */ Int32BufferAttribute),
+/* harmony export */   Int8BufferAttribute: () => (/* binding */ Int8BufferAttribute),
+/* harmony export */   IntType: () => (/* binding */ IntType),
+/* harmony export */   InterleavedBuffer: () => (/* binding */ InterleavedBuffer),
+/* harmony export */   InterleavedBufferAttribute: () => (/* binding */ InterleavedBufferAttribute),
+/* harmony export */   Interpolant: () => (/* binding */ Interpolant),
+/* harmony export */   InterpolateDiscrete: () => (/* binding */ InterpolateDiscrete),
+/* harmony export */   InterpolateLinear: () => (/* binding */ InterpolateLinear),
+/* harmony export */   InterpolateSmooth: () => (/* binding */ InterpolateSmooth),
+/* harmony export */   InvertStencilOp: () => (/* binding */ InvertStencilOp),
+/* harmony export */   KeepStencilOp: () => (/* binding */ KeepStencilOp),
+/* harmony export */   KeyframeTrack: () => (/* binding */ KeyframeTrack),
+/* harmony export */   LOD: () => (/* binding */ LOD),
+/* harmony export */   LatheBufferGeometry: () => (/* binding */ LatheBufferGeometry),
+/* harmony export */   LatheGeometry: () => (/* binding */ LatheGeometry),
+/* harmony export */   Layers: () => (/* binding */ Layers),
+/* harmony export */   LessDepth: () => (/* binding */ LessDepth),
+/* harmony export */   LessEqualDepth: () => (/* binding */ LessEqualDepth),
+/* harmony export */   LessEqualStencilFunc: () => (/* binding */ LessEqualStencilFunc),
+/* harmony export */   LessStencilFunc: () => (/* binding */ LessStencilFunc),
+/* harmony export */   Light: () => (/* binding */ Light),
+/* harmony export */   LightProbe: () => (/* binding */ LightProbe),
+/* harmony export */   Line: () => (/* binding */ Line),
+/* harmony export */   Line3: () => (/* binding */ Line3),
+/* harmony export */   LineBasicMaterial: () => (/* binding */ LineBasicMaterial),
+/* harmony export */   LineCurve: () => (/* binding */ LineCurve),
+/* harmony export */   LineCurve3: () => (/* binding */ LineCurve3),
+/* harmony export */   LineDashedMaterial: () => (/* binding */ LineDashedMaterial),
+/* harmony export */   LineLoop: () => (/* binding */ LineLoop),
+/* harmony export */   LineSegments: () => (/* binding */ LineSegments),
+/* harmony export */   LinearEncoding: () => (/* binding */ LinearEncoding),
+/* harmony export */   LinearFilter: () => (/* binding */ LinearFilter),
+/* harmony export */   LinearInterpolant: () => (/* binding */ LinearInterpolant),
+/* harmony export */   LinearMipMapLinearFilter: () => (/* binding */ LinearMipMapLinearFilter),
+/* harmony export */   LinearMipMapNearestFilter: () => (/* binding */ LinearMipMapNearestFilter),
+/* harmony export */   LinearMipmapLinearFilter: () => (/* binding */ LinearMipmapLinearFilter),
+/* harmony export */   LinearMipmapNearestFilter: () => (/* binding */ LinearMipmapNearestFilter),
+/* harmony export */   LinearSRGBColorSpace: () => (/* binding */ LinearSRGBColorSpace),
+/* harmony export */   LinearToneMapping: () => (/* binding */ LinearToneMapping),
+/* harmony export */   Loader: () => (/* binding */ Loader),
+/* harmony export */   LoaderUtils: () => (/* binding */ LoaderUtils),
+/* harmony export */   LoadingManager: () => (/* binding */ LoadingManager),
+/* harmony export */   LoopOnce: () => (/* binding */ LoopOnce),
+/* harmony export */   LoopPingPong: () => (/* binding */ LoopPingPong),
+/* harmony export */   LoopRepeat: () => (/* binding */ LoopRepeat),
+/* harmony export */   LuminanceAlphaFormat: () => (/* binding */ LuminanceAlphaFormat),
+/* harmony export */   LuminanceFormat: () => (/* binding */ LuminanceFormat),
+/* harmony export */   MOUSE: () => (/* binding */ MOUSE),
+/* harmony export */   Material: () => (/* binding */ Material),
+/* harmony export */   MaterialLoader: () => (/* binding */ MaterialLoader),
+/* harmony export */   MathUtils: () => (/* binding */ MathUtils),
+/* harmony export */   Matrix3: () => (/* binding */ Matrix3),
+/* harmony export */   Matrix4: () => (/* binding */ Matrix4),
+/* harmony export */   MaxEquation: () => (/* binding */ MaxEquation),
+/* harmony export */   Mesh: () => (/* binding */ Mesh),
+/* harmony export */   MeshBasicMaterial: () => (/* binding */ MeshBasicMaterial),
+/* harmony export */   MeshDepthMaterial: () => (/* binding */ MeshDepthMaterial),
+/* harmony export */   MeshDistanceMaterial: () => (/* binding */ MeshDistanceMaterial),
+/* harmony export */   MeshLambertMaterial: () => (/* binding */ MeshLambertMaterial),
+/* harmony export */   MeshMatcapMaterial: () => (/* binding */ MeshMatcapMaterial),
+/* harmony export */   MeshNormalMaterial: () => (/* binding */ MeshNormalMaterial),
+/* harmony export */   MeshPhongMaterial: () => (/* binding */ MeshPhongMaterial),
+/* harmony export */   MeshPhysicalMaterial: () => (/* binding */ MeshPhysicalMaterial),
+/* harmony export */   MeshStandardMaterial: () => (/* binding */ MeshStandardMaterial),
+/* harmony export */   MeshToonMaterial: () => (/* binding */ MeshToonMaterial),
+/* harmony export */   MinEquation: () => (/* binding */ MinEquation),
+/* harmony export */   MirroredRepeatWrapping: () => (/* binding */ MirroredRepeatWrapping),
+/* harmony export */   MixOperation: () => (/* binding */ MixOperation),
+/* harmony export */   MultiplyBlending: () => (/* binding */ MultiplyBlending),
+/* harmony export */   MultiplyOperation: () => (/* binding */ MultiplyOperation),
+/* harmony export */   NearestFilter: () => (/* binding */ NearestFilter),
+/* harmony export */   NearestMipMapLinearFilter: () => (/* binding */ NearestMipMapLinearFilter),
+/* harmony export */   NearestMipMapNearestFilter: () => (/* binding */ NearestMipMapNearestFilter),
+/* harmony export */   NearestMipmapLinearFilter: () => (/* binding */ NearestMipmapLinearFilter),
+/* harmony export */   NearestMipmapNearestFilter: () => (/* binding */ NearestMipmapNearestFilter),
+/* harmony export */   NeverDepth: () => (/* binding */ NeverDepth),
+/* harmony export */   NeverStencilFunc: () => (/* binding */ NeverStencilFunc),
+/* harmony export */   NoBlending: () => (/* binding */ NoBlending),
+/* harmony export */   NoColorSpace: () => (/* binding */ NoColorSpace),
+/* harmony export */   NoToneMapping: () => (/* binding */ NoToneMapping),
+/* harmony export */   NormalAnimationBlendMode: () => (/* binding */ NormalAnimationBlendMode),
+/* harmony export */   NormalBlending: () => (/* binding */ NormalBlending),
+/* harmony export */   NotEqualDepth: () => (/* binding */ NotEqualDepth),
+/* harmony export */   NotEqualStencilFunc: () => (/* binding */ NotEqualStencilFunc),
+/* harmony export */   NumberKeyframeTrack: () => (/* binding */ NumberKeyframeTrack),
+/* harmony export */   Object3D: () => (/* binding */ Object3D),
+/* harmony export */   ObjectLoader: () => (/* binding */ ObjectLoader),
+/* harmony export */   ObjectSpaceNormalMap: () => (/* binding */ ObjectSpaceNormalMap),
+/* harmony export */   OctahedronBufferGeometry: () => (/* binding */ OctahedronBufferGeometry),
+/* harmony export */   OctahedronGeometry: () => (/* binding */ OctahedronGeometry),
+/* harmony export */   OneFactor: () => (/* binding */ OneFactor),
+/* harmony export */   OneMinusDstAlphaFactor: () => (/* binding */ OneMinusDstAlphaFactor),
+/* harmony export */   OneMinusDstColorFactor: () => (/* binding */ OneMinusDstColorFactor),
+/* harmony export */   OneMinusSrcAlphaFactor: () => (/* binding */ OneMinusSrcAlphaFactor),
+/* harmony export */   OneMinusSrcColorFactor: () => (/* binding */ OneMinusSrcColorFactor),
+/* harmony export */   OrthographicCamera: () => (/* binding */ OrthographicCamera),
+/* harmony export */   PCFShadowMap: () => (/* binding */ PCFShadowMap),
+/* harmony export */   PCFSoftShadowMap: () => (/* binding */ PCFSoftShadowMap),
+/* harmony export */   PMREMGenerator: () => (/* binding */ PMREMGenerator),
+/* harmony export */   Path: () => (/* binding */ Path),
+/* harmony export */   PerspectiveCamera: () => (/* binding */ PerspectiveCamera),
+/* harmony export */   Plane: () => (/* binding */ Plane),
+/* harmony export */   PlaneBufferGeometry: () => (/* binding */ PlaneBufferGeometry),
+/* harmony export */   PlaneGeometry: () => (/* binding */ PlaneGeometry),
+/* harmony export */   PlaneHelper: () => (/* binding */ PlaneHelper),
+/* harmony export */   PointLight: () => (/* binding */ PointLight),
+/* harmony export */   PointLightHelper: () => (/* binding */ PointLightHelper),
+/* harmony export */   Points: () => (/* binding */ Points),
+/* harmony export */   PointsMaterial: () => (/* binding */ PointsMaterial),
+/* harmony export */   PolarGridHelper: () => (/* binding */ PolarGridHelper),
+/* harmony export */   PolyhedronBufferGeometry: () => (/* binding */ PolyhedronBufferGeometry),
+/* harmony export */   PolyhedronGeometry: () => (/* binding */ PolyhedronGeometry),
+/* harmony export */   PositionalAudio: () => (/* binding */ PositionalAudio),
+/* harmony export */   PropertyBinding: () => (/* binding */ PropertyBinding),
+/* harmony export */   PropertyMixer: () => (/* binding */ PropertyMixer),
+/* harmony export */   QuadraticBezierCurve: () => (/* binding */ QuadraticBezierCurve),
+/* harmony export */   QuadraticBezierCurve3: () => (/* binding */ QuadraticBezierCurve3),
+/* harmony export */   Quaternion: () => (/* binding */ Quaternion),
+/* harmony export */   QuaternionKeyframeTrack: () => (/* binding */ QuaternionKeyframeTrack),
+/* harmony export */   QuaternionLinearInterpolant: () => (/* binding */ QuaternionLinearInterpolant),
+/* harmony export */   REVISION: () => (/* binding */ REVISION),
+/* harmony export */   RGBADepthPacking: () => (/* binding */ RGBADepthPacking),
+/* harmony export */   RGBAFormat: () => (/* binding */ RGBAFormat),
+/* harmony export */   RGBAIntegerFormat: () => (/* binding */ RGBAIntegerFormat),
+/* harmony export */   RGBA_ASTC_10x10_Format: () => (/* binding */ RGBA_ASTC_10x10_Format),
+/* harmony export */   RGBA_ASTC_10x5_Format: () => (/* binding */ RGBA_ASTC_10x5_Format),
+/* harmony export */   RGBA_ASTC_10x6_Format: () => (/* binding */ RGBA_ASTC_10x6_Format),
+/* harmony export */   RGBA_ASTC_10x8_Format: () => (/* binding */ RGBA_ASTC_10x8_Format),
+/* harmony export */   RGBA_ASTC_12x10_Format: () => (/* binding */ RGBA_ASTC_12x10_Format),
+/* harmony export */   RGBA_ASTC_12x12_Format: () => (/* binding */ RGBA_ASTC_12x12_Format),
+/* harmony export */   RGBA_ASTC_4x4_Format: () => (/* binding */ RGBA_ASTC_4x4_Format),
+/* harmony export */   RGBA_ASTC_5x4_Format: () => (/* binding */ RGBA_ASTC_5x4_Format),
+/* harmony export */   RGBA_ASTC_5x5_Format: () => (/* binding */ RGBA_ASTC_5x5_Format),
+/* harmony export */   RGBA_ASTC_6x5_Format: () => (/* binding */ RGBA_ASTC_6x5_Format),
+/* harmony export */   RGBA_ASTC_6x6_Format: () => (/* binding */ RGBA_ASTC_6x6_Format),
+/* harmony export */   RGBA_ASTC_8x5_Format: () => (/* binding */ RGBA_ASTC_8x5_Format),
+/* harmony export */   RGBA_ASTC_8x6_Format: () => (/* binding */ RGBA_ASTC_8x6_Format),
+/* harmony export */   RGBA_ASTC_8x8_Format: () => (/* binding */ RGBA_ASTC_8x8_Format),
+/* harmony export */   RGBA_BPTC_Format: () => (/* binding */ RGBA_BPTC_Format),
+/* harmony export */   RGBA_ETC2_EAC_Format: () => (/* binding */ RGBA_ETC2_EAC_Format),
+/* harmony export */   RGBA_PVRTC_2BPPV1_Format: () => (/* binding */ RGBA_PVRTC_2BPPV1_Format),
+/* harmony export */   RGBA_PVRTC_4BPPV1_Format: () => (/* binding */ RGBA_PVRTC_4BPPV1_Format),
+/* harmony export */   RGBA_S3TC_DXT1_Format: () => (/* binding */ RGBA_S3TC_DXT1_Format),
+/* harmony export */   RGBA_S3TC_DXT3_Format: () => (/* binding */ RGBA_S3TC_DXT3_Format),
+/* harmony export */   RGBA_S3TC_DXT5_Format: () => (/* binding */ RGBA_S3TC_DXT5_Format),
+/* harmony export */   RGBFormat: () => (/* binding */ RGBFormat),
+/* harmony export */   RGB_ETC1_Format: () => (/* binding */ RGB_ETC1_Format),
+/* harmony export */   RGB_ETC2_Format: () => (/* binding */ RGB_ETC2_Format),
+/* harmony export */   RGB_PVRTC_2BPPV1_Format: () => (/* binding */ RGB_PVRTC_2BPPV1_Format),
+/* harmony export */   RGB_PVRTC_4BPPV1_Format: () => (/* binding */ RGB_PVRTC_4BPPV1_Format),
+/* harmony export */   RGB_S3TC_DXT1_Format: () => (/* binding */ RGB_S3TC_DXT1_Format),
+/* harmony export */   RGFormat: () => (/* binding */ RGFormat),
+/* harmony export */   RGIntegerFormat: () => (/* binding */ RGIntegerFormat),
+/* harmony export */   RawShaderMaterial: () => (/* binding */ RawShaderMaterial),
+/* harmony export */   Ray: () => (/* binding */ Ray),
+/* harmony export */   Raycaster: () => (/* binding */ Raycaster),
+/* harmony export */   RectAreaLight: () => (/* binding */ RectAreaLight),
+/* harmony export */   RedFormat: () => (/* binding */ RedFormat),
+/* harmony export */   RedIntegerFormat: () => (/* binding */ RedIntegerFormat),
+/* harmony export */   ReinhardToneMapping: () => (/* binding */ ReinhardToneMapping),
+/* harmony export */   RepeatWrapping: () => (/* binding */ RepeatWrapping),
+/* harmony export */   ReplaceStencilOp: () => (/* binding */ ReplaceStencilOp),
+/* harmony export */   ReverseSubtractEquation: () => (/* binding */ ReverseSubtractEquation),
+/* harmony export */   RingBufferGeometry: () => (/* binding */ RingBufferGeometry),
+/* harmony export */   RingGeometry: () => (/* binding */ RingGeometry),
+/* harmony export */   SRGBColorSpace: () => (/* binding */ SRGBColorSpace),
+/* harmony export */   Scene: () => (/* binding */ Scene),
+/* harmony export */   ShaderChunk: () => (/* binding */ ShaderChunk),
+/* harmony export */   ShaderLib: () => (/* binding */ ShaderLib),
+/* harmony export */   ShaderMaterial: () => (/* binding */ ShaderMaterial),
+/* harmony export */   ShadowMaterial: () => (/* binding */ ShadowMaterial),
+/* harmony export */   Shape: () => (/* binding */ Shape),
+/* harmony export */   ShapeBufferGeometry: () => (/* binding */ ShapeBufferGeometry),
+/* harmony export */   ShapeGeometry: () => (/* binding */ ShapeGeometry),
+/* harmony export */   ShapePath: () => (/* binding */ ShapePath),
+/* harmony export */   ShapeUtils: () => (/* binding */ ShapeUtils),
+/* harmony export */   ShortType: () => (/* binding */ ShortType),
+/* harmony export */   Skeleton: () => (/* binding */ Skeleton),
+/* harmony export */   SkeletonHelper: () => (/* binding */ SkeletonHelper),
+/* harmony export */   SkinnedMesh: () => (/* binding */ SkinnedMesh),
+/* harmony export */   Source: () => (/* binding */ Source),
+/* harmony export */   Sphere: () => (/* binding */ Sphere),
+/* harmony export */   SphereBufferGeometry: () => (/* binding */ SphereBufferGeometry),
+/* harmony export */   SphereGeometry: () => (/* binding */ SphereGeometry),
+/* harmony export */   Spherical: () => (/* binding */ Spherical),
+/* harmony export */   SphericalHarmonics3: () => (/* binding */ SphericalHarmonics3),
+/* harmony export */   SplineCurve: () => (/* binding */ SplineCurve),
+/* harmony export */   SpotLight: () => (/* binding */ SpotLight),
+/* harmony export */   SpotLightHelper: () => (/* binding */ SpotLightHelper),
+/* harmony export */   Sprite: () => (/* binding */ Sprite),
+/* harmony export */   SpriteMaterial: () => (/* binding */ SpriteMaterial),
+/* harmony export */   SrcAlphaFactor: () => (/* binding */ SrcAlphaFactor),
+/* harmony export */   SrcAlphaSaturateFactor: () => (/* binding */ SrcAlphaSaturateFactor),
+/* harmony export */   SrcColorFactor: () => (/* binding */ SrcColorFactor),
+/* harmony export */   StaticCopyUsage: () => (/* binding */ StaticCopyUsage),
+/* harmony export */   StaticDrawUsage: () => (/* binding */ StaticDrawUsage),
+/* harmony export */   StaticReadUsage: () => (/* binding */ StaticReadUsage),
+/* harmony export */   StereoCamera: () => (/* binding */ StereoCamera),
+/* harmony export */   StreamCopyUsage: () => (/* binding */ StreamCopyUsage),
+/* harmony export */   StreamDrawUsage: () => (/* binding */ StreamDrawUsage),
+/* harmony export */   StreamReadUsage: () => (/* binding */ StreamReadUsage),
+/* harmony export */   StringKeyframeTrack: () => (/* binding */ StringKeyframeTrack),
+/* harmony export */   SubtractEquation: () => (/* binding */ SubtractEquation),
+/* harmony export */   SubtractiveBlending: () => (/* binding */ SubtractiveBlending),
+/* harmony export */   TOUCH: () => (/* binding */ TOUCH),
+/* harmony export */   TangentSpaceNormalMap: () => (/* binding */ TangentSpaceNormalMap),
+/* harmony export */   TetrahedronBufferGeometry: () => (/* binding */ TetrahedronBufferGeometry),
+/* harmony export */   TetrahedronGeometry: () => (/* binding */ TetrahedronGeometry),
+/* harmony export */   Texture: () => (/* binding */ Texture),
+/* harmony export */   TextureLoader: () => (/* binding */ TextureLoader),
+/* harmony export */   TorusBufferGeometry: () => (/* binding */ TorusBufferGeometry),
+/* harmony export */   TorusGeometry: () => (/* binding */ TorusGeometry),
+/* harmony export */   TorusKnotBufferGeometry: () => (/* binding */ TorusKnotBufferGeometry),
+/* harmony export */   TorusKnotGeometry: () => (/* binding */ TorusKnotGeometry),
+/* harmony export */   Triangle: () => (/* binding */ Triangle),
+/* harmony export */   TriangleFanDrawMode: () => (/* binding */ TriangleFanDrawMode),
+/* harmony export */   TriangleStripDrawMode: () => (/* binding */ TriangleStripDrawMode),
+/* harmony export */   TrianglesDrawMode: () => (/* binding */ TrianglesDrawMode),
+/* harmony export */   TubeBufferGeometry: () => (/* binding */ TubeBufferGeometry),
+/* harmony export */   TubeGeometry: () => (/* binding */ TubeGeometry),
+/* harmony export */   TwoPassDoubleSide: () => (/* binding */ TwoPassDoubleSide),
+/* harmony export */   UVMapping: () => (/* binding */ UVMapping),
+/* harmony export */   Uint16BufferAttribute: () => (/* binding */ Uint16BufferAttribute),
+/* harmony export */   Uint32BufferAttribute: () => (/* binding */ Uint32BufferAttribute),
+/* harmony export */   Uint8BufferAttribute: () => (/* binding */ Uint8BufferAttribute),
+/* harmony export */   Uint8ClampedBufferAttribute: () => (/* binding */ Uint8ClampedBufferAttribute),
+/* harmony export */   Uniform: () => (/* binding */ Uniform),
+/* harmony export */   UniformsGroup: () => (/* binding */ UniformsGroup),
+/* harmony export */   UniformsLib: () => (/* binding */ UniformsLib),
+/* harmony export */   UniformsUtils: () => (/* binding */ UniformsUtils),
+/* harmony export */   UnsignedByteType: () => (/* binding */ UnsignedByteType),
+/* harmony export */   UnsignedInt248Type: () => (/* binding */ UnsignedInt248Type),
+/* harmony export */   UnsignedIntType: () => (/* binding */ UnsignedIntType),
+/* harmony export */   UnsignedShort4444Type: () => (/* binding */ UnsignedShort4444Type),
+/* harmony export */   UnsignedShort5551Type: () => (/* binding */ UnsignedShort5551Type),
+/* harmony export */   UnsignedShortType: () => (/* binding */ UnsignedShortType),
+/* harmony export */   VSMShadowMap: () => (/* binding */ VSMShadowMap),
+/* harmony export */   Vector2: () => (/* binding */ Vector2),
+/* harmony export */   Vector3: () => (/* binding */ Vector3),
+/* harmony export */   Vector4: () => (/* binding */ Vector4),
+/* harmony export */   VectorKeyframeTrack: () => (/* binding */ VectorKeyframeTrack),
+/* harmony export */   VideoTexture: () => (/* binding */ VideoTexture),
+/* harmony export */   WebGL1Renderer: () => (/* binding */ WebGL1Renderer),
+/* harmony export */   WebGL3DRenderTarget: () => (/* binding */ WebGL3DRenderTarget),
+/* harmony export */   WebGLArrayRenderTarget: () => (/* binding */ WebGLArrayRenderTarget),
+/* harmony export */   WebGLCubeRenderTarget: () => (/* binding */ WebGLCubeRenderTarget),
+/* harmony export */   WebGLMultipleRenderTargets: () => (/* binding */ WebGLMultipleRenderTargets),
+/* harmony export */   WebGLMultisampleRenderTarget: () => (/* binding */ WebGLMultisampleRenderTarget),
+/* harmony export */   WebGLRenderTarget: () => (/* binding */ WebGLRenderTarget),
+/* harmony export */   WebGLRenderer: () => (/* binding */ WebGLRenderer),
+/* harmony export */   WebGLUtils: () => (/* binding */ WebGLUtils),
+/* harmony export */   WireframeGeometry: () => (/* binding */ WireframeGeometry),
+/* harmony export */   WrapAroundEnding: () => (/* binding */ WrapAroundEnding),
+/* harmony export */   ZeroCurvatureEnding: () => (/* binding */ ZeroCurvatureEnding),
+/* harmony export */   ZeroFactor: () => (/* binding */ ZeroFactor),
+/* harmony export */   ZeroSlopeEnding: () => (/* binding */ ZeroSlopeEnding),
+/* harmony export */   ZeroStencilOp: () => (/* binding */ ZeroStencilOp),
+/* harmony export */   _SRGBAFormat: () => (/* binding */ _SRGBAFormat),
+/* harmony export */   sRGBEncoding: () => (/* binding */ sRGBEncoding)
 /* harmony export */ });
 /**
  * @license
@@ -55114,8 +56336,8 @@ if ( typeof window !== 'undefined' ) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "MapControls": () => (/* binding */ MapControls),
-/* harmony export */   "OrbitControls": () => (/* binding */ OrbitControls)
+/* harmony export */   MapControls: () => (/* binding */ MapControls),
+/* harmony export */   OrbitControls: () => (/* binding */ OrbitControls)
 /* harmony export */ });
 /* harmony import */ var three__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! three */ "./node_modules/three/build/three.module.js");
 
@@ -56581,6 +57803,1493 @@ Stats.Panel = function ( name, fg, bg ) {
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Stats);
 
 
+/***/ }),
+
+/***/ "./src/helper.ts":
+/*!***********************!*\
+  !*** ./src/helper.ts ***!
+  \***********************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   fillArray: () => (/* binding */ fillArray),
+/* harmony export */   fillMidNodes: () => (/* binding */ fillMidNodes),
+/* harmony export */   updateHtmlUI: () => (/* binding */ updateHtmlUI)
+/* harmony export */ });
+/* harmony import */ var _octree__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./octree */ "./src/octree.ts");
+
+function fillArray(points, count, width, height, depth) {
+    for (let i = 0; i < count; i++) {
+        let point = new _octree__WEBPACK_IMPORTED_MODULE_0__.Point(i, Math.floor(Math.random() * width) - width / 2, Math.floor(Math.random() * height) - height / 2, Math.floor(Math.random() * depth) - depth / 2);
+        points.push(point);
+    }
+}
+function fillMidNodes(tree) {
+    if (!tree.isDivided) {
+        tree.points.splice(0, 1);
+        return tree.points[0];
+    }
+    let children = [
+        tree.minNE,
+        tree.minNW,
+        tree.minSW,
+        tree.minSE,
+        tree.maxNE,
+        tree.maxNW,
+        tree.maxSW,
+        tree.maxSE,
+    ];
+    let result = [];
+    for (let i = 0, _length = children.length; i < _length; i++) {
+        let result1 = fillMidNodes(children[i]);
+        if (result1 != null) {
+            result.push(result1);
+        }
+    }
+    let passIndex = Math.ceil(result.length / 2);
+    let passingValue = result[passIndex];
+    if (tree.level > 0) {
+        result.splice(passIndex, 1);
+    }
+    tree.representativeNodes = [...result];
+    return passingValue;
+}
+function updateHtmlUI(nodeNotFoundInBuffer, nodeFoundInBuffer, nodeFoundInLRU, nodeFoundInPersistent, nodeToFetch) {
+    let statsText = `Among total nodes needed ${nodeFoundInBuffer + nodeNotFoundInBuffer}\b
+                    nodes found in GPU Buffer: ${nodeFoundInBuffer} \b
+                    ----------------------------------------------------
+                    nodes need to be loaded ${nodeNotFoundInBuffer}\b
+                    \b
+                    nodes found in LRU Cache: ${nodeFoundInLRU} \b
+                    nodes found in Persistent memory: ${nodeFoundInPersistent} \b
+                    nodes that were fetched from host: ${nodeToFetch}    `;
+    document.getElementById("stats-div").innerText = statsText;
+}
+
+
+/***/ }),
+
+/***/ "./src/index.ts":
+/*!**********************!*\
+  !*** ./src/index.ts ***!
+  \**********************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   appState: () => (/* binding */ appState),
+/* harmony export */   loadCOPC: () => (/* binding */ loadCOPC),
+/* harmony export */   retrivePoints: () => (/* binding */ retrivePoints)
+/* harmony export */ });
+/* harmony import */ var three__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! three */ "./node_modules/three/build/three.module.js");
+/* harmony import */ var three_addons_controls_OrbitControls_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! three/addons/controls/OrbitControls.js */ "./node_modules/three/examples/jsm/controls/OrbitControls.js");
+/* harmony import */ var copc__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! copc */ "./node_modules/copc/lib/index.js");
+/* harmony import */ var copc__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(copc__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var gl_matrix__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! gl-matrix */ "./node_modules/gl-matrix/esm/mat4.js");
+/* harmony import */ var _worker_fetcher_worker__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./worker/fetcher.worker */ "./src/worker/fetcher.worker.ts");
+/* harmony import */ var _webgpu_renderer__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./webgpu/renderer */ "./src/webgpu/renderer.ts");
+/* harmony import */ var _passiveloader__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./passiveloader */ "./src/passiveloader.ts");
+/* harmony import */ var _private_origin_file_manager__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./private_origin/file_manager */ "./src/private_origin/file_manager.ts");
+/* harmony import */ var _private_origin_cache_manager__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./private_origin/cache_manager */ "./src/private_origin/cache_manager.ts");
+/* harmony import */ var _helper__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./helper */ "./src/helper.ts");
+/* harmony import */ var _lru_cache_index__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./lru-cache/index */ "./src/lru-cache/index.ts");
+
+
+
+
+
+const Worker = _worker_fetcher_worker__WEBPACK_IMPORTED_MODULE_4__["default"] || _worker_fetcher_worker__WEBPACK_IMPORTED_MODULE_4__;
+
+
+
+
+
+
+const SOURCE_FILE_NAME = "https://media.githubusercontent.com/media/sceneserver/copc/main/naarden-vesting.copc.laz".split("/").pop();
+const MAX_WORKERS = navigator.hardwareConcurrency - 1;
+const canvas = document.getElementById("screen-canvas");
+canvas.width = window.innerWidth * (window.devicePixelRatio || 1);
+canvas.height = window.innerHeight * (window.devicePixelRatio || 1);
+const appState = {
+    bufferMap: {},
+    toDeleteMap: {},
+    persCache: null,
+    globalMaxIntensity: 0,
+    prefetchKeyCountMap: null,
+    // COPC data
+    nodePages: null,
+    nodePagesString: null,
+    pagesString: null,
+    copcString: null,
+    // Bounding box
+    xMin: 0,
+    yMin: 0,
+    zMin: 0,
+    xMax: 0,
+    yMax: 0,
+    zMax: 0,
+    widthX: 0,
+    widthY: 0,
+    widthZ: 0,
+    centerX: 0,
+    centerY: 0,
+    centerZ: 0,
+    scaleFactor: null,
+    // Three.js objects
+    camera: null,
+    controls: null,
+    proj: null,
+    params: null,
+    // Worker management
+    workerCount: 0,
+    promises: [],
+    clock: new three__WEBPACK_IMPORTED_MODULE_0__.Clock(),
+};
+async function loadCOPC() {
+    appState.clock.getDelta();
+    const filename = "https://media.githubusercontent.com/media/sceneserver/copc/main/naarden-vesting.copc.laz";
+    const copc = await copc__WEBPACK_IMPORTED_MODULE_2__.Copc.create(filename);
+    console.log("file is", copc);
+    appState.scaleFactor = [1.0, 1.0, 1.0];
+    appState.copcString = JSON.stringify(copc);
+    [appState.xMin, appState.yMin, appState.zMin, appState.xMax, appState.yMax, appState.zMax] = [
+        ...copc.header.min,
+        ...copc.header.max,
+    ];
+    appState.xMin *= appState.scaleFactor[0];
+    appState.xMax *= appState.scaleFactor[0];
+    appState.yMin *= appState.scaleFactor[1];
+    appState.yMax *= appState.scaleFactor[1];
+    appState.zMin *= appState.scaleFactor[2];
+    appState.zMax *= appState.scaleFactor[2];
+    appState.widthX = Math.abs(appState.xMax - appState.xMin);
+    appState.widthY = Math.abs(appState.yMax - appState.yMin);
+    appState.widthZ = Math.abs(appState.zMax - appState.zMin);
+    appState.params = [
+        appState.widthX,
+        appState.widthY,
+        appState.widthZ,
+        appState.xMin,
+        appState.yMin,
+        appState.zMin,
+    ];
+    appState.centerX = (appState.xMin + appState.xMax) / 2 - appState.xMin - 0.5 * appState.widthX;
+    appState.centerY = (appState.yMin + appState.yMax) / 2 - appState.yMin - 0.5 * appState.widthY;
+    appState.centerZ = (appState.zMin + appState.zMax) / 2 - appState.zMin - 0.5 * appState.widthZ;
+    const { nodes: nodePages1, pages: pages } = await copc__WEBPACK_IMPORTED_MODULE_2__.Copc.loadHierarchyPage(filename, copc.info.rootHierarchyPage);
+    appState.nodePages = nodePages1;
+    appState.nodePagesString = JSON.stringify(nodePages1);
+    appState.pagesString = JSON.stringify(pages);
+}
+async function retrivePoints(projectionViewMatrix, controllerSignal = null) {
+    let [keyCountMap, nodeToPrefetch] = (0,_passiveloader__WEBPACK_IMPORTED_MODULE_6__.traverseTreeWrapper)(appState.nodePages, [0, 0, 0, 0], appState.centerX, appState.centerY, appState.centerZ, [0.5 * appState.widthX, 0.5 * appState.widthY, 0.5 * appState.widthZ], appState.scaleFactor, appState.controls, projectionViewMatrix);
+    keyCountMap = await _filterKeyCountMap(keyCountMap);
+    appState.prefetchKeyCountMap = await _filterKeyCountMapPrefetch(nodeToPrefetch);
+    appState.clock.getDelta();
+    let totalNodes = keyCountMap.length / 2;
+    let doneCount = 0;
+    for (let m = 0; m < keyCountMap.length;) {
+        let remaining = totalNodes - doneCount;
+        let numbWorker = Math.min(MAX_WORKERS, remaining);
+        for (let i = 0; i < numbWorker; i++) {
+            appState.promises.push(_createWorker(keyCountMap[m], keyCountMap[m + 1]));
+            doneCount++;
+            m += 2;
+            if (doneCount % MAX_WORKERS == 0 || doneCount == totalNodes) {
+                await _syncThread();
+                if (controllerSignal && controllerSignal.aborted) {
+                    return;
+                }
+            }
+        }
+    }
+}
+function _createBuffer(positions, colors) {
+    let size = positions.length;
+    let positionBuffer = _webgpu_renderer__WEBPACK_IMPORTED_MODULE_5__.device.device.createBuffer({
+        label: `${size}`,
+        size: size * 4,
+        usage: GPUBufferUsage.VERTEX,
+        mappedAtCreation: true,
+    });
+    let positionMappedArray = new Float32Array(positionBuffer.getMappedRange());
+    positionMappedArray.set(positions);
+    positionBuffer.unmap();
+    let colorBuffer = _webgpu_renderer__WEBPACK_IMPORTED_MODULE_5__.device.device.createBuffer({
+        label: `${size}`,
+        size: size * 4,
+        usage: GPUBufferUsage.VERTEX,
+        mappedAtCreation: true,
+    });
+    let colorMappedArray = new Float32Array(colorBuffer.getMappedRange());
+    colorMappedArray.set(colors);
+    colorBuffer.unmap();
+    return [positionBuffer, colorBuffer];
+}
+function _createWorker(data1, data2) {
+    let myNode = data1.split("-").map(Number);
+    let myLevel = myNode[0];
+    return new Promise((resolve) => {
+        let worker = new Worker();
+        worker.onmessage = (event) => {
+            let postMessageRes = event.data;
+            if (postMessageRes == 200) {
+                worker.postMessage([
+                    appState.nodePagesString,
+                    appState.pagesString,
+                    appState.copcString,
+                    data1,
+                    data2,
+                    [
+                        appState.xMin,
+                        appState.yMin,
+                        appState.zMin,
+                        appState.widthX,
+                        appState.widthY,
+                        appState.widthZ,
+                        appState.scaleFactor[0],
+                        appState.scaleFactor[1],
+                        appState.scaleFactor[2],
+                        myLevel,
+                    ],
+                ]);
+            }
+            else {
+                appState.workerCount += 1;
+                let position = postMessageRes[0];
+                let color = postMessageRes[1];
+                let [, , maxIntensity, dataLevel] = postMessageRes[2];
+                if (maxIntensity > appState.globalMaxIntensity) {
+                    appState.globalMaxIntensity = maxIntensity;
+                }
+                let localPosition = [];
+                let localColor = [];
+                for (let i = 0; i < position.length; i++) {
+                    if (i > 0 && i % 3 == 0) {
+                        localPosition.push(dataLevel);
+                    }
+                    localPosition.push(position[i]);
+                    localColor.push(color[i]);
+                }
+                localPosition.push(dataLevel);
+                if (appState.workerCount == MAX_WORKERS) {
+                    appState.workerCount = 0;
+                    appState.promises = [];
+                }
+                worker.terminate();
+                resolve([localPosition, localColor, data1, maxIntensity]);
+            }
+        };
+    });
+}
+async function _syncThread() {
+    await Promise.all(appState.promises).then(async (response) => {
+        for (let i = 0, _length = response.length; i < _length; i++) {
+            let data = response[i];
+            let fileName = data[2];
+            let dataJson = {
+                position: data[0],
+                color: data[1],
+                maxIntensity: data[3],
+            };
+            let dataJsonStringify = JSON.stringify(dataJson);
+            await (0,_private_origin_file_manager__WEBPACK_IMPORTED_MODULE_7__.writeFile)(`${SOURCE_FILE_NAME}-${fileName}`, dataJsonStringify);
+            let [positionBuffer, colorBuffer] = _createBuffer(data[0], data[1]);
+            appState.bufferMap[data[2]] = {
+                position: positionBuffer,
+                color: colorBuffer,
+                maxIntensity: data[3],
+            };
+        }
+    });
+}
+async function _filterKeyCountMapPrefetch(keyMap) {
+    let afterCheckingCache = [];
+    for (let i = 0; i < keyMap.length; i += 2) {
+        let cachedResult = _lru_cache_index__WEBPACK_IMPORTED_MODULE_10__.cache.get(keyMap[i]);
+        if (!cachedResult) {
+            afterCheckingCache.push(keyMap[i], keyMap[i + 1]);
+        }
+    }
+    let filteredElements = [];
+    for (let i = 0; i < afterCheckingCache.length; i += 2) {
+        let [exist, data] = (await (0,_private_origin_file_manager__WEBPACK_IMPORTED_MODULE_7__.doesExist)(`${SOURCE_FILE_NAME}-${afterCheckingCache[i]}`));
+        if (exist) {
+            _lru_cache_index__WEBPACK_IMPORTED_MODULE_10__.cache.set(afterCheckingCache[i], JSON.stringify(data));
+            appState.persCache = (0,_private_origin_cache_manager__WEBPACK_IMPORTED_MODULE_8__.getInCache)(appState.persCache, afterCheckingCache[i]);
+        }
+        else {
+            filteredElements.push(afterCheckingCache[i], afterCheckingCache[i + 1]);
+            appState.persCache = (0,_private_origin_cache_manager__WEBPACK_IMPORTED_MODULE_8__.putInCache)(appState.persCache, afterCheckingCache[i], {
+                count: 1,
+                date: Date.now(),
+            });
+        }
+    }
+    (0,_private_origin_file_manager__WEBPACK_IMPORTED_MODULE_7__.throttledUpdatePersCache)((0,_private_origin_cache_manager__WEBPACK_IMPORTED_MODULE_8__.mapIntoJSON)(_lru_cache_index__WEBPACK_IMPORTED_MODULE_10__.cache));
+    return filteredElements;
+}
+async function _filterKeyCountMap(keyMap) {
+    let nodeNotFoundInBuffer = 0;
+    let nodeFoundInBuffer = 0;
+    let nodeFoundInLRU = 0;
+    let nodeFoundInPersistent = 0;
+    let nodeToFetch = 0;
+    let newKeyMap = [];
+    let newBufferMap = {};
+    for (const key in appState.toDeleteMap) {
+        appState.toDeleteMap[key].position.destroy();
+        appState.toDeleteMap[key].color.destroy();
+        delete appState.toDeleteMap[key];
+    }
+    let existingBuffers = Object.keys(appState.bufferMap);
+    let toDeleteArray = existingBuffers.reduce((acc, val) => {
+        acc[val] = true;
+        return acc;
+    }, {});
+    for (let i = 0; i < keyMap.length; i += 2) {
+        if (!(keyMap[i] in appState.bufferMap)) {
+            newKeyMap.push(keyMap[i], keyMap[i + 1]);
+            nodeNotFoundInBuffer++;
+        }
+        else {
+            nodeFoundInBuffer++;
+            let maxIntensity = appState.bufferMap[keyMap[i]].maxIntensity;
+            newBufferMap[keyMap[i]] = {
+                position: appState.bufferMap[keyMap[i]].position,
+                color: appState.bufferMap[keyMap[i]].color,
+                maxIntensity: maxIntensity,
+            };
+            if (maxIntensity > appState.globalMaxIntensity) {
+                appState.globalMaxIntensity = maxIntensity;
+            }
+            appState.persCache = (0,_private_origin_cache_manager__WEBPACK_IMPORTED_MODULE_8__.getInCache)(appState.persCache, keyMap[i]);
+            delete toDeleteArray[keyMap[i]];
+        }
+    }
+    let afterCheckingCache = [];
+    for (let i = 0; i < newKeyMap.length; i += 2) {
+        let cachedResult = _lru_cache_index__WEBPACK_IMPORTED_MODULE_10__.cache.get(newKeyMap[i]);
+        if (cachedResult) {
+            nodeFoundInLRU++;
+            cachedResult = JSON.parse(cachedResult);
+            appState.persCache = (0,_private_origin_cache_manager__WEBPACK_IMPORTED_MODULE_8__.getInCache)(appState.persCache, newKeyMap[i]);
+            let [positionBuffer, colorBuffer] = _createBuffer(cachedResult.position, cachedResult.color);
+            const maxIntensity = cachedResult.maxIntensity;
+            newBufferMap[newKeyMap[i]] = {
+                position: positionBuffer,
+                color: colorBuffer,
+                maxIntensity: maxIntensity,
+            };
+            if (maxIntensity > appState.globalMaxIntensity) {
+                appState.globalMaxIntensity = maxIntensity;
+            }
+        }
+        else {
+            afterCheckingCache.push(newKeyMap[i], newKeyMap[i + 1]);
+        }
+    }
+    let filteredElements = [];
+    for (let i = 0; i < afterCheckingCache.length; i += 2) {
+        let [exist, data] = (await (0,_private_origin_file_manager__WEBPACK_IMPORTED_MODULE_7__.doesExist)(`${SOURCE_FILE_NAME}-${afterCheckingCache[i]}`));
+        if (exist) {
+            console.log("found in POFS");
+            nodeFoundInPersistent++;
+            let [positionBuffer, colorBuffer] = _createBuffer(data.position, data.color);
+            newBufferMap[afterCheckingCache[i]] = {
+                position: positionBuffer,
+                color: colorBuffer,
+                maxIntensity: data.maxIntensity,
+            };
+            if (data.maxIntensity > appState.globalMaxIntensity) {
+                appState.globalMaxIntensity = data.maxIntensity;
+            }
+            _lru_cache_index__WEBPACK_IMPORTED_MODULE_10__.cache.set(afterCheckingCache[i], JSON.stringify(data));
+            appState.persCache = (0,_private_origin_cache_manager__WEBPACK_IMPORTED_MODULE_8__.getInCache)(appState.persCache, afterCheckingCache[i]);
+        }
+        else {
+            filteredElements.push(afterCheckingCache[i], afterCheckingCache[i + 1]);
+            appState.persCache = (0,_private_origin_cache_manager__WEBPACK_IMPORTED_MODULE_8__.putInCache)(appState.persCache, afterCheckingCache[i], {
+                count: 1,
+                date: Date.now(),
+            });
+            nodeToFetch++;
+        }
+    }
+    (0,_private_origin_file_manager__WEBPACK_IMPORTED_MODULE_7__.throttledUpdatePersCache)((0,_private_origin_cache_manager__WEBPACK_IMPORTED_MODULE_8__.mapIntoJSON)(_lru_cache_index__WEBPACK_IMPORTED_MODULE_10__.cache));
+    for (let key in toDeleteArray) {
+        appState.toDeleteMap[key] = {
+            position: appState.bufferMap[key].position,
+            color: appState.bufferMap[key].position,
+        };
+    }
+    appState.bufferMap = newBufferMap;
+    (0,_helper__WEBPACK_IMPORTED_MODULE_9__.updateHtmlUI)(nodeNotFoundInBuffer, nodeFoundInBuffer, nodeFoundInLRU, nodeFoundInPersistent, nodeToFetch);
+    return filteredElements;
+}
+async function _createCameraProj() {
+    appState.camera = new three__WEBPACK_IMPORTED_MODULE_0__.PerspectiveCamera(50, canvas.width / canvas.height, 0.1, 4000);
+    appState.camera.up.set(0, 0, 1);
+    appState.camera.position.set(0, 1000, 1000);
+    appState.camera.updateProjectionMatrix();
+    appState.controls = new three_addons_controls_OrbitControls_js__WEBPACK_IMPORTED_MODULE_1__.OrbitControls(appState.camera, canvas);
+    appState.controls.enableDamping = true;
+    appState.controls.dampingFactor = 0.5;
+    appState.controls.zoomSpeed = 1;
+    appState.controls.panSpeed = 2;
+    appState.controls.update();
+    appState.proj = gl_matrix__WEBPACK_IMPORTED_MODULE_3__.perspective(gl_matrix__WEBPACK_IMPORTED_MODULE_3__.create(), (50 * Math.PI) / 180.0, canvas.width / canvas.height, 0.1, 8000);
+}
+// ============================================================================
+// Initialization
+// ============================================================================
+(async () => {
+    await (0,_private_origin_file_manager__WEBPACK_IMPORTED_MODULE_7__.createPersistentMetaCache)();
+    appState.persCache = await (0,_private_origin_cache_manager__WEBPACK_IMPORTED_MODULE_8__.pCache)();
+    await _createCameraProj();
+    await loadCOPC();
+    let projViewMatrix = await (0,_webgpu_renderer__WEBPACK_IMPORTED_MODULE_5__.stages)(appState.camera, appState.proj, appState.params);
+    await retrivePoints(projViewMatrix);
+    await (0,_webgpu_renderer__WEBPACK_IMPORTED_MODULE_5__.renderWrapper)();
+})();
+
+
+/***/ }),
+
+/***/ "./src/lru-cache/index.ts":
+/*!********************************!*\
+  !*** ./src/lru-cache/index.ts ***!
+  \********************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   cache: () => (/* binding */ cache)
+/* harmony export */ });
+/* harmony import */ var lru_cache__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! lru-cache */ "./node_modules/lru-cache/dist/mjs/index.js");
+
+const _options = {
+    max: 500,
+    //   ttl: 100 * 60 * 10,   i dont think i need this as the node value wont be time dependent
+    allowStale: false,
+    updateAgeOnGet: true,
+    updateAgeOnHas: true,
+};
+const cache = new lru_cache__WEBPACK_IMPORTED_MODULE_0__["default"](_options);
+// -------------------------------------------------------
+// since LRU Cache is not persistant on reload by default and is in-memory cache we dont need to be worried about clearing
+
+
+/***/ }),
+
+/***/ "./src/octree.ts":
+/*!***********************!*\
+  !*** ./src/octree.ts ***!
+  \***********************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   Box: () => (/* binding */ Box),
+/* harmony export */   Octree: () => (/* binding */ Octree),
+/* harmony export */   Point: () => (/* binding */ Point)
+/* harmony export */ });
+/* harmony import */ var three__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! three */ "./node_modules/three/build/three.module.js");
+
+// Constants
+const maxBoundary = {
+    x: 8,
+    y: 8,
+    z: 8,
+};
+const colors = [
+    new three__WEBPACK_IMPORTED_MODULE_0__.Color(0xe69b00), // yellow
+    new three__WEBPACK_IMPORTED_MODULE_0__.Color(0xff0000), // red
+    new three__WEBPACK_IMPORTED_MODULE_0__.Color(0xf1a784), // illusion
+    new three__WEBPACK_IMPORTED_MODULE_0__.Color(0x0000ff), // blue
+    new three__WEBPACK_IMPORTED_MODULE_0__.Color(0xc5e908), // green
+    new three__WEBPACK_IMPORTED_MODULE_0__.Color(0xe0a387), // grey
+    new three__WEBPACK_IMPORTED_MODULE_0__.Color(0xf1a784), // illusion
+];
+class Point {
+    constructor(index, x, y, z) {
+        this.index = index;
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        let mesh = new three__WEBPACK_IMPORTED_MODULE_0__.Mesh(new three__WEBPACK_IMPORTED_MODULE_0__.BoxGeometry(5, 5, 5), new three__WEBPACK_IMPORTED_MODULE_0__.MeshBasicMaterial({ color: 0xff0000 }));
+        mesh.position.set(x, y, z);
+        mesh.updateMatrix();
+        mesh.matrixAutoUpdate = false;
+        this.mesh = mesh;
+    }
+}
+class Box {
+    constructor(label, x, y, z, width, level) {
+        this.label = label;
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        this.width = width;
+        let mesh = new three__WEBPACK_IMPORTED_MODULE_0__.Mesh(new three__WEBPACK_IMPORTED_MODULE_0__.BoxGeometry(width, width, width), new three__WEBPACK_IMPORTED_MODULE_0__.MeshBasicMaterial({ color: colors[level % 7], wireframe: true }));
+        mesh.position.set(x, y, z);
+        mesh.updateMatrix();
+        mesh.matrixAutoUpdate = false;
+        this.mesh = mesh;
+        // scene.add(mesh);
+    }
+    bound(point) {
+        if (this.x + this.width * 0.5 == 0.5 * maxBoundary.x) {
+            return (point.x >= this.x - this.width * 0.5 &&
+                point.x <= this.x + this.width * 0.5 &&
+                point.y < this.y + this.width * 0.5 &&
+                point.y >= this.y - this.width * 0.5 &&
+                point.z >= this.z - this.width * 0.5 &&
+                point.z < this.z + this.width * 0.5);
+        }
+        if (this.y + this.width * 0.5 == 0.5 * maxBoundary.y) {
+            return (point.x >= this.x - this.width * 0.5 &&
+                point.x < this.x + this.width * 0.5 &&
+                point.y <= this.y + this.width * 0.5 &&
+                point.y >= this.y - this.width * 0.5 &&
+                point.z >= this.z - this.width * 0.5 &&
+                point.z < this.z + this.width * 0.5);
+        }
+        if (this.z + this.width * 0.5 == 0.5 * maxBoundary.z) {
+            return (point.x >= this.x - this.width * 0.5 &&
+                point.x < this.x + this.width * 0.5 &&
+                point.y < this.y + this.width * 0.5 &&
+                point.y >= this.y - this.width * 0.5 &&
+                point.z >= this.z - this.width * 0.5 &&
+                point.z <= this.z + this.width * 0.5);
+        }
+        else {
+            return (point.x >= this.x - this.width * 0.5 &&
+                point.x < this.x + this.width * 0.5 &&
+                point.y < this.y + this.width * 0.5 &&
+                point.y >= this.y - this.width * 0.5 &&
+                point.z >= this.z - this.width * 0.5 &&
+                point.z < this.z + this.width * 0.5);
+        }
+    }
+}
+class Octree {
+    constructor(box, level = 0) {
+        this.box = box;
+        this.minNE = null;
+        this.minNW = null;
+        this.minSW = null;
+        this.minSE = null;
+        this.maxNE = null;
+        this.maxNW = null;
+        this.maxSW = null;
+        this.maxSE = null;
+        this.isDivided = false;
+        // this.representativeNodes = [];
+        this.points = [];
+        this.buffer = [];
+        this.level = level;
+        this.parent = null;
+    }
+    // function findRepresentiveNode(){
+    //   let children = [this.minNE, this.minNW, this.minSW, this.minSE, this.maxNE, this.maxNW, this.maxSW, this.maxSE]
+    //   children.forEach((element, index)=>{
+    //     if(element != null && element.length>0){
+    //       this.representativeNodes.push(element.nodes[0])
+    //     }
+    //   })
+    // }
+    partition() {
+        let x = this.box.x;
+        let y = this.box.y;
+        let z = this.box.z;
+        let newWidth = this.box.width * 0.5;
+        let level = this.level + 1;
+        let maxNE_Box = new Box("maxNE", x + newWidth * 0.5, y + 0.5 * newWidth, z - 0.5 * newWidth, newWidth, level);
+        let maxNW_Box = new Box("maxNW", x - newWidth * 0.5, y + 0.5 * newWidth, z - 0.5 * newWidth, newWidth, level);
+        let maxSW_Box = new Box("maxSW", x - newWidth * 0.5, y - 0.5 * newWidth, z - 0.5 * newWidth, newWidth, level);
+        let maxSE_Box = new Box("maxSE", x + newWidth * 0.5, y - 0.5 * newWidth, z - 0.5 * newWidth, newWidth, level);
+        let minNE_Box = new Box("minNE", x + newWidth * 0.5, y + 0.5 * newWidth, z + 0.5 * newWidth, newWidth, level);
+        let minNW_Box = new Box("minNW", x - newWidth * 0.5, y + 0.5 * newWidth, z + 0.5 * newWidth, newWidth, level);
+        let minSW_Box = new Box("minSW", x - newWidth * 0.5, y - 0.5 * newWidth, z + 0.5 * newWidth, newWidth, level);
+        let minSE_Box = new Box("minSE", x + newWidth * 0.5, y - 0.5 * newWidth, z + 0.5 * newWidth, newWidth, level);
+        this.minNE = new Octree(minNE_Box, level);
+        this.minNW = new Octree(minNW_Box, level);
+        this.minSW = new Octree(minSW_Box, level);
+        this.minSE = new Octree(minSE_Box, level);
+        this.maxNE = new Octree(maxNE_Box, level);
+        this.maxNW = new Octree(maxNW_Box, level);
+        this.maxSW = new Octree(maxSW_Box, level);
+        this.maxSE = new Octree(maxSE_Box, level);
+        this.isDivided = true;
+    }
+    insert(point) {
+        if (!this.box.bound(point)) {
+            // console.log(
+            //   "out of boundary",
+            //   "for node",
+            //   point.x,
+            //   point.y,
+            //   point.z,
+            //   "for box",
+            //   this.box.x,
+            //   this.box.y,
+            //   this.box.z,
+            //   this.box.width * 0.5,
+            //   this.box.label
+            // );
+            return false;
+        }
+        if (this.points.length < tree.leafCapacity && !this.isDivided) {
+            // this.updateRepresentativeNode();
+            this.points.push(point.index);
+            // this.sortNode();
+            return true;
+        }
+        else if (this.buffer.length < tree.bufferCapacity && !this.isDivided) {
+            this.buffer.push(point.index);
+            return true;
+        }
+        else {
+            if (!this.isDivided) {
+                this.partition();
+                this.buffer.forEach((existingPoint) => {
+                    if (existingPoint.x == point.x &&
+                        existingPoint.y == point.y &&
+                        existingPoint.z == point.z) {
+                        console.log("repetitive node not allowed");
+                        return false;
+                    }
+                    this.minNE.insert(existingPoint) ||
+                        this.minNW.insert(existingPoint) ||
+                        this.minSE.insert(existingPoint) ||
+                        this.minSW.insert(existingPoint) ||
+                        this.maxNE.insert(existingPoint) ||
+                        this.maxNW.insert(existingPoint) ||
+                        this.maxSW.insert(existingPoint) ||
+                        this.maxSE.insert(existingPoint);
+                });
+                this.buffer = [];
+            }
+            return (this.minNE.insert(point) ||
+                this.minNW.insert(point) ||
+                this.minSE.insert(point) ||
+                this.minSW.insert(point) ||
+                this.maxNE.insert(point) ||
+                this.maxNW.insert(point) ||
+                this.maxSW.insert(point) ||
+                this.maxSE.insert(point));
+        }
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/passiveloader.ts":
+/*!******************************!*\
+  !*** ./src/passiveloader.ts ***!
+  \******************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   traverseTreeWrapper: () => (/* binding */ traverseTreeWrapper)
+/* harmony export */ });
+/* harmony import */ var _utils_loader__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./utils/loader */ "./src/utils/loader.ts");
+
+const DIRECTION = [
+    [0, 0, 0],
+    [0, 0, 1],
+    [0, 1, 0],
+    [0, 1, 1],
+    [1, 0, 0],
+    [1, 0, 1],
+    [1, 1, 0],
+    [1, 1, 1],
+];
+const canvas = document.getElementById("screen-canvas");
+canvas.width = window.innerWidth * (window.devicePixelRatio || 1);
+canvas.height = window.innerHeight * (window.devicePixelRatio || 1);
+const loaderState = {
+    cameraFocalLength: (0,_utils_loader__WEBPACK_IMPORTED_MODULE_0__.computeFocalLength)(90),
+    nodeToPrefetch: [],
+    screenWidth: canvas.width,
+    screenHeight: canvas.height,
+    fovRadian: Math.PI / 2,
+};
+function traverseTreeWrapper(nodePages, root, centerX, centerY, centerZ, width, _scale, controls, projViewMatrix) {
+    let cameraPosition = controls.object.position.toArray();
+    loaderState.nodeToPrefetch = [];
+    function _traverseTree(root, centerX, centerY, centerZ, width) {
+        let [level, x, y, z] = root;
+        let newLevel = level + 1;
+        let key = level + "-" + x + "-" + y + "-" + z;
+        let distance = Math.sqrt(Math.pow(Math.abs(cameraPosition[0] - centerX), 2) +
+            Math.pow(Math.abs(cameraPosition[1] - centerY), 2) +
+            Math.pow(Math.abs(cameraPosition[2] - centerZ), 2));
+        if (!_isRendered([centerX, centerY, centerZ], Math.max(...width), distance, projViewMatrix, level, key, nodePages)) {
+            return [];
+        }
+        let centerXLeft = centerX - width[0] / 2;
+        let centerXRight = centerX + width[0] / 2;
+        let centerYTop = centerY + width[1] / 2;
+        let centerYBottom = centerY - width[1] / 2;
+        let centerZNear = centerZ + width[2] / 2;
+        let centerZFar = centerZ - width[2] / 2;
+        let result = [key, nodePages[key].pointCount];
+        DIRECTION.forEach((element) => {
+            let [dx, dy, dz] = element;
+            let key1 = `${newLevel}-${2 * x + dx}-${2 * y + dy}-${2 * z + dz}`;
+            if (!(key1 in nodePages && nodePages[key].pointCount > 0)) {
+                return [];
+            }
+            centerX = centerXLeft;
+            centerY = centerYBottom;
+            centerZ = centerZFar;
+            if (dx == 1) {
+                centerX = centerXRight;
+            }
+            if (dy == 1) {
+                centerY = centerYTop;
+            }
+            if (dz == 1) {
+                centerZ = centerZNear;
+            }
+            let result1 = _traverseTree([newLevel, 2 * x + dx, 2 * y + dy, 2 * z + dz], centerX, centerY, centerZ, [width[0] / 2, width[1] / 2, width[2] / 2]);
+            result.push(...result1);
+        });
+        return result;
+    }
+    let finalPoints = _traverseTree(root, centerX, centerY, centerZ, [
+        width[0],
+        width[1],
+        width[2],
+    ]);
+    return [finalPoints, loaderState.nodeToPrefetch];
+}
+function _isRendered(_center, radius, distance, _projViewMatrix, _level, _key, _nodePages) {
+    let projectedRadius = (radius * loaderState.screenHeight) / (distance * (2 * Math.tan(loaderState.fovRadian / 2.0)));
+    return Math.abs(projectedRadius) > 90;
+}
+
+
+/***/ }),
+
+/***/ "./src/private_origin/cache_manager.ts":
+/*!*********************************************!*\
+  !*** ./src/private_origin/cache_manager.ts ***!
+  \*********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   getInCache: () => (/* binding */ getInCache),
+/* harmony export */   mapIntoJSON: () => (/* binding */ mapIntoJSON),
+/* harmony export */   pCache: () => (/* binding */ pCache),
+/* harmony export */   putInCache: () => (/* binding */ putInCache)
+/* harmony export */ });
+/* harmony import */ var _file_manager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./file_manager */ "./src/private_origin/file_manager.ts");
+
+function getInCache(cache, key) {
+    if (!cache.has(key))
+        return cache;
+    const val = cache.get(key);
+    cache.delete(key);
+    cache.set(key, { date: Date.now(), count: val.count + 1 });
+    return cache;
+}
+function mapIntoJSON(map) {
+    return JSON.stringify(Object.fromEntries(map));
+}
+async function pCache() {
+    const [, content] = await (0,_file_manager__WEBPACK_IMPORTED_MODULE_0__.doesExist)("cache-holder");
+    const cache = _sortObjectIntoMap(content);
+    return cache;
+}
+function putInCache(cache, key, value) {
+    cache.delete(key);
+    if (cache.size == "150") {
+        cache.delete(cache.keys().next().value);
+    }
+    else {
+        cache.set(key, value);
+    }
+    return cache;
+}
+function _sortObjectIntoMap(object) {
+    const resultMap = new Map();
+    if (!object)
+        return resultMap;
+    const sortedArray = Object.entries(object).sort((a, b) => a.date - b.date);
+    sortedArray.forEach(([key, value]) => resultMap.set(key, value));
+    return resultMap;
+}
+
+
+/***/ }),
+
+/***/ "./src/private_origin/file_manager.ts":
+/*!********************************************!*\
+  !*** ./src/private_origin/file_manager.ts ***!
+  \********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   clearAllFiles: () => (/* binding */ clearAllFiles),
+/* harmony export */   createPersistentMetaCache: () => (/* binding */ createPersistentMetaCache),
+/* harmony export */   doesExist: () => (/* binding */ doesExist),
+/* harmony export */   readFile: () => (/* binding */ readFile),
+/* harmony export */   throttledUpdatePersCache: () => (/* binding */ throttledUpdatePersCache),
+/* harmony export */   writeFile: () => (/* binding */ writeFile)
+/* harmony export */ });
+/* harmony import */ var _webgpu_renderer__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../webgpu/renderer */ "./src/webgpu/renderer.ts");
+
+// Query storage usage for monitoring (no global state needed)
+navigator.webkitPersistentStorage.queryUsageAndQuota(function () {
+    // Available for future monitoring if needed
+}, function (error) {
+    console.error("Error getting origin-private file system size:", error);
+});
+async function clearAllFiles() {
+    const root = await navigator.storage.getDirectory();
+    const fileNames = root.keys();
+    let x = await fileNames.next();
+    while (!x.done) {
+        const fileName = x.value;
+        const fileHandle = await root.getFileHandle(fileName);
+        await fileHandle.remove();
+        x = await fileNames.next();
+    }
+}
+async function createPersistentMetaCache() {
+    const fileToCheck = `${"cache-holder"}.json`;
+    const [alreadyExist] = await doesExist(fileToCheck);
+    if (!alreadyExist) {
+        const root = await navigator.storage.getDirectory();
+        await root.getFileHandle(fileToCheck, {
+            create: true,
+        });
+    }
+    else {
+        console.log("meta cache file already exist");
+    }
+}
+async function doesExist(fileName) {
+    try {
+        const fileToCheck = `${fileName}.bin`;
+        const root = await navigator.storage.getDirectory();
+        const fileHandle = await root.getFileHandle(fileToCheck);
+        const retrievedBlob = await fileHandle.getFile();
+        if (retrievedBlob.size > 0) {
+            return await _readBlobAsJSON(retrievedBlob);
+        }
+        else {
+            return [true, { position: [], color: [] }];
+        }
+    }
+    catch (error) {
+        if (error.name === "NotFoundError") {
+            return [false, null];
+        }
+        else {
+            console.error("Error checking if file exists:", error);
+            return [false, null];
+        }
+    }
+}
+async function readFile(fileName) {
+    const root = await navigator.storage.getDirectory();
+    const fileHandle = await root.getFileHandle(`${fileName}.bin`, {
+        create: false,
+    });
+    const file = await fileHandle.getFile();
+    const content = await file.text();
+    if (content) {
+        return JSON.parse(content);
+    }
+    return null;
+}
+const throttledUpdatePersCache = (0,_webgpu_renderer__WEBPACK_IMPORTED_MODULE_0__.throttle)(_updatePersCache, 30000);
+async function writeFile(fileName, data) {
+    const fileToCheck = `${fileName}.bin`;
+    const blob = new Blob([data], { type: "application/octet-stream" });
+    const root = await navigator.storage.getDirectory();
+    const fileHandle = await root.getFileHandle(fileToCheck, {
+        create: true,
+    });
+    const writableStream = await fileHandle.createWritable();
+    await writableStream.write(blob);
+    await writableStream.close();
+}
+async function _readBlobAsJSON(blob) {
+    return await new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onload = function () {
+            resolve([true, JSON.parse(reader.result)]);
+        };
+        reader.readAsText(blob);
+    });
+}
+async function _updatePersCache(updatedData) {
+    const fileToCheck = `${"cache-holder"}.json`;
+    const root = await navigator.storage.getDirectory();
+    const fileHandle = await root.getFileHandle(fileToCheck, {
+        create: true,
+    });
+    const writableStream = await fileHandle.createWritable();
+    await writableStream.write(updatedData);
+    await writableStream.close();
+    console.log("cache updating is done");
+}
+
+
+/***/ }),
+
+/***/ "./src/shaders/renderShader.ts":
+/*!*************************************!*\
+  !*** ./src/shaders/renderShader.ts ***!
+  \*************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   fs: () => (/* binding */ fs),
+/* harmony export */   vs: () => (/* binding */ vs)
+/* harmony export */ });
+let vs = `
+    struct VertexInput {
+        @location(0) position: vec4<f32>,
+        @location(1) color: vec3<f32>
+    };
+
+    struct VertexOut {
+        @builtin(position) position: vec4<f32>,
+        @location(0) color: vec4<f32>,
+    };
+
+    struct paramsUniform {
+        width_x:f32,
+        width_y:f32,
+        width_z:f32,
+        x_min: f32,
+        y_min: f32,
+        z_min: f32,
+        current_Axis: f32,
+        max_Intensity: f32
+    };
+
+    struct cmapUniform {
+        colors: array<vec4<f32>, 20>
+    };
+
+    @group(0) @binding(0) var<uniform> MVP_Matrix: mat4x4<f32>;
+    @group(0) @binding(1) var<uniform> cMap: cmapUniform;
+    @group(0) @binding(2) var<uniform> params: paramsUniform;
+
+    const direction = array<vec2<f32>, 4>(
+        vec2<f32>(-1, -1),
+        vec2<f32>(1, -1),
+        vec2<f32>(-1, 1),
+        vec2<f32>(1, 1)
+    );
+    
+    const PI: f32 = 3.1415926535897932384626433832795;
+
+    fn getCmapped(cMapIndex: i32)->vec4<f32>{
+        var cmapped = cMap.colors[cMapIndex];
+        if(cMapIndex>19){
+            cmapped = cMap.colors[19];
+        }
+        return cmapped;
+    }
+
+    @vertex
+    fn main(in: VertexInput, @builtin(instance_index) inst_index:u32, @builtin(vertex_index) vertexIndex : u32)->VertexOut{
+        var out:VertexOut;
+        var cMapIndex:i32; 
+        var level:f32 = in.position.w;
+        var radius:f32 = 3.0* pow(0.6, level);
+        radius = max(radius, 1.0);
+        var position:vec3<f32> = in.position.xyz - vec3(params.x_min, params.y_min, params.z_min) - 0.5*vec3(params.width_x, params.width_y, params.width_z);
+        var factor = in.color.x/params.max_Intensity;
+        if(params.current_Axis == 2.0){
+            cMapIndex = i32((abs(in.position.z - params.z_min)/params.width_z) *19);
+            let mappedColor = getCmapped(cMapIndex);
+            out.color = vec4(mappedColor.xyz, 1.0);
+            if(cMapIndex < 0){
+                out.color = vec4(1.0, 0.0, 0.0, 1.0);
+            }
+            out.color = vec4(out.color.x, out.color.y, out.color.z, 1.0)*factor;
+
+        }
+        else if(params.current_Axis == 1.0){
+            cMapIndex = i32(1.25*(abs(in.position.y - params.y_min)/params.width_y) *19);
+            out.color = getCmapped(cMapIndex);
+            out.color = vec4(out.color.x, out.color.y, out.color.z, 1.0)*factor;
+
+        }
+        else if(params.current_Axis == 0.0){
+            cMapIndex = i32(1.25*(abs(in.position.x - params.x_min)/params.width_x) *19);
+            out.color = getCmapped(cMapIndex);
+            out.color = vec4(out.color.x, out.color.y, out.color.z, 1.0)*factor;
+        }
+        else{
+            out.color = vec4(in.color.x/255.0, in.color.y/225.0, in.color.z/255.0, 1.0);
+        }
+
+        if(factor < 0.1){
+            factor = 0.35;
+        }
+        // if(level <= 1.0){
+        //     out.color = vec4(0.0, 1.0, 0.0, 1.0);
+        // }
+        position = position + vec3<f32>(radius*direction[vertexIndex], 0.0);
+        out.position = MVP_Matrix* vec4<f32>(position, 1.0);
+        return out;
+    }
+`;
+let fs = `
+struct VertexOut {
+    @builtin(position) position: vec4<f32>,
+    @location(0) color: vec4<f32>
+};
+
+@fragment
+fn main(in:VertexOut)->@location(0) vec4<f32>{
+    return in.color;
+}
+`;
+
+
+
+/***/ }),
+
+/***/ "./src/utils/loader.ts":
+/*!*****************************!*\
+  !*** ./src/utils/loader.ts ***!
+  \*****************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   computeFocalLength: () => (/* binding */ computeFocalLength),
+/* harmony export */   computeSSE: () => (/* binding */ computeSSE)
+/* harmony export */ });
+class Loader {
+    constructor(url) {
+        this.url = url;
+    }
+    async loadHeader() {
+        // loadheader
+        let loaderByteSize = 549;
+    }
+}
+function computeFocalLength(angle) {
+    let canvas = document.getElementById("screen-canvas");
+    let angleRadian = (angle * Math.PI) / 180;
+    return canvas.clientHeight * 0.5 * (1 / Math.tan(angleRadian / 2));
+}
+function computeSSE(width, distance, focalLength) {
+    return (width / distance) * focalLength;
+}
+
+
+/***/ }),
+
+/***/ "./src/webgpu/renderer.ts":
+/*!********************************!*\
+  !*** ./src/webgpu/renderer.ts ***!
+  \********************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   device: () => (/* binding */ renderContext),
+/* harmony export */   renderWrapper: () => (/* binding */ renderWrapper),
+/* harmony export */   stages: () => (/* binding */ stages),
+/* harmony export */   throttle: () => (/* binding */ throttle)
+/* harmony export */ });
+/* harmony import */ var _shaders_renderShader__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../shaders/renderShader */ "./src/shaders/renderShader.ts");
+/* harmony import */ var _index__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../index */ "./src/index.ts");
+/* harmony import */ var three_addons_libs_stats_module_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! three/addons/libs/stats.module.js */ "./node_modules/three/examples/jsm/libs/stats.module.js");
+/* harmony import */ var gl_matrix__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! gl-matrix */ "./node_modules/gl-matrix/esm/mat4.js");
+
+
+
+
+const renderContext = {
+    adapter: null,
+    device: null,
+    context: null,
+    canvas: null,
+    swapChainFormat: "bgra8unorm",
+    renderPipeline: null,
+    // Buffers
+    mvpBindGroup: null,
+    mvpBuffer: null,
+    colorMapBuffer: null,
+    paramsBuffer: null,
+    levelBuffer: null,
+    renderDepthTexture: null,
+    // Matrices and camera
+    projView: gl_matrix__WEBPACK_IMPORTED_MODULE_3__.create(),
+    proj: null,
+    camera: null,
+    param: null,
+    // Render state
+    commandEncoder: null,
+    renderPassDescriptor: null,
+    numPoints: 0,
+    // UI state
+    currentAxis: 3,
+    abortController: null,
+    keyMap: {
+        isDown: false,
+        dragging: false,
+    },
+};
+const stats = new three_addons_libs_stats_module_js__WEBPACK_IMPORTED_MODULE_2__["default"]();
+document.body.appendChild(stats.dom);
+
+function throttle(callback, interval) {
+    let enableCall = true;
+    return function (...args) {
+        if (!enableCall)
+            return;
+        enableCall = false;
+        callback.apply(this, args);
+        setTimeout(() => (enableCall = true), interval);
+    };
+}
+async function stages(cameraObj, projMatrix, params) {
+    await _init();
+    await _initRenderPipeline();
+    const projectionViewMatrix = await _initUniform(cameraObj, projMatrix, params);
+    return projectionViewMatrix;
+}
+async function renderWrapper() {
+    await _createBindGroups();
+    await _createDepthBuffer();
+    await _updateMaxIntensity();
+    _render();
+}
+async function _init() {
+    renderContext.adapter = await navigator.gpu.requestAdapter();
+    if (!renderContext.adapter)
+        return _handleFallback();
+    renderContext.device = await renderContext.adapter.requestDevice();
+    if (!renderContext.device)
+        return _handleFallback();
+    renderContext.canvas = document.getElementById("screen-canvas");
+    renderContext.canvas.width = window.innerWidth * (window.devicePixelRatio || 1);
+    renderContext.canvas.height = window.innerHeight * (window.devicePixelRatio || 1);
+    renderContext.context = renderContext.canvas.getContext("webgpu");
+    if (!renderContext.context) {
+        console.error("could not get context from the canvas");
+        return;
+    }
+    renderContext.swapChainFormat = navigator.gpu.getPreferredCanvasFormat();
+    _configureSwapChain(renderContext.device);
+    _setupEventListeners();
+}
+function _handleFallback() {
+    console.error("unable to start webgpu");
+    return;
+}
+function _configureSwapChain(gpuDevice) {
+    renderContext.context.configure({
+        device: gpuDevice,
+        format: renderContext.swapChainFormat,
+        usage: GPUTextureUsage.RENDER_ATTACHMENT,
+        alphaMode: "premultiplied",
+    });
+}
+function _setupEventListeners() {
+    renderContext.canvas.addEventListener("mousedown", (e) => {
+        if (e.buttons == 1 || e.buttons == 2) {
+            renderContext.keyMap.isDown = true;
+        }
+    });
+    window.addEventListener("mouseup", () => {
+        renderContext.keyMap.isDown = false;
+    });
+    renderContext.canvas.addEventListener("mousemove", () => {
+        if (renderContext.keyMap.isDown == true) {
+            _throttleTreeTravel(renderContext.projView);
+        }
+    });
+    window.addEventListener("wheel", () => {
+        if (renderContext.abortController) {
+            renderContext.abortController.abort();
+        }
+        renderContext.abortController = new AbortController();
+        _throttleTreeTravel(renderContext.projView, renderContext.abortController.signal);
+    });
+}
+const _throttleTreeTravel = throttle(_index__WEBPACK_IMPORTED_MODULE_1__.retrivePoints, 2000);
+async function _initRenderPipeline() {
+    const vsModule = renderContext.device.createShaderModule({
+        label: "vertex shader",
+        code: _shaders_renderShader__WEBPACK_IMPORTED_MODULE_0__.vs,
+    });
+    const fsModule = renderContext.device.createShaderModule({
+        label: "fragment shader",
+        code: _shaders_renderShader__WEBPACK_IMPORTED_MODULE_0__.fs,
+    });
+    const positionAttributeDesc = {
+        shaderLocation: 0,
+        offset: 0,
+        format: "float32x4",
+    };
+    const colorAttributeDesc = {
+        shaderLocation: 1,
+        offset: 0,
+        format: "float32x3",
+    };
+    const vertexShaderDescriptor = {
+        module: vsModule,
+        entryPoint: "main",
+        buffers: [
+            {
+                arrayStride: 16,
+                stepMode: "instance",
+                attributes: [positionAttributeDesc],
+            },
+            {
+                arrayStride: 12,
+                stepMode: "instance",
+                attributes: [colorAttributeDesc],
+            },
+        ],
+    };
+    const fragmentShaderDescriptor = {
+        module: fsModule,
+        entryPoint: "main",
+        targets: [{ format: renderContext.swapChainFormat }],
+    };
+    const depthStencilDescriptor = {
+        format: "depth24plus-stencil8",
+        depthWriteEnabled: true,
+        depthCompare: "less",
+    };
+    const primitiveDescriptor = {
+        topology: "triangle-strip",
+        cullMode: "none",
+    };
+    renderContext.renderPipeline = await renderContext.device.createRenderPipeline({
+        label: "render pipeline",
+        layout: "auto",
+        vertex: vertexShaderDescriptor,
+        fragment: fragmentShaderDescriptor,
+        depthStencil: depthStencilDescriptor,
+        primitive: primitiveDescriptor,
+    });
+}
+function _initUniform(cam, projMatrix, params) {
+    renderContext.camera = cam;
+    renderContext.proj = projMatrix;
+    renderContext.param = params;
+    params.push(renderContext.currentAxis);
+    params.push(_index__WEBPACK_IMPORTED_MODULE_1__.appState.globalMaxIntensity);
+    renderContext.paramsBuffer = renderContext.device.createBuffer({
+        size: 8 * 4,
+        usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST,
+        mappedAtCreation: true,
+    });
+    const mapArrayParams = new Float32Array(renderContext.paramsBuffer.getMappedRange());
+    mapArrayParams.set(params);
+    renderContext.paramsBuffer.unmap();
+    renderContext.levelBuffer = renderContext.device.createBuffer({
+        size: 4,
+        usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST,
+        mappedAtCreation: true,
+    });
+    const mapArrayLevel = new Float32Array(renderContext.levelBuffer.getMappedRange());
+    mapArrayLevel.set([0]);
+    renderContext.levelBuffer.unmap();
+    // Create colormap
+    const hsvColors = [
+        [0.0, 0.0, 0.5], [0.0, 0.2, 0.7], [0.0, 0.4, 0.9], [0.0, 0.6, 1.0],
+        [0.0, 0.8, 1.0], [0.2, 0.9, 0.8], [0.4, 1.0, 0.6], [0.6, 1.0, 0.4],
+        [0.8, 1.0, 0.2], [1.0, 1.0, 0.0], [1.0, 0.9, 0.0], [1.0, 0.8, 0.0],
+        [1.0, 0.6, 0.0], [1.0, 0.4, 0.0], [1.0, 0.2, 0.0], [0.9, 0.0, 0.0],
+        [0.7, 0.0, 0.0], [0.5, 0.0, 0.0], [0.3, 0.0, 0.0], [0.1, 0.5, 0.0],
+    ].flat();
+    renderContext.colorMapBuffer = renderContext.device.createBuffer({
+        size: hsvColors.length * 3 * 4,
+        usage: GPUBufferUsage.UNIFORM,
+        mappedAtCreation: true,
+    });
+    const mapArray = new Float32Array(renderContext.colorMapBuffer.getMappedRange());
+    mapArray.set(hsvColors);
+    renderContext.colorMapBuffer.unmap();
+    renderContext.mvpBuffer = renderContext.device.createBuffer({
+        size: 16 * 4,
+        usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST,
+    });
+    const viewMatrix = renderContext.camera.matrixWorldInverse.elements;
+    renderContext.projView = gl_matrix__WEBPACK_IMPORTED_MODULE_3__.mul(renderContext.projView, viewMatrix, renderContext.proj);
+    return renderContext.projView;
+}
+async function _createBindGroups() {
+    renderContext.mvpBindGroup = renderContext.device.createBindGroup({
+        label: "uniform bindgroup - rendering",
+        layout: renderContext.renderPipeline.getBindGroupLayout(0),
+        entries: [
+            {
+                binding: 0,
+                resource: { buffer: renderContext.mvpBuffer },
+            },
+            {
+                binding: 1,
+                resource: { buffer: renderContext.colorMapBuffer },
+            },
+            {
+                binding: 2,
+                resource: { buffer: renderContext.paramsBuffer },
+            },
+        ],
+    });
+}
+async function _createDepthBuffer() {
+    renderContext.renderDepthTexture = renderContext.device.createTexture({
+        size: [renderContext.canvas.width, renderContext.canvas.height, 1],
+        format: "depth24plus-stencil8",
+        usage: GPUTextureUsage.RENDER_ATTACHMENT,
+    });
+}
+async function _updateMaxIntensity() {
+    renderContext.param[renderContext.param.length - 1] = _index__WEBPACK_IMPORTED_MODULE_1__.appState.globalMaxIntensity;
+    const stagingBuffer = renderContext.device.createBuffer({
+        usage: GPUBufferUsage.MAP_WRITE | GPUBufferUsage.COPY_SRC,
+        size: 32,
+        mappedAtCreation: true,
+    });
+    const stagingData = new Float32Array(stagingBuffer.getMappedRange());
+    stagingData.set(renderContext.param);
+    stagingBuffer.unmap();
+    const copyEncoder = renderContext.device.createCommandEncoder();
+    copyEncoder.copyBufferToBuffer(stagingBuffer, 28, renderContext.paramsBuffer, 28, 4);
+    renderContext.device.queue.submit([copyEncoder.finish()]);
+}
+function _render() {
+    stats.update();
+    renderContext.commandEncoder = renderContext.device.createCommandEncoder();
+    const viewMatrix = renderContext.camera.matrixWorldInverse.elements;
+    renderContext.projView = gl_matrix__WEBPACK_IMPORTED_MODULE_3__.mul(renderContext.projView, renderContext.proj, viewMatrix);
+    _index__WEBPACK_IMPORTED_MODULE_1__.appState.controls.update();
+    _encodeCommand();
+    const wvStagingBuffer = renderContext.device.createBuffer({
+        size: 4 * 16,
+        usage: GPUBufferUsage.COPY_SRC,
+        mappedAtCreation: true,
+    });
+    const stagingUniformData = new Float32Array(wvStagingBuffer.getMappedRange());
+    stagingUniformData.set(renderContext.projView);
+    wvStagingBuffer.unmap();
+    renderContext.commandEncoder.copyBufferToBuffer(wvStagingBuffer, 0, renderContext.mvpBuffer, 0, 64);
+    const renderPass = renderContext.commandEncoder.beginRenderPass(renderContext.renderPassDescriptor);
+    renderPass.setPipeline(renderContext.renderPipeline);
+    renderPass.setViewport(0, 0, renderContext.canvas.width, renderContext.canvas.height, 0.0, 1.0);
+    renderPass.setBindGroup(0, renderContext.mvpBindGroup);
+    for (let key in _index__WEBPACK_IMPORTED_MODULE_1__.appState.bufferMap) {
+        renderPass.setVertexBuffer(0, _index__WEBPACK_IMPORTED_MODULE_1__.appState.bufferMap[key].position);
+        renderPass.setVertexBuffer(1, _index__WEBPACK_IMPORTED_MODULE_1__.appState.bufferMap[key].color);
+        renderContext.numPoints = +_index__WEBPACK_IMPORTED_MODULE_1__.appState.bufferMap[key].position.label / 4;
+        renderPass.draw(4, renderContext.numPoints, 0, 0);
+    }
+    renderPass.end();
+    renderContext.device.queue.submit([renderContext.commandEncoder.finish()]);
+    requestAnimationFrame(_render);
+}
+async function _encodeCommand() {
+    const colorAttachment = {
+        view: renderContext.context.getCurrentTexture().createView(),
+        clearValue: { r: 1.0, g: 1.0, b: 1.0, a: 1.0 },
+        loadOp: "clear",
+        storeOp: "store",
+    };
+    const depthAttachment = {
+        view: renderContext.renderDepthTexture.createView(),
+        depthLoadOp: "clear",
+        depthClearValue: 1.0,
+        depthStoreOp: "store",
+        stencilLoadOp: "clear",
+        stencilClearValue: 0,
+        stencilStoreOp: "store",
+    };
+    renderContext.renderPassDescriptor = {
+        colorAttachments: [colorAttachment],
+        depthStencilAttachment: depthAttachment,
+    };
+}
+async function _updateAxis() {
+    renderContext.param[renderContext.param.length - 2] = renderContext.currentAxis;
+    const stagingBuffer = renderContext.device.createBuffer({
+        usage: GPUBufferUsage.MAP_WRITE | GPUBufferUsage.COPY_SRC,
+        size: 32,
+        mappedAtCreation: true,
+    });
+    const stagingData = new Float32Array(stagingBuffer.getMappedRange());
+    stagingData.set(renderContext.param);
+    stagingBuffer.unmap();
+    const copyEncoder = renderContext.device.createCommandEncoder();
+    copyEncoder.copyBufferToBuffer(stagingBuffer, 24, renderContext.paramsBuffer, 24, 8);
+    renderContext.device.queue.submit([copyEncoder.finish()]);
+}
+(() => {
+    const selectColormap = document.getElementById("colormap-axis");
+    selectColormap.addEventListener("change", (event) => {
+        const axis = parseInt(event.target.value);
+        if (axis != renderContext.currentAxis) {
+            renderContext.currentAxis = axis;
+            _updateAxis();
+        }
+    });
+})();
+
+
+/***/ }),
+
+/***/ "./src/worker/fetcher.worker.ts":
+/*!**************************************!*\
+  !*** ./src/worker/fetcher.worker.ts ***!
+  \**************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ Worker_fn)
+/* harmony export */ });
+function Worker_fn() {
+  return new Worker(__webpack_require__.p + "bundle.worker.js");
+}
+
+
+/***/ }),
+
+/***/ "?3dd1":
+/*!********************!*\
+  !*** fs (ignored) ***!
+  \********************/
+/***/ (() => {
+
+/* (ignored) */
+
 /***/ })
 
 /******/ 	});
@@ -56597,7 +59306,7 @@ Stats.Panel = function ( name, fg, bg ) {
 /******/ 		}
 /******/ 		// Create a new module (and put it into the cache)
 /******/ 		var module = __webpack_module_cache__[moduleId] = {
-/******/ 			id: moduleId,
+/******/ 			// no module.id needed
 /******/ 			// no module.loaded needed
 /******/ 			exports: {}
 /******/ 		};
@@ -56668,23 +59377,21 @@ Stats.Panel = function ( name, fg, bg ) {
 /******/ 		if (__webpack_require__.g.importScripts) scriptUrl = __webpack_require__.g.location + "";
 /******/ 		var document = __webpack_require__.g.document;
 /******/ 		if (!scriptUrl && document) {
-/******/ 			if (document.currentScript)
-/******/ 				scriptUrl = document.currentScript.src
+/******/ 			if (document.currentScript && document.currentScript.tagName.toUpperCase() === 'SCRIPT')
+/******/ 				scriptUrl = document.currentScript.src;
 /******/ 			if (!scriptUrl) {
 /******/ 				var scripts = document.getElementsByTagName("script");
-/******/ 				if(scripts.length) scriptUrl = scripts[scripts.length - 1].src
+/******/ 				if(scripts.length) {
+/******/ 					var i = scripts.length - 1;
+/******/ 					while (i > -1 && (!scriptUrl || !/^http(s?):/.test(scriptUrl))) scriptUrl = scripts[i--].src;
+/******/ 				}
 /******/ 			}
 /******/ 		}
 /******/ 		// When supporting browsers where an automatic publicPath is not supported you must specify an output.publicPath manually via configuration
 /******/ 		// or pass an empty string ("") and set the __webpack_public_path__ variable from your code to use your own logic.
 /******/ 		if (!scriptUrl) throw new Error("Automatic publicPath is not supported in this browser");
-/******/ 		scriptUrl = scriptUrl.replace(/#.*$/, "").replace(/\?.*$/, "").replace(/\/[^\/]+$/, "/");
+/******/ 		scriptUrl = scriptUrl.replace(/^blob:/, "").replace(/#.*$/, "").replace(/\?.*$/, "").replace(/\/[^\/]+$/, "/");
 /******/ 		__webpack_require__.p = scriptUrl;
-/******/ 	})();
-/******/ 	
-/******/ 	/* webpack/runtime/nonce */
-/******/ 	(() => {
-/******/ 		__webpack_require__.nc = undefined;
 /******/ 	})();
 /******/ 	
 /************************************************************************/
@@ -56692,7 +59399,7 @@ Stats.Panel = function ( name, fg, bg ) {
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module is referenced by other modules so it can't be inlined
-/******/ 	var __webpack_exports__ = __webpack_require__("./src/index.js");
+/******/ 	var __webpack_exports__ = __webpack_require__("./src/index.ts");
 /******/ 	
 /******/ })()
 ;
