@@ -1,0 +1,69 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  border: none;
+  font-family: "Poppins", sans-serif;
+}
+
+body {
+  overflow: hidden;
+}
+
+.note {
+  position: absolute;
+  color: rgb(32, 31, 30);
+  top: 15px;
+  left: 20px;
+}
+
+.note title {
+  font-size: 20px;
+}
+
+.bottom-note {
+  position: absolute;
+  bottom: 55px;
+  left: 50px;
+  font-weight: 600;
+}
+.selection-map {
+  position: absolute;
+  top: 50px;
+  right: 50px;
+}
+
+.option-title {
+  border-bottom: 1px solid #aaa;
+  margin-bottom: 20px;
+}
+
+select {
+  padding: 20px;
+  border: 1px solid #ccc;
+}
+
+option {
+  text-indent: 15px;
+}
+
+.abort-div {
+  position: absolute;
+  top: 50px;
+  left: 10px;
+  padding: 20px 30px;
+  border: 2px solid;
+}
+
+#abort_btn {
+  background: none;
+  font-size: 14px;
+}
+
+#stats-div{
+  position: absolute;
+  bottom: 100px; 
+  right: 50px;
+  background-color: aliceblue;
+  padding: 20px;
+}

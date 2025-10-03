@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <!-- <div class="note">
+      <h3>
+        Multiple reloading may waste your memory because i have not disposed
+        element to avoid memory leakage (SOLVED)
+      </h3>
+      <span style="color: red">Update: Memory leakage is resolved</span>
+      <br />
+      <span> Points: 1000 Points generated randomly in 3D space</span><br />
+      <span>
+        Color: Points color is red and Each bounding box is colored according to
+        level</span
+      ><br />
+
+      <span>Using: Three.js</span>
+    </div> -->
+
+    <canvas id="screen-canvas"></canvas>
+    <div class="selection-map">
+      <h3 class="option-title">Color-map axis</h3>
+      <select id="colormap-axis">
+        <optgroup label="Color Strategy">
+          <option value="3">RGB Color</option>
+          <option value="2">Z-axis color map</option>
+          <option value="0">X-axis color map</option>
+          <option value="1">Y-axis color map</option>
+        </optgroup>
+      </select>
+    </div>
+    <div class="abort-div">
+      <button id="abort_btn">Abort Multithread Fetching</button>
+    </div>
+    <div id="stats-div">
+    </div>
+    <div class="bottom-note">
+      <!-- <span>Minimap of the orthogoanl view of bounding box from top</span> -->
+    </div>
+    <script src="./js/dom-main.js"></script>
+    <script src="./js/gl-matrix.min.js"></script>
+    <script src="./js/webgl-util.js"></script>
+    <script src="./bundle.js"></script>
+    <script type="worker-script">
+      {
+        const original = self.close;
+        self.close = () => {
+          setTimeout( () => original.call( self ), 0 );
+          throw new Error( "closing" );
+        };
+      }
+
+      onmessage = () => {
+        self.close();
+      };
+    </script>
+  </body>
+</html>
