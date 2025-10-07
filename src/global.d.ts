@@ -18,3 +18,4 @@ declare module "*.worker" {
 
 declare const __webpack_public_path__: string;
 declare const tree: any;
+declare module "*.css";

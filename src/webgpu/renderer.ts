@@ -1,160 +1,136 @@
-import { vs, fs } from "../shaders/renderShader";
-import { appState, retrivePoints } from "../index";
 import Stats from "three/addons/libs/stats.module.js";
 import { mat4 } from "gl-matrix";
 
-const renderContext = {
-  adapter: null,
-  device: null,
-  context: null,
-  canvas: null,
-  swapChainFormat: "bgra8unorm",
-  renderPipeline: null,
+import vec4ShaderCode from "../shaders/vec4-shader.wgsl";
+import { appState } from "../canvas/state-manager";
 
-  // Buffers
-  mvpBindGroup: null,
-  mvpBuffer: null,
-  colorMapBuffer: null,
-  paramsBuffer: null,
-  levelBuffer: null,
-  renderDepthTexture: null,
-
-  // Matrices and camera
-  projView: mat4.create(),
-  proj: null,
-  camera: null,
-  param: null,
-
-  // Render state
-  commandEncoder: null,
-  renderPassDescriptor: null,
-  numPoints: 0,
-
-  // UI state
-  currentAxis: 3,
-  abortController: null,
-  keyMap: {
-    isDown: false,
-    dragging: false,
-  },
-};
-
+// これでFPSなどの数値を管理できる。
 const stats = new (Stats as any)();
 document.body.appendChild(stats.dom);
 
-export { renderContext as device };
+export async function stages(cameraObj, projMatrix, params) {
+  const { device, context, swapChainFormat } = await _init();
+  const renderPipeline = await _initRenderPipeline(device, swapChainFormat);
+  const { projView, mvpBuffer, colorMapBuffer, paramsBuffer } = _initUniform(
+    device,
+    cameraObj,
+    projMatrix,
+    params
+  );
 
-export function throttle(callback, interval) {
-  let enableCall = true;
-  return function (...args) {
-    if (!enableCall) return;
-    enableCall = false;
-    callback.apply(this, args);
-    setTimeout(() => (enableCall = true), interval);
+  return {
+    device,
+    projViewMatrix: projView,
+    context,
+    swapChainFormat,
+    renderPipeline,
+    mvpBuffer,
+    colorMapBuffer,
+    paramsBuffer,
   };
 }
 
-export async function stages(cameraObj, projMatrix, params) {
-  await _init();
-  await _initRenderPipeline();
-  const projectionViewMatrix = await _initUniform(cameraObj, projMatrix, params);
-  return projectionViewMatrix;
+export async function renderWrapper(
+  device: GPUDevice,
+  canvas: HTMLCanvasElement,
+  context: GPUCanvasContext,
+  renderPipeline: GPURenderPipeline,
+  mvpBuffer: GPUBuffer,
+  colorMapBuffer: GPUBuffer,
+  paramsBuffer: GPUBuffer,
+  camera: any,
+  projMatrix: any,
+  params: number[]
+) {
+  const mvpBindGroup = await _createBindGroups(
+    device,
+    renderPipeline,
+    mvpBuffer,
+    colorMapBuffer,
+    paramsBuffer
+  );
+  const renderDepthTexture = _createDepthBuffer(device, canvas);
+  await _updateMaxIntensity(device, paramsBuffer, params);
+
+  _render(
+    device,
+    canvas,
+    context,
+    renderPipeline,
+    mvpBuffer,
+    mvpBindGroup,
+    renderDepthTexture,
+    camera,
+    projMatrix
+  );
 }
 
-export async function renderWrapper() {
-  await _createBindGroups();
-  await _createDepthBuffer();
-  await _updateMaxIntensity();
-  _render();
+async function _init(): Promise<{
+  device: GPUDevice;
+  context: GPUCanvasContext;
+  swapChainFormat: GPUTextureFormat;
+}> {
+  const adapter = await navigator.gpu.requestAdapter();
+  if (!adapter) throw new Error("WebGPU not supported");
+
+  const device = await adapter.requestDevice();
+  if (!device) throw new Error("Failed to get GPU device");
+
+  const canvas = document.getElementById("screen-canvas") as HTMLCanvasElement;
+  canvas.width = window.innerWidth * (window.devicePixelRatio || 1);
+  canvas.height = window.innerHeight * (window.devicePixelRatio || 1);
+
+  const context = canvas.getContext("webgpu") as unknown as GPUCanvasContext;
+  if (!context) throw new Error("could not get context from the canvas");
+
+  const swapChainFormat = navigator.gpu.getPreferredCanvasFormat();
+  _configureSwapChain(device, context, swapChainFormat);
+
+  return { device, context, swapChainFormat };
 }
 
-async function _init() {
-  renderContext.adapter = await navigator.gpu.requestAdapter();
-  if (!renderContext.adapter) return _handleFallback();
-  renderContext.device = await renderContext.adapter.requestDevice();
-  if (!renderContext.device) return _handleFallback();
-
-  renderContext.canvas = document.getElementById("screen-canvas");
-  renderContext.canvas.width = window.innerWidth * (window.devicePixelRatio || 1);
-  renderContext.canvas.height = window.innerHeight * (window.devicePixelRatio || 1);
-
-  renderContext.context = renderContext.canvas.getContext("webgpu");
-  if (!renderContext.context) {
-    console.error("could not get context from the canvas");
-    return;
-  }
-
-  renderContext.swapChainFormat = navigator.gpu.getPreferredCanvasFormat();
-  _configureSwapChain(renderContext.device);
-  _setupEventListeners();
-}
-
-function _handleFallback() {
-  console.error("unable to start webgpu");
-  return;
-}
-
-function _configureSwapChain(gpuDevice) {
-  renderContext.context.configure({
-    device: gpuDevice,
-    format: renderContext.swapChainFormat,
+function _configureSwapChain(
+  device: GPUDevice,
+  context: GPUCanvasContext,
+  format: GPUTextureFormat
+) {
+  context.configure({
+    device: device,
+    format: format,
     usage: GPUTextureUsage.RENDER_ATTACHMENT,
     alphaMode: "premultiplied",
   });
 }
 
-function _setupEventListeners() {
-  renderContext.canvas.addEventListener("mousedown", (e) => {
-    if (e.buttons == 1 || e.buttons == 2) {
-      renderContext.keyMap.isDown = true;
-    }
-  });
+async function _initRenderPipeline(
+  device: GPUDevice,
+  swapChainFormat: GPUTextureFormat
+): Promise<GPURenderPipeline> {
+  const format = swapChainFormat;
 
-  window.addEventListener("mouseup", () => {
-    renderContext.keyMap.isDown = false;
-  });
-
-  renderContext.canvas.addEventListener("mousemove", () => {
-    if (renderContext.keyMap.isDown == true) {
-      _throttleTreeTravel(renderContext.projView);
-    }
-  });
-
-  window.addEventListener("wheel", () => {
-    if (renderContext.abortController) {
-      renderContext.abortController.abort();
-    }
-    renderContext.abortController = new AbortController();
-    _throttleTreeTravel(renderContext.projView, renderContext.abortController.signal);
-  });
-}
-
-const _throttleTreeTravel = throttle(retrivePoints, 2000);
-
-async function _initRenderPipeline() {
-  const vsModule = renderContext.device.createShaderModule({
+  const vsModule = device.createShaderModule({
     label: "vertex shader",
-    code: vs,
+    code: vec4ShaderCode,
   });
 
-  const fsModule = renderContext.device.createShaderModule({
+  const fsModule = device.createShaderModule({
     label: "fragment shader",
-    code: fs,
+    code: vec4ShaderCode,
   });
 
-  const positionAttributeDesc = {
+  const positionAttributeDesc: GPUVertexAttribute = {
     shaderLocation: 0,
     offset: 0,
     format: "float32x4",
   };
 
-  const colorAttributeDesc = {
+  const colorAttributeDesc: GPUVertexAttribute = {
     shaderLocation: 1,
     offset: 0,
     format: "float32x3",
   };
 
-  const vertexShaderDescriptor = {
+  const vertexShaderDescriptor: GPUVertexState = {
     module: vsModule,
     entryPoint: "main",
     buffers: [
@@ -171,24 +147,24 @@ async function _initRenderPipeline() {
     ],
   };
 
-  const fragmentShaderDescriptor = {
+  const fragmentShaderDescriptor: GPUFragmentState = {
     module: fsModule,
-    entryPoint: "main",
-    targets: [{ format: renderContext.swapChainFormat }],
+    entryPoint: "fragmentMain",
+    targets: [{ format: format as GPUTextureFormat }],
   };
 
-  const depthStencilDescriptor = {
+  const depthStencilDescriptor: GPUDepthStencilState = {
     format: "depth24plus-stencil8",
     depthWriteEnabled: true,
     depthCompare: "less",
   };
 
-  const primitiveDescriptor = {
+  const primitiveDescriptor: GPUPrimitiveState = {
     topology: "triangle-strip",
     cullMode: "none",
   };
 
-  renderContext.renderPipeline = await renderContext.device.createRenderPipeline({
+  const renderPipeline = device.createRenderPipeline({
     label: "render pipeline",
     layout: "auto",
     vertex: vertexShaderDescriptor,
@@ -196,154 +172,220 @@ async function _initRenderPipeline() {
     depthStencil: depthStencilDescriptor,
     primitive: primitiveDescriptor,
   });
+
+  return renderPipeline;
 }
 
-function _initUniform(cam, projMatrix, params) {
-  renderContext.camera = cam;
-  renderContext.proj = projMatrix;
-  renderContext.param = params;
-  params.push(renderContext.currentAxis);
+function _initUniform(
+  device: GPUDevice,
+  cam: any,
+  projMatrix: any,
+  params: number[],
+  currentAxis: number = 3
+): {
+  projView: mat4;
+  mvpBuffer: GPUBuffer;
+  colorMapBuffer: GPUBuffer;
+  paramsBuffer: GPUBuffer;
+} {
+  params.push(currentAxis);
   params.push(appState.globalMaxIntensity);
 
-  renderContext.paramsBuffer = renderContext.device.createBuffer({
+  const paramsBuffer = device.createBuffer({
     size: 8 * 4,
     usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST,
     mappedAtCreation: true,
   });
-  const mapArrayParams = new Float32Array(renderContext.paramsBuffer.getMappedRange());
+  const mapArrayParams = new Float32Array(paramsBuffer.getMappedRange());
   mapArrayParams.set(params);
-  renderContext.paramsBuffer.unmap();
-
-  renderContext.levelBuffer = renderContext.device.createBuffer({
-    size: 4,
-    usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST,
-    mappedAtCreation: true,
-  });
-  const mapArrayLevel = new Float32Array(renderContext.levelBuffer.getMappedRange());
-  mapArrayLevel.set([0]);
-  renderContext.levelBuffer.unmap();
+  paramsBuffer.unmap();
 
   // Create colormap
   const hsvColors = [
-    [0.0, 0.0, 0.5], [0.0, 0.2, 0.7], [0.0, 0.4, 0.9], [0.0, 0.6, 1.0],
-    [0.0, 0.8, 1.0], [0.2, 0.9, 0.8], [0.4, 1.0, 0.6], [0.6, 1.0, 0.4],
-    [0.8, 1.0, 0.2], [1.0, 1.0, 0.0], [1.0, 0.9, 0.0], [1.0, 0.8, 0.0],
-    [1.0, 0.6, 0.0], [1.0, 0.4, 0.0], [1.0, 0.2, 0.0], [0.9, 0.0, 0.0],
-    [0.7, 0.0, 0.0], [0.5, 0.0, 0.0], [0.3, 0.0, 0.0], [0.1, 0.5, 0.0],
+    [0.0, 0.0, 0.5],
+    [0.0, 0.2, 0.7],
+    [0.0, 0.4, 0.9],
+    [0.0, 0.6, 1.0],
+    [0.0, 0.8, 1.0],
+    [0.2, 0.9, 0.8],
+    [0.4, 1.0, 0.6],
+    [0.6, 1.0, 0.4],
+    [0.8, 1.0, 0.2],
+    [1.0, 1.0, 0.0],
+    [1.0, 0.9, 0.0],
+    [1.0, 0.8, 0.0],
+    [1.0, 0.6, 0.0],
+    [1.0, 0.4, 0.0],
+    [1.0, 0.2, 0.0],
+    [0.9, 0.0, 0.0],
+    [0.7, 0.0, 0.0],
+    [0.5, 0.0, 0.0],
+    [0.3, 0.0, 0.0],
+    [0.1, 0.5, 0.0],
   ].flat();
 
-  renderContext.colorMapBuffer = renderContext.device.createBuffer({
+  const colorMapBuffer = device.createBuffer({
     size: hsvColors.length * 3 * 4,
     usage: GPUBufferUsage.UNIFORM,
     mappedAtCreation: true,
   });
 
-  const mapArray = new Float32Array(renderContext.colorMapBuffer.getMappedRange());
+  const mapArray = new Float32Array(colorMapBuffer.getMappedRange());
   mapArray.set(hsvColors);
-  renderContext.colorMapBuffer.unmap();
+  colorMapBuffer.unmap();
 
-  renderContext.mvpBuffer = renderContext.device.createBuffer({
+  const mvpBuffer = device.createBuffer({
     size: 16 * 4,
     usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST,
   });
 
-  const viewMatrix = renderContext.camera.matrixWorldInverse.elements;
-  renderContext.projView = mat4.mul(renderContext.projView, viewMatrix, renderContext.proj);
-  return renderContext.projView;
+  const viewMatrix = cam.matrixWorldInverse.elements;
+  const projView = mat4.mul(mat4.create(), projMatrix, viewMatrix);
+
+  return {
+    projView,
+    mvpBuffer,
+    colorMapBuffer,
+    paramsBuffer,
+  };
 }
 
-async function _createBindGroups() {
-  renderContext.mvpBindGroup = renderContext.device.createBindGroup({
+async function _createBindGroups(
+  device: GPUDevice,
+  renderPipeline: GPURenderPipeline,
+  mvpBuffer: GPUBuffer,
+  colorMapBuffer: GPUBuffer,
+  paramsBuffer: GPUBuffer
+): Promise<GPUBindGroup> {
+  const mvpBindGroup = device.createBindGroup({
     label: "uniform bindgroup - rendering",
-    layout: renderContext.renderPipeline.getBindGroupLayout(0),
+    layout: renderPipeline.getBindGroupLayout(0),
     entries: [
       {
         binding: 0,
-        resource: { buffer: renderContext.mvpBuffer },
+        resource: { buffer: mvpBuffer },
       },
       {
         binding: 1,
-        resource: { buffer: renderContext.colorMapBuffer },
+        resource: { buffer: colorMapBuffer },
       },
       {
         binding: 2,
-        resource: { buffer: renderContext.paramsBuffer },
+        resource: { buffer: paramsBuffer },
       },
     ],
   });
+
+  return mvpBindGroup;
 }
 
-async function _createDepthBuffer() {
-  renderContext.renderDepthTexture = renderContext.device.createTexture({
-    size: [renderContext.canvas.width, renderContext.canvas.height, 1],
+function _createDepthBuffer(
+  device: GPUDevice,
+  canvas: HTMLCanvasElement
+): GPUTexture {
+  const renderDepthTexture = device.createTexture({
+    size: [canvas.width, canvas.height, 1],
     format: "depth24plus-stencil8",
     usage: GPUTextureUsage.RENDER_ATTACHMENT,
   });
+
+  return renderDepthTexture;
 }
 
-async function _updateMaxIntensity() {
-  renderContext.param[renderContext.param.length - 1] = appState.globalMaxIntensity;
-  const stagingBuffer = renderContext.device.createBuffer({
+async function _updateMaxIntensity(
+  device: GPUDevice,
+  paramsBuffer: GPUBuffer,
+  params: number[]
+) {
+  params[params.length - 1] = appState.globalMaxIntensity;
+
+  const stagingBuffer = device.createBuffer({
     usage: GPUBufferUsage.MAP_WRITE | GPUBufferUsage.COPY_SRC,
     size: 32,
     mappedAtCreation: true,
   });
 
   const stagingData = new Float32Array(stagingBuffer.getMappedRange());
-  stagingData.set(renderContext.param);
+  stagingData.set(params);
   stagingBuffer.unmap();
-  const copyEncoder = renderContext.device.createCommandEncoder();
-  copyEncoder.copyBufferToBuffer(stagingBuffer, 28, renderContext.paramsBuffer, 28, 4);
-  renderContext.device.queue.submit([copyEncoder.finish()]);
+
+  const copyEncoder = device.createCommandEncoder();
+  copyEncoder.copyBufferToBuffer(stagingBuffer, 28, paramsBuffer, 28, 4);
+  device.queue.submit([copyEncoder.finish()]);
 }
 
-function _render() {
+function _render(
+  device: GPUDevice,
+  canvas: HTMLCanvasElement,
+  context: GPUCanvasContext,
+  renderPipeline: GPURenderPipeline,
+  mvpBuffer: GPUBuffer,
+  mvpBindGroup: GPUBindGroup,
+  renderDepthTexture: GPUTexture,
+  camera: any,
+  projMatrix: mat4
+) {
   stats.update();
-  renderContext.commandEncoder = renderContext.device.createCommandEncoder();
+  const commandEncoder = device.createCommandEncoder();
 
-  const viewMatrix = renderContext.camera.matrixWorldInverse.elements;
-  renderContext.projView = mat4.mul(renderContext.projView, renderContext.proj, viewMatrix);
+  const viewMatrix = camera.matrixWorldInverse.elements;
+  const projView = mat4.mul(mat4.create(), projMatrix, viewMatrix);
   appState.controls.update();
 
-  _encodeCommand();
+  const renderPassDescriptor = _encodeCommand(context, renderDepthTexture);
 
-  const wvStagingBuffer = renderContext.device.createBuffer({
+  const wvStagingBuffer = device.createBuffer({
     size: 4 * 16,
     usage: GPUBufferUsage.COPY_SRC,
     mappedAtCreation: true,
   });
   const stagingUniformData = new Float32Array(wvStagingBuffer.getMappedRange());
-  stagingUniformData.set(renderContext.projView);
+  stagingUniformData.set(projView as Float32Array);
   wvStagingBuffer.unmap();
-  renderContext.commandEncoder.copyBufferToBuffer(wvStagingBuffer, 0, renderContext.mvpBuffer, 0, 64);
+  commandEncoder.copyBufferToBuffer(wvStagingBuffer, 0, mvpBuffer, 0, 64);
 
-  const renderPass = renderContext.commandEncoder.beginRenderPass(renderContext.renderPassDescriptor);
-  renderPass.setPipeline(renderContext.renderPipeline);
-  renderPass.setViewport(0, 0, renderContext.canvas.width, renderContext.canvas.height, 0.0, 1.0);
-  renderPass.setBindGroup(0, renderContext.mvpBindGroup);
+  const renderPass = commandEncoder.beginRenderPass(renderPassDescriptor);
+  renderPass.setPipeline(renderPipeline);
+  renderPass.setViewport(0, 0, canvas.width, canvas.height, 0.0, 1.0);
+  renderPass.setBindGroup(0, mvpBindGroup);
 
   for (let key in appState.bufferMap) {
     renderPass.setVertexBuffer(0, appState.bufferMap[key].position);
     renderPass.setVertexBuffer(1, appState.bufferMap[key].color);
-    renderContext.numPoints = +appState.bufferMap[key].position.label / 4;
-    renderPass.draw(4, renderContext.numPoints, 0, 0);
+    const numPoints = Math.floor(+appState.bufferMap[key].position.label / 4);
+    renderPass.draw(4, numPoints, 0, 0);
   }
 
   renderPass.end();
-  renderContext.device.queue.submit([renderContext.commandEncoder.finish()]);
-  requestAnimationFrame(_render);
+  device.queue.submit([commandEncoder.finish()]);
+  requestAnimationFrame(() =>
+    _render(
+      device,
+      canvas,
+      context,
+      renderPipeline,
+      mvpBuffer,
+      mvpBindGroup,
+      renderDepthTexture,
+      camera,
+      projMatrix
+    )
+  );
 }
 
-async function _encodeCommand() {
-  const colorAttachment = {
-    view: renderContext.context.getCurrentTexture().createView(),
+function _encodeCommand(
+  context: GPUCanvasContext,
+  renderDepthTexture: GPUTexture
+): GPURenderPassDescriptor {
+  const colorAttachment: GPURenderPassColorAttachment = {
+    view: context.getCurrentTexture().createView(),
     clearValue: { r: 1.0, g: 1.0, b: 1.0, a: 1.0 },
     loadOp: "clear",
     storeOp: "store",
   };
 
-  const depthAttachment = {
-    view: renderContext.renderDepthTexture.createView(),
+  const depthAttachment: GPURenderPassDepthStencilAttachment = {
+    view: renderDepthTexture.createView(),
     depthLoadOp: "clear",
     depthClearValue: 1.0,
     depthStoreOp: "store",
@@ -352,35 +394,10 @@ async function _encodeCommand() {
     stencilStoreOp: "store",
   };
 
-  renderContext.renderPassDescriptor = {
+  const renderPassDescriptor: GPURenderPassDescriptor = {
     colorAttachments: [colorAttachment],
     depthStencilAttachment: depthAttachment,
   };
+
+  return renderPassDescriptor;
 }
-
-async function _updateAxis() {
-  renderContext.param[renderContext.param.length - 2] = renderContext.currentAxis;
-  const stagingBuffer = renderContext.device.createBuffer({
-    usage: GPUBufferUsage.MAP_WRITE | GPUBufferUsage.COPY_SRC,
-    size: 32,
-    mappedAtCreation: true,
-  });
-
-  const stagingData = new Float32Array(stagingBuffer.getMappedRange());
-  stagingData.set(renderContext.param);
-  stagingBuffer.unmap();
-  const copyEncoder = renderContext.device.createCommandEncoder();
-  copyEncoder.copyBufferToBuffer(stagingBuffer, 24, renderContext.paramsBuffer, 24, 8);
-  renderContext.device.queue.submit([copyEncoder.finish()]);
-}
-
-(() => {
-  const selectColormap = document.getElementById("colormap-axis");
-  selectColormap.addEventListener("change", (event) => {
-    const axis = parseInt((event.target as HTMLSelectElement).value);
-    if (axis != renderContext.currentAxis) {
-      renderContext.currentAxis = axis;
-      _updateAxis();
-    }
-  });
-})();

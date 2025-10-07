@@ -11,6 +11,7 @@ export interface COPCParams {
     min: [number, number, number];
     max: [number, number, number];
   };
+  vectorType: string; // "vec3" or "vec4"
 }
 
 export class COPCFileLoader extends BaseFileLoader<COPCParams> {
@@ -21,6 +22,7 @@ export class COPCFileLoader extends BaseFileLoader<COPCParams> {
       min: copc.header.min,
       max: copc.header.max,
     };
+    const vectorType = "vec4";
 
     console.log(`Loading COPC file: ${this.filename}`);
     console.log("COPC file loaded:", copc);
@@ -29,6 +31,7 @@ export class COPCFileLoader extends BaseFileLoader<COPCParams> {
       copc,
       hierarchy,
       boundingBox,
+      vectorType,
     };
   }
 

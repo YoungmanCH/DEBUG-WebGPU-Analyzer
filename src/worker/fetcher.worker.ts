@@ -1,7 +1,29 @@
 import { Copc } from "copc";
 import * as THREE from "three";
 
-const FILENAME = (process.env as any).COPC_FILE;
+// TODO: 後でファイルを読み込みを修正する。
+function _files_loader(): any {
+  const files: string = (process.env as any).POINT_CLOUD_FILES;
+  const parsed_files: string[] = JSON.parse(files);
+
+  return parsed_files;
+}
+
+function _las_file_loader(): string {
+  const filename = (process.env as any).LAS_FILES;
+
+  return filename;
+}
+
+function _copc_file_loader(): string {
+  const filename = (process.env as any).COPC_FILE;
+
+  return filename;
+}
+
+// const files = _files_loader();
+const FILENAME = _copc_file_loader();
+// const FILENAME = _las_file_loader();
 
 // Worker state
 const workerState = {
