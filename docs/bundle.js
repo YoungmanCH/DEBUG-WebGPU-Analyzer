@@ -83548,228 +83548,6 @@ function updateHtmlUI(nodeNotFoundInBuffer, nodeFoundInBuffer, nodeFoundInLRU, n
 
 /***/ }),
 
-/***/ "./src/index.ts":
-/*!**********************!*\
-  !*** ./src/index.ts ***!
-  \**********************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   retrivePoints: () => (/* binding */ retrivePoints)
-/* harmony export */ });
-/* harmony import */ var _worker_fetcher_worker__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./worker/fetcher.worker */ "./src/worker/fetcher.worker.ts");
-/* harmony import */ var _webgpu_renderer__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./webgpu/renderer */ "./src/webgpu/renderer.ts");
-/* harmony import */ var _passiveloader__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./passiveloader */ "./src/passiveloader.ts");
-/* harmony import */ var _utils_file_manager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./utils/file-manager */ "./src/utils/file-manager.ts");
-/* harmony import */ var _cache_persistent_cache__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./cache/persistent-cache */ "./src/cache/persistent-cache.ts");
-/* harmony import */ var _pointcloud_initializer__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./pointcloud-initializer */ "./src/pointcloud-initializer.ts");
-/* harmony import */ var _canvas_state_manager__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./canvas/state-manager */ "./src/canvas/state-manager.ts");
-/* harmony import */ var _canvas_viewport_initializer__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./canvas/viewport-initializer */ "./src/canvas/viewport-initializer.ts");
-/* harmony import */ var _webgpu_webgpu_buffer__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./webgpu/webgpu-buffer */ "./src/webgpu/webgpu-buffer.ts");
-/* harmony import */ var _cache_buffer_cache_coordinator__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./cache/buffer-cache-coordinator */ "./src/cache/buffer-cache-coordinator.ts");
-/* harmony import */ var _webgpu_webgpu_renderer__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./webgpu/webgpu-renderer */ "./src/webgpu/webgpu-renderer.ts");
-/* harmony import */ var _styles_main_css__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./styles/main.css */ "./src/styles/main.css");
-
-
-
-
-
-
-
-
-
-
-
-
-const Worker = _worker_fetcher_worker__WEBPACK_IMPORTED_MODULE_0__["default"] || _worker_fetcher_worker__WEBPACK_IMPORTED_MODULE_0__;
-const MAX_WORKERS = navigator.hardwareConcurrency - 1;
-const canvas = document.getElementById("screen-canvas");
-canvas.width = window.innerWidth * (window.devicePixelRatio || 1);
-canvas.height = window.innerHeight * (window.devicePixelRatio || 1);
-async function retrivePoints(filename, projectionViewMatrix, controllerSignal = null) {
-    let [keyCountMap, nodeToPrefetch] = (0,_passiveloader__WEBPACK_IMPORTED_MODULE_2__.traverseTreeWrapper)(_canvas_state_manager__WEBPACK_IMPORTED_MODULE_6__.appState.nodePages, [0, 0, 0, 0], _canvas_state_manager__WEBPACK_IMPORTED_MODULE_6__.appState.centerX, _canvas_state_manager__WEBPACK_IMPORTED_MODULE_6__.appState.centerY, _canvas_state_manager__WEBPACK_IMPORTED_MODULE_6__.appState.centerZ, [0.5 * _canvas_state_manager__WEBPACK_IMPORTED_MODULE_6__.appState.widthX, 0.5 * _canvas_state_manager__WEBPACK_IMPORTED_MODULE_6__.appState.widthY, 0.5 * _canvas_state_manager__WEBPACK_IMPORTED_MODULE_6__.appState.widthZ], _canvas_state_manager__WEBPACK_IMPORTED_MODULE_6__.appState.scaleFactor, _canvas_state_manager__WEBPACK_IMPORTED_MODULE_6__.appState.controls, projectionViewMatrix);
-    keyCountMap = await (0,_cache_buffer_cache_coordinator__WEBPACK_IMPORTED_MODULE_9__.filterKeyCountMap)(keyCountMap, filename);
-    _canvas_state_manager__WEBPACK_IMPORTED_MODULE_6__.appState.prefetchKeyCountMap = await (0,_cache_buffer_cache_coordinator__WEBPACK_IMPORTED_MODULE_9__.filterKeyCountMapPrefetch)(nodeToPrefetch, filename);
-    _canvas_state_manager__WEBPACK_IMPORTED_MODULE_6__.appState.clock.getDelta();
-    let totalNodes = keyCountMap.length / 2;
-    let doneCount = 0;
-    for (let m = 0; m < keyCountMap.length;) {
-        let remaining = totalNodes - doneCount;
-        let numbWorker = Math.min(MAX_WORKERS, remaining);
-        for (let i = 0; i < numbWorker; i++) {
-            _canvas_state_manager__WEBPACK_IMPORTED_MODULE_6__.appState.promises.push(_createWorker(keyCountMap[m], keyCountMap[m + 1]));
-            doneCount++;
-            m += 2;
-            if (doneCount % MAX_WORKERS == 0 || doneCount == totalNodes) {
-                await _syncThread(filename);
-                if (controllerSignal && controllerSignal.aborted) {
-                    return;
-                }
-            }
-        }
-    }
-}
-function _createWorker(data1, data2) {
-    let myNode = data1.split("-").map(Number);
-    let myLevel = myNode[0];
-    return new Promise((resolve) => {
-        let worker = new Worker();
-        worker.onmessage = (event) => {
-            let postMessageRes = event.data;
-            if (postMessageRes == 200) {
-                worker.postMessage([
-                    _canvas_state_manager__WEBPACK_IMPORTED_MODULE_6__.appState.nodePagesString,
-                    _canvas_state_manager__WEBPACK_IMPORTED_MODULE_6__.appState.pagesString,
-                    _canvas_state_manager__WEBPACK_IMPORTED_MODULE_6__.appState.copcString,
-                    data1,
-                    data2,
-                    [
-                        _canvas_state_manager__WEBPACK_IMPORTED_MODULE_6__.appState.xMin,
-                        _canvas_state_manager__WEBPACK_IMPORTED_MODULE_6__.appState.yMin,
-                        _canvas_state_manager__WEBPACK_IMPORTED_MODULE_6__.appState.zMin,
-                        _canvas_state_manager__WEBPACK_IMPORTED_MODULE_6__.appState.widthX,
-                        _canvas_state_manager__WEBPACK_IMPORTED_MODULE_6__.appState.widthY,
-                        _canvas_state_manager__WEBPACK_IMPORTED_MODULE_6__.appState.widthZ,
-                        _canvas_state_manager__WEBPACK_IMPORTED_MODULE_6__.appState.scaleFactor[0],
-                        _canvas_state_manager__WEBPACK_IMPORTED_MODULE_6__.appState.scaleFactor[1],
-                        _canvas_state_manager__WEBPACK_IMPORTED_MODULE_6__.appState.scaleFactor[2],
-                        myLevel,
-                    ],
-                ]);
-            }
-            else {
-                _canvas_state_manager__WEBPACK_IMPORTED_MODULE_6__.appState.workerCount += 1;
-                let position = postMessageRes[0];
-                let color = postMessageRes[1];
-                let [, , maxIntensity, dataLevel] = postMessageRes[2];
-                if (maxIntensity > _canvas_state_manager__WEBPACK_IMPORTED_MODULE_6__.appState.globalMaxIntensity) {
-                    _canvas_state_manager__WEBPACK_IMPORTED_MODULE_6__.appState.globalMaxIntensity = maxIntensity;
-                }
-                let localPosition = [];
-                let localColor = [];
-                for (let i = 0; i < position.length; i++) {
-                    if (i > 0 && i % 3 == 0) {
-                        localPosition.push(dataLevel);
-                    }
-                    localPosition.push(position[i]);
-                    localColor.push(color[i]);
-                }
-                localPosition.push(dataLevel);
-                if (_canvas_state_manager__WEBPACK_IMPORTED_MODULE_6__.appState.workerCount == MAX_WORKERS) {
-                    _canvas_state_manager__WEBPACK_IMPORTED_MODULE_6__.appState.workerCount = 0;
-                    _canvas_state_manager__WEBPACK_IMPORTED_MODULE_6__.appState.promises = [];
-                }
-                worker.terminate();
-                resolve([localPosition, localColor, data1, maxIntensity]);
-            }
-        };
-    });
-}
-async function _syncThread(filename) {
-    await Promise.all(_canvas_state_manager__WEBPACK_IMPORTED_MODULE_6__.appState.promises).then(async (response) => {
-        for (let i = 0, _length = response.length; i < _length; i++) {
-            let data = response[i];
-            let fileName = data[2];
-            let dataJson = {
-                position: data[0],
-                color: data[1],
-                maxIntensity: data[3],
-            };
-            let dataJsonStringify = JSON.stringify(dataJson);
-            await (0,_utils_file_manager__WEBPACK_IMPORTED_MODULE_3__.writeFile)(`${filename}-${fileName}`, dataJsonStringify);
-            let [positionBuffer, colorBuffer] = (0,_webgpu_webgpu_buffer__WEBPACK_IMPORTED_MODULE_8__.createBuffer)(data[0], data[1]);
-            const numPoints = data[0].length / 4; // position is float32x4
-            _canvas_state_manager__WEBPACK_IMPORTED_MODULE_6__.appState.bufferMap[data[2]] = {
-                position: positionBuffer,
-                color: colorBuffer,
-                maxIntensity: data[3],
-                numPoints: numPoints,
-            };
-        }
-    });
-}
-function _files_loader() {
-    const files = "[\"dataset/las/09KD9817.las\"]";
-    const parsed_files = JSON.parse(files);
-    return parsed_files;
-}
-function _copc_file_loader() {
-    const filename = "https://media.githubusercontent.com/media/sceneserver/copc/main/naarden-vesting.copc.laz";
-    return filename;
-}
-function _las_file_loader() {
-    const filename = "dataset/las/09KD9817.las";
-    return filename;
-}
-// ============================================================================
-// Initialization
-// ============================================================================
-async function _old_render(file) {
-    await (0,_webgpu_renderer__WEBPACK_IMPORTED_MODULE_1__.stages)(_canvas_state_manager__WEBPACK_IMPORTED_MODULE_6__.appState.camera, _canvas_state_manager__WEBPACK_IMPORTED_MODULE_6__.appState.proj, _canvas_state_manager__WEBPACK_IMPORTED_MODULE_6__.appState.params);
-    // 原因わかりました。projViewMatrixは悪くないが、initializeの処理のどこかがおかしい。
-    const renderer = new _webgpu_webgpu_renderer__WEBPACK_IMPORTED_MODULE_10__.WebGPURenderer(canvas.id);
-    const projViewMatrix = await renderer.initialize(_canvas_state_manager__WEBPACK_IMPORTED_MODULE_6__.appState.camera, _canvas_state_manager__WEBPACK_IMPORTED_MODULE_6__.appState.proj, _canvas_state_manager__WEBPACK_IMPORTED_MODULE_6__.appState.params);
-    (0,_webgpu_webgpu_buffer__WEBPACK_IMPORTED_MODULE_8__.setGPUDevice)(renderer.getDevice());
-    const filename = file.split("/").pop().split(".")[0];
-    renderer.setFilename(filename);
-    const pipeline = renderer.getPipeline(renderer.getDevice());
-    const mvpBuffer2 = renderer.getMVPBuffer();
-    const colorMapBuffer2 = renderer.getColorMapBuffer();
-    const paramsBuffer2 = renderer.getParamsBuffer();
-    if (_canvas_state_manager__WEBPACK_IMPORTED_MODULE_6__.appState.lasData) {
-        (0,_webgpu_webgpu_buffer__WEBPACK_IMPORTED_MODULE_8__.createLASBuffer)();
-    }
-    else {
-        await retrivePoints(file.split("/").pop().split(".")[0], projViewMatrix);
-    }
-    // await renderWrapper(
-    //   device,
-    //   canvas,
-    //   context,
-    //   renderPipeline,
-    //   mvpBuffer,
-    //   colorMapBuffer,
-    //   paramsBuffer,
-    //   appState.camera,
-    //   appState.proj,
-    //   appState.params
-    // );
-    // レンダリング処理
-    await (0,_webgpu_renderer__WEBPACK_IMPORTED_MODULE_1__.renderWrapper)(renderer.getDevice(), canvas, renderer.getContext(), pipeline, mvpBuffer2, colorMapBuffer2, paramsBuffer2, _canvas_state_manager__WEBPACK_IMPORTED_MODULE_6__.appState.camera, _canvas_state_manager__WEBPACK_IMPORTED_MODULE_6__.appState.proj, _canvas_state_manager__WEBPACK_IMPORTED_MODULE_6__.appState.params);
-}
-async function _render(file) {
-    if (_canvas_state_manager__WEBPACK_IMPORTED_MODULE_6__.appState.lasData) {
-        console.log("This is las Data.");
-    }
-    else {
-        const renderer = new _webgpu_webgpu_renderer__WEBPACK_IMPORTED_MODULE_10__.WebGPURenderer(canvas.id);
-        const projViewMatrix = await renderer.initialize(_canvas_state_manager__WEBPACK_IMPORTED_MODULE_6__.appState.camera, _canvas_state_manager__WEBPACK_IMPORTED_MODULE_6__.appState.proj, _canvas_state_manager__WEBPACK_IMPORTED_MODULE_6__.appState.params);
-        (0,_webgpu_webgpu_buffer__WEBPACK_IMPORTED_MODULE_8__.setGPUDevice)(renderer.getDevice());
-        const filename = file.split("/").pop().split(".")[0];
-        renderer.setFilename(filename);
-        await retrivePoints(filename, projViewMatrix);
-        renderer.start();
-    }
-}
-(async () => {
-    await (0,_utils_file_manager__WEBPACK_IMPORTED_MODULE_3__.createPersistentMetaCache)();
-    _canvas_state_manager__WEBPACK_IMPORTED_MODULE_6__.appState.persCache = await (0,_cache_persistent_cache__WEBPACK_IMPORTED_MODULE_4__.pCache)();
-    await (0,_canvas_viewport_initializer__WEBPACK_IMPORTED_MODULE_7__.setupViewport)(canvas);
-    // const files = _files_loader();
-    // await initializePointCloud(files);
-    // const file = _las_file_loader();
-    // await initializeLAS(file);
-    const file = _copc_file_loader();
-    await (0,_pointcloud_initializer__WEBPACK_IMPORTED_MODULE_5__.initializeCOPC)(file);
-    await _old_render(file);
-    // await _render(file);
-})();
-
-
-/***/ }),
-
 /***/ "./src/loaders/base-loader.ts":
 /*!************************************!*\
   !*** ./src/loaders/base-loader.ts ***!
@@ -83902,6 +83680,79 @@ class LASFileLoader extends _base_loader__WEBPACK_IMPORTED_MODULE_0__.BaseFileLo
 
 /***/ }),
 
+/***/ "./src/loaders/point-cloud-loader.ts":
+/*!*******************************************!*\
+  !*** ./src/loaders/point-cloud-loader.ts ***!
+  \*******************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   retrivePoints: () => (/* binding */ retrivePoints)
+/* harmony export */ });
+/* harmony import */ var _passiveloader__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../passiveloader */ "./src/passiveloader.ts");
+/* harmony import */ var _utils_file_manager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../utils/file-manager */ "./src/utils/file-manager.ts");
+/* harmony import */ var _canvas_state_manager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../canvas/state-manager */ "./src/canvas/state-manager.ts");
+/* harmony import */ var _webgpu_webgpu_buffer__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../webgpu/webgpu-buffer */ "./src/webgpu/webgpu-buffer.ts");
+/* harmony import */ var _cache_buffer_cache_coordinator__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../cache/buffer-cache-coordinator */ "./src/cache/buffer-cache-coordinator.ts");
+/* harmony import */ var _worker_manager__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./worker-manager */ "./src/loaders/worker-manager.ts");
+
+
+
+
+
+
+async function retrivePoints(filename, projectionViewMatrix, controllerSignal = null) {
+    let [keyCountMap, nodeToPrefetch] = (0,_passiveloader__WEBPACK_IMPORTED_MODULE_0__.traverseTreeWrapper)(_canvas_state_manager__WEBPACK_IMPORTED_MODULE_2__.appState.nodePages, [0, 0, 0, 0], _canvas_state_manager__WEBPACK_IMPORTED_MODULE_2__.appState.centerX, _canvas_state_manager__WEBPACK_IMPORTED_MODULE_2__.appState.centerY, _canvas_state_manager__WEBPACK_IMPORTED_MODULE_2__.appState.centerZ, [0.5 * _canvas_state_manager__WEBPACK_IMPORTED_MODULE_2__.appState.widthX, 0.5 * _canvas_state_manager__WEBPACK_IMPORTED_MODULE_2__.appState.widthY, 0.5 * _canvas_state_manager__WEBPACK_IMPORTED_MODULE_2__.appState.widthZ], _canvas_state_manager__WEBPACK_IMPORTED_MODULE_2__.appState.scaleFactor, _canvas_state_manager__WEBPACK_IMPORTED_MODULE_2__.appState.controls, projectionViewMatrix);
+    keyCountMap = await (0,_cache_buffer_cache_coordinator__WEBPACK_IMPORTED_MODULE_4__.filterKeyCountMap)(keyCountMap, filename);
+    _canvas_state_manager__WEBPACK_IMPORTED_MODULE_2__.appState.prefetchKeyCountMap = await (0,_cache_buffer_cache_coordinator__WEBPACK_IMPORTED_MODULE_4__.filterKeyCountMapPrefetch)(nodeToPrefetch, filename);
+    _canvas_state_manager__WEBPACK_IMPORTED_MODULE_2__.appState.clock.getDelta();
+    let totalNodes = keyCountMap.length / 2;
+    let doneCount = 0;
+    for (let m = 0; m < keyCountMap.length;) {
+        let remaining = totalNodes - doneCount;
+        let numbWorker = Math.min(_worker_manager__WEBPACK_IMPORTED_MODULE_5__.MAX_WORKERS, remaining);
+        for (let i = 0; i < numbWorker; i++) {
+            _canvas_state_manager__WEBPACK_IMPORTED_MODULE_2__.appState.promises.push((0,_worker_manager__WEBPACK_IMPORTED_MODULE_5__.createWorker)(keyCountMap[m], keyCountMap[m + 1]));
+            doneCount++;
+            m += 2;
+            if (doneCount % _worker_manager__WEBPACK_IMPORTED_MODULE_5__.MAX_WORKERS == 0 || doneCount == totalNodes) {
+                await syncThread(filename);
+                if (controllerSignal && controllerSignal.aborted) {
+                    return;
+                }
+            }
+        }
+    }
+}
+async function syncThread(filename) {
+    await Promise.all(_canvas_state_manager__WEBPACK_IMPORTED_MODULE_2__.appState.promises).then(async (response) => {
+        for (let i = 0, _length = response.length; i < _length; i++) {
+            let data = response[i];
+            let fileName = data[2];
+            let dataJson = {
+                position: data[0],
+                color: data[1],
+                maxIntensity: data[3],
+            };
+            let dataJsonStringify = JSON.stringify(dataJson);
+            await (0,_utils_file_manager__WEBPACK_IMPORTED_MODULE_1__.writeFile)(`${filename}-${fileName}`, dataJsonStringify);
+            let [positionBuffer, colorBuffer] = (0,_webgpu_webgpu_buffer__WEBPACK_IMPORTED_MODULE_3__.createBuffer)(data[0], data[1]);
+            const numPoints = data[0].length / 4; // position is float32x4
+            _canvas_state_manager__WEBPACK_IMPORTED_MODULE_2__.appState.bufferMap[data[2]] = {
+                position: positionBuffer,
+                color: colorBuffer,
+                maxIntensity: data[3],
+                numPoints: numPoints,
+            };
+        }
+    });
+}
+
+
+/***/ }),
+
 /***/ "./src/loaders/pointcloud-loader.ts":
 /*!******************************************!*\
   !*** ./src/loaders/pointcloud-loader.ts ***!
@@ -83976,6 +83827,84 @@ class PointCloudLoader {
         }
         return "unknown";
     }
+}
+
+
+/***/ }),
+
+/***/ "./src/loaders/worker-manager.ts":
+/*!***************************************!*\
+  !*** ./src/loaders/worker-manager.ts ***!
+  \***************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   MAX_WORKERS: () => (/* binding */ MAX_WORKERS),
+/* harmony export */   createWorker: () => (/* binding */ createWorker)
+/* harmony export */ });
+/* harmony import */ var _worker_fetcher_worker__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../worker/fetcher.worker */ "./src/worker/fetcher.worker.ts");
+/* harmony import */ var _canvas_state_manager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../canvas/state-manager */ "./src/canvas/state-manager.ts");
+
+
+const Worker = _worker_fetcher_worker__WEBPACK_IMPORTED_MODULE_0__["default"] || _worker_fetcher_worker__WEBPACK_IMPORTED_MODULE_0__;
+const MAX_WORKERS = navigator.hardwareConcurrency - 1;
+function createWorker(data1, data2) {
+    let myNode = data1.split("-").map(Number);
+    let myLevel = myNode[0];
+    return new Promise((resolve) => {
+        let worker = new Worker();
+        worker.onmessage = (event) => {
+            let postMessageRes = event.data;
+            if (postMessageRes == 200) {
+                worker.postMessage([
+                    _canvas_state_manager__WEBPACK_IMPORTED_MODULE_1__.appState.nodePagesString,
+                    _canvas_state_manager__WEBPACK_IMPORTED_MODULE_1__.appState.pagesString,
+                    _canvas_state_manager__WEBPACK_IMPORTED_MODULE_1__.appState.copcString,
+                    data1,
+                    data2,
+                    [
+                        _canvas_state_manager__WEBPACK_IMPORTED_MODULE_1__.appState.xMin,
+                        _canvas_state_manager__WEBPACK_IMPORTED_MODULE_1__.appState.yMin,
+                        _canvas_state_manager__WEBPACK_IMPORTED_MODULE_1__.appState.zMin,
+                        _canvas_state_manager__WEBPACK_IMPORTED_MODULE_1__.appState.widthX,
+                        _canvas_state_manager__WEBPACK_IMPORTED_MODULE_1__.appState.widthY,
+                        _canvas_state_manager__WEBPACK_IMPORTED_MODULE_1__.appState.widthZ,
+                        _canvas_state_manager__WEBPACK_IMPORTED_MODULE_1__.appState.scaleFactor[0],
+                        _canvas_state_manager__WEBPACK_IMPORTED_MODULE_1__.appState.scaleFactor[1],
+                        _canvas_state_manager__WEBPACK_IMPORTED_MODULE_1__.appState.scaleFactor[2],
+                        myLevel,
+                    ],
+                ]);
+            }
+            else {
+                _canvas_state_manager__WEBPACK_IMPORTED_MODULE_1__.appState.workerCount += 1;
+                let position = postMessageRes[0];
+                let color = postMessageRes[1];
+                let [, , maxIntensity, dataLevel] = postMessageRes[2];
+                if (maxIntensity > _canvas_state_manager__WEBPACK_IMPORTED_MODULE_1__.appState.globalMaxIntensity) {
+                    _canvas_state_manager__WEBPACK_IMPORTED_MODULE_1__.appState.globalMaxIntensity = maxIntensity;
+                }
+                let localPosition = [];
+                let localColor = [];
+                for (let i = 0; i < position.length; i++) {
+                    if (i > 0 && i % 3 == 0) {
+                        localPosition.push(dataLevel);
+                    }
+                    localPosition.push(position[i]);
+                    localColor.push(color[i]);
+                }
+                localPosition.push(dataLevel);
+                if (_canvas_state_manager__WEBPACK_IMPORTED_MODULE_1__.appState.workerCount == MAX_WORKERS) {
+                    _canvas_state_manager__WEBPACK_IMPORTED_MODULE_1__.appState.workerCount = 0;
+                    _canvas_state_manager__WEBPACK_IMPORTED_MODULE_1__.appState.promises = [];
+                }
+                worker.terminate();
+                resolve([localPosition, localColor, data1, maxIntensity]);
+            }
+        };
+    });
 }
 
 
@@ -84364,43 +84293,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   BaseRenderer: () => (/* binding */ BaseRenderer)
 /* harmony export */ });
 class BaseRenderer {
-    constructor(device) {
+    constructor(device, swapChainFormat) {
         this.pipelineLayout = null;
         this.device = device;
-    }
-    // 共通の初期化処理
-    initialize(bindGroupLayout) {
-        const { vertex, fragment } = this.getShaderCode();
-        let layout = "auto";
-        if (bindGroupLayout) {
-            layout = this.device.createPipelineLayout({
-                bindGroupLayouts: [bindGroupLayout],
-            });
-            this.pipelineLayout = layout;
-        }
-        this.pipeline = this.device.createRenderPipeline({
-            label: `${this.constructor.name} pipeline`,
-            layout: layout,
-            vertex: {
-                module: this.device.createShaderModule({ code: vertex }),
-                entryPoint: "main",
-                buffers: [this.getPositionLayout(), this.getColorLayout()],
-            },
-            fragment: {
-                module: this.device.createShaderModule({ code: fragment }),
-                entryPoint: "fragmentMain",
-                targets: [{ format: "bgra8unorm" }],
-            },
-            depthStencil: {
-                format: "depth24plus-stencil8",
-                depthWriteEnabled: true,
-                depthCompare: "less",
-            },
-            primitive: {
-                topology: "triangle-strip",
-                cullMode: "none",
-            },
-        });
+        this.swapChainFormat = swapChainFormat;
     }
     // 共通の描画処理
     render(renderPass, positionBuffer, colorBuffer, pointCount, bindGroup) {
@@ -84410,10 +84306,33 @@ class BaseRenderer {
         renderPass.setVertexBuffer(1, colorBuffer);
         renderPass.draw(4, pointCount, 0, 0);
     }
-    getPipeline() {
-        return this.pipeline;
-    }
 }
+
+
+/***/ }),
+
+/***/ "./src/renderers/exports.ts":
+/*!**********************************!*\
+  !*** ./src/renderers/exports.ts ***!
+  \**********************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   BaseRenderer: () => (/* reexport safe */ _base_renderer__WEBPACK_IMPORTED_MODULE_0__.BaseRenderer),
+/* harmony export */   RendererFactory: () => (/* reexport safe */ _renderer_factory__WEBPACK_IMPORTED_MODULE_3__.RendererFactory),
+/* harmony export */   Vec3Renderer: () => (/* reexport safe */ _vec3_renderer__WEBPACK_IMPORTED_MODULE_1__.Vec3Renderer),
+/* harmony export */   Vec4Renderer: () => (/* reexport safe */ _vec4_renderer__WEBPACK_IMPORTED_MODULE_2__.Vec4Renderer)
+/* harmony export */ });
+/* harmony import */ var _base_renderer__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./base-renderer */ "./src/renderers/base-renderer.ts");
+/* harmony import */ var _vec3_renderer__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./vec3-renderer */ "./src/renderers/vec3-renderer.ts");
+/* harmony import */ var _vec4_renderer__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./vec4-renderer */ "./src/renderers/vec4-renderer.ts");
+/* harmony import */ var _renderer_factory__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./renderer-factory */ "./src/renderers/renderer-factory.ts");
+
+
+
+
 
 
 /***/ }),
@@ -84434,23 +84353,24 @@ __webpack_require__.r(__webpack_exports__);
 
 
 class RendererFactory {
-    static setBindGroupLayout(layout) {
-        this.bindGroupLayout = layout;
-    }
-    static getRenderer(vectorType, device) {
+    // TODO: 共通のbindgrouplayoutがあれば実装
+    // private static bindGroupLayout: GPUBindGroupLayout | null = null;
+    // static setBindGroupLayout(layout: GPUBindGroupLayout | null) {
+    //   this.bindGroupLayout = layout;
+    // }
+    static getRenderer(vectorType, device, swapChainFormat) {
         // 既にレンダラーが存在する場合はそれを返す。
         if (!this.renderers.has(vectorType)) {
             const renderer = vectorType === "vec3"
-                ? new _vec3_renderer__WEBPACK_IMPORTED_MODULE_0__.Vec3Renderer(device)
-                : new _vec4_renderer__WEBPACK_IMPORTED_MODULE_1__.Vec4Renderer(device);
-            renderer.initialize(this.bindGroupLayout || undefined);
+                ? new _vec3_renderer__WEBPACK_IMPORTED_MODULE_0__.Vec3Renderer(device, swapChainFormat)
+                : new _vec4_renderer__WEBPACK_IMPORTED_MODULE_1__.Vec4Renderer(device, swapChainFormat);
+            renderer.initialize();
             this.renderers.set(vectorType, renderer);
         }
         return this.renderers.get(vectorType);
     }
 }
 RendererFactory.renderers = new Map();
-RendererFactory.bindGroupLayout = null;
 
 
 /***/ }),
@@ -84502,6 +84422,36 @@ class Vec3Renderer extends _base_renderer__WEBPACK_IMPORTED_MODULE_0__.BaseRende
     }
     getArrayStride() {
         return 12;
+    }
+    getPipeline() {
+        return this.pipeline;
+    }
+    initialize() {
+        const { vertex, fragment } = this.getShaderCode();
+        let layout = "auto";
+        this.pipeline = this.device.createRenderPipeline({
+            label: "Vec3Renderer pipeline",
+            layout: layout,
+            vertex: {
+                module: this.device.createShaderModule({ code: vertex }),
+                entryPoint: "main",
+                buffers: [this.getPositionLayout(), this.getColorLayout()],
+            },
+            fragment: {
+                module: this.device.createShaderModule({ code: fragment }),
+                entryPoint: "fragmentMain",
+                targets: [{ format: this.swapChainFormat }],
+            },
+            depthStencil: {
+                format: "depth24plus-stencil8",
+                depthWriteEnabled: true,
+                depthCompare: "less",
+            },
+            primitive: {
+                topology: "triangle-strip",
+                cullMode: "none",
+            },
+        });
     }
     // Vec3特有の処理があればここに追加
     renderWithIntensity(renderPass, buffer, intensities) {
@@ -84562,6 +84512,36 @@ class Vec4Renderer extends _base_renderer__WEBPACK_IMPORTED_MODULE_0__.BaseRende
     }
     getArrayStride() {
         return 16;
+    }
+    getPipeline() {
+        return this.pipeline;
+    }
+    initialize() {
+        const { vertex, fragment } = this.getShaderCode();
+        let layout = "auto";
+        this.pipeline = this.device.createRenderPipeline({
+            label: "Vec4Renderer pipeline",
+            layout: layout,
+            vertex: {
+                module: this.device.createShaderModule({ code: vertex }),
+                entryPoint: "main",
+                buffers: [this.getPositionLayout(), this.getColorLayout()],
+            },
+            fragment: {
+                module: this.device.createShaderModule({ code: fragment }),
+                entryPoint: "fragmentMain",
+                targets: [{ format: this.swapChainFormat }],
+            },
+            depthStencil: {
+                format: "depth24plus-stencil8",
+                depthWriteEnabled: true,
+                depthCompare: "less",
+            },
+            primitive: {
+                topology: "triangle-strip",
+                cullMode: "none",
+            },
+        });
     }
     // Vec4特有の処理（LOD可視化など）
     setLevelColorMap(colorMap) {
@@ -84872,7 +84852,8 @@ class WebGPUContext {
         this.adapter = null;
         this.device = null;
         this.context = null;
-        this.swapChainFormat = "bgra8unorm";
+        this.swapChainFormat = "bgra8unorm"; // Generally: "bgra8unorm"
+        this.depthTexture = null;
         this.canvas = document.getElementById(canvasId);
         this._resizeCanvas();
     }
@@ -84892,38 +84873,6 @@ class WebGPUContext {
         this.swapChainFormat = navigator.gpu.getPreferredCanvasFormat();
         this._configureContext();
     }
-    /**
-     * initialize2 - Returns values instead of storing them in instance variables
-     * Similar to _init() in renderer.ts
-     */
-    async initialize2() {
-        const adapter = await navigator.gpu.requestAdapter();
-        if (!adapter) {
-            throw new Error("WebGPU not supported");
-        }
-        const device = await adapter.requestDevice();
-        if (!device) {
-            throw new Error("Failed to get GPU device");
-        }
-        const context = this.canvas.getContext("webgpu");
-        if (!context) {
-            throw new Error("Failed to get WebGPU context");
-        }
-        const swapChainFormat = navigator.gpu.getPreferredCanvasFormat();
-        // Configure context
-        context.configure({
-            device: device,
-            format: swapChainFormat,
-            usage: GPUTextureUsage.RENDER_ATTACHMENT,
-            alphaMode: "premultiplied",
-        });
-        // Also store in instance variables for compatibility
-        this.adapter = adapter;
-        this.device = device;
-        this.context = context;
-        this.swapChainFormat = swapChainFormat;
-        return { device, context, swapChainFormat };
-    }
     _resizeCanvas() {
         this.canvas.width = window.innerWidth * (window.devicePixelRatio || 1);
         this.canvas.height = window.innerHeight * (window.devicePixelRatio || 1);
@@ -84935,6 +84884,19 @@ class WebGPUContext {
             usage: GPUTextureUsage.RENDER_ATTACHMENT,
             alphaMode: "premultiplied",
         });
+    }
+    createDepthTexture() {
+        this.depthTexture = this.device.createTexture({
+            size: [this.canvas.width, this.canvas.height, 1],
+            format: "depth24plus-stencil8",
+            usage: GPUTextureUsage.RENDER_ATTACHMENT,
+        });
+    }
+    getDepthTexture() {
+        if (!this.depthTexture) {
+            throw new Error("Depth texture not created. Call createDepthTexture() first.");
+        }
+        return this.depthTexture;
     }
     getDevice() {
         return this.device;
@@ -84948,376 +84910,6 @@ class WebGPUContext {
     getFormat() {
         return this.swapChainFormat;
     }
-}
-
-
-/***/ }),
-
-/***/ "./src/webgpu/render-loop.ts":
-/*!***********************************!*\
-  !*** ./src/webgpu/render-loop.ts ***!
-  \***********************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   RenderLoop: () => (/* binding */ RenderLoop)
-/* harmony export */ });
-/* harmony import */ var three_addons_libs_stats_module_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! three/addons/libs/stats.module.js */ "./node_modules/three/examples/jsm/libs/stats.module.js");
-/* harmony import */ var _renderers_renderer_factory__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../renderers/renderer-factory */ "./src/renderers/renderer-factory.ts");
-/* harmony import */ var _canvas_state_manager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../canvas/state-manager */ "./src/canvas/state-manager.ts");
-
-
-
-class RenderLoop {
-    constructor(context, uniformer, controls) {
-        // おそらく_renderが原因だろう。特にrender-loopはレンダリングのループ処理なのでめちゃくちゃ怪しい。
-        this._render = () => {
-            this.stats.update();
-            this.uniformer.updateMVP();
-            this.controls.update();
-            const device = this.context.getDevice();
-            const bindGroup = this.uniformer.getBindGroup();
-            const canvas = this.context.getCanvas();
-            const encoder = device.createCommandEncoder();
-            const renderPassDescriptor = this._createRenderPassDescriptor();
-            const renderPass = encoder.beginRenderPass(renderPassDescriptor);
-            renderPass.setViewport(0, 0, canvas.width, canvas.height, 0.0, 1.0);
-            // バッファマップをループして描画
-            for (let key in _canvas_state_manager__WEBPACK_IMPORTED_MODULE_2__.appState.bufferMap) {
-                const bufferInfo = _canvas_state_manager__WEBPACK_IMPORTED_MODULE_2__.appState.bufferMap[key];
-                const renderer = _renderers_renderer_factory__WEBPACK_IMPORTED_MODULE_1__.RendererFactory.getRenderer(bufferInfo.vectorType || "vec4", device);
-                renderer.render(renderPass, bufferInfo.position, bufferInfo.color, bufferInfo.numPoints, bindGroup);
-            }
-            renderPass.end();
-            device.queue.submit([encoder.finish()]);
-            requestAnimationFrame(() => this._render());
-        };
-        this.context = context;
-        this.uniformer = uniformer;
-        this.controls = controls;
-        this.stats = new three_addons_libs_stats_module_js__WEBPACK_IMPORTED_MODULE_0__["default"]();
-        document.body.appendChild(this.stats.dom);
-    }
-    initialize() {
-        this._createDepthTexture();
-    }
-    _createDepthTexture() {
-        const canvas = this.context.getCanvas();
-        this.depthTexture = this.context.getDevice().createTexture({
-            size: [canvas.width, canvas.height, 1],
-            format: "depth24plus-stencil8",
-            usage: GPUTextureUsage.RENDER_ATTACHMENT,
-        });
-    }
-    start() {
-        this._render();
-    }
-    _createRenderPassDescriptor() {
-        return {
-            colorAttachments: [
-                {
-                    view: this.context.getContext().getCurrentTexture().createView(),
-                    clearValue: { r: 1.0, g: 1.0, b: 1.0, a: 1.0 },
-                    loadOp: "clear",
-                    storeOp: "store",
-                },
-            ],
-            depthStencilAttachment: {
-                view: this.depthTexture.createView(),
-                depthLoadOp: "clear",
-                depthClearValue: 1.0,
-                depthStoreOp: "store",
-                stencilLoadOp: "clear",
-                stencilClearValue: 0,
-                stencilStoreOp: "store",
-            },
-        };
-    }
-}
-
-
-/***/ }),
-
-/***/ "./src/webgpu/renderer.ts":
-/*!********************************!*\
-  !*** ./src/webgpu/renderer.ts ***!
-  \********************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   renderWrapper: () => (/* binding */ renderWrapper),
-/* harmony export */   stages: () => (/* binding */ stages)
-/* harmony export */ });
-/* harmony import */ var three_addons_libs_stats_module_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! three/addons/libs/stats.module.js */ "./node_modules/three/examples/jsm/libs/stats.module.js");
-/* harmony import */ var gl_matrix__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! gl-matrix */ "./node_modules/gl-matrix/esm/mat4.js");
-/* harmony import */ var _shaders_vec4_shader_wgsl__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../shaders/vec4-shader.wgsl */ "./src/shaders/vec4-shader.wgsl");
-/* harmony import */ var _canvas_state_manager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../canvas/state-manager */ "./src/canvas/state-manager.ts");
-
-
-
-
-// これでFPSなどの数値を管理できる。
-const stats = new three_addons_libs_stats_module_js__WEBPACK_IMPORTED_MODULE_0__["default"]();
-document.body.appendChild(stats.dom);
-async function stages(cameraObj, projMatrix, params) {
-    const { device, context, swapChainFormat } = await _init();
-    const renderPipeline = await _initRenderPipeline(device, swapChainFormat);
-    const { projView, mvpBuffer, colorMapBuffer, paramsBuffer } = _initUniform(device, cameraObj, projMatrix, params);
-    return {
-        projViewMatrix: projView,
-        context,
-        swapChainFormat,
-        renderPipeline,
-        mvpBuffer,
-        colorMapBuffer,
-        paramsBuffer,
-    };
-}
-async function renderWrapper(device, canvas, context, renderPipeline, mvpBuffer, colorMapBuffer, paramsBuffer, camera, projMatrix, params) {
-    const mvpBindGroup = await _createBindGroups(device, renderPipeline, mvpBuffer, colorMapBuffer, paramsBuffer);
-    const renderDepthTexture = await _createDepthBuffer(device, canvas);
-    await _updateMaxIntensity(device, paramsBuffer, params);
-    _render(device, canvas, context, renderPipeline, mvpBuffer, mvpBindGroup, renderDepthTexture, camera, projMatrix);
-}
-async function _init() {
-    const adapter = await navigator.gpu.requestAdapter();
-    if (!adapter)
-        throw new Error("WebGPU not supported");
-    const device = await adapter.requestDevice();
-    if (!device)
-        throw new Error("Failed to get GPU device");
-    const canvas = document.getElementById("screen-canvas");
-    canvas.width = window.innerWidth * (window.devicePixelRatio || 1);
-    canvas.height = window.innerHeight * (window.devicePixelRatio || 1);
-    const context = canvas.getContext("webgpu");
-    if (!context) {
-        throw new Error("could not get context from the canvas");
-    }
-    const swapChainFormat = navigator.gpu.getPreferredCanvasFormat();
-    _configureSwapChain(device, context, swapChainFormat);
-    return { device, context, swapChainFormat };
-}
-function _configureSwapChain(device, context, format) {
-    context.configure({
-        device: device,
-        format: format,
-        usage: GPUTextureUsage.RENDER_ATTACHMENT,
-        alphaMode: "premultiplied",
-    });
-}
-async function _initRenderPipeline(device, swapChainFormat) {
-    const format = swapChainFormat;
-    const vsModule = device.createShaderModule({
-        label: "vertex shader",
-        code: _shaders_vec4_shader_wgsl__WEBPACK_IMPORTED_MODULE_2__,
-    });
-    const fsModule = device.createShaderModule({
-        label: "fragment shader",
-        code: _shaders_vec4_shader_wgsl__WEBPACK_IMPORTED_MODULE_2__,
-    });
-    const positionAttributeDesc = {
-        shaderLocation: 0,
-        offset: 0,
-        format: "float32x4",
-    };
-    const colorAttributeDesc = {
-        shaderLocation: 1,
-        offset: 0,
-        format: "float32x3",
-    };
-    const vertexShaderDescriptor = {
-        module: vsModule,
-        entryPoint: "main",
-        buffers: [
-            {
-                arrayStride: 16,
-                stepMode: "instance",
-                attributes: [positionAttributeDesc],
-            },
-            {
-                arrayStride: 12,
-                stepMode: "instance",
-                attributes: [colorAttributeDesc],
-            },
-        ],
-    };
-    const fragmentShaderDescriptor = {
-        module: fsModule,
-        entryPoint: "fragmentMain",
-        targets: [{ format: format }],
-    };
-    const depthStencilDescriptor = {
-        format: "depth24plus-stencil8",
-        depthWriteEnabled: true,
-        depthCompare: "less",
-    };
-    const primitiveDescriptor = {
-        topology: "triangle-strip",
-        cullMode: "none",
-    };
-    const renderPipeline = device.createRenderPipeline({
-        label: "render pipeline",
-        layout: "auto",
-        vertex: vertexShaderDescriptor,
-        fragment: fragmentShaderDescriptor,
-        depthStencil: depthStencilDescriptor,
-        primitive: primitiveDescriptor,
-    });
-    return renderPipeline;
-}
-function _initUniform(device, cam, projMatrix, params, currentAxis = 3) {
-    params.push(currentAxis);
-    params.push(_canvas_state_manager__WEBPACK_IMPORTED_MODULE_3__.appState.globalMaxIntensity);
-    const paramsBuffer = device.createBuffer({
-        size: 8 * 4,
-        usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST,
-        mappedAtCreation: true,
-    });
-    const mapArrayParams = new Float32Array(paramsBuffer.getMappedRange());
-    mapArrayParams.set(params);
-    paramsBuffer.unmap();
-    // Create colormap
-    const hsvColors = [
-        [0.0, 0.0, 0.5],
-        [0.0, 0.2, 0.7],
-        [0.0, 0.4, 0.9],
-        [0.0, 0.6, 1.0],
-        [0.0, 0.8, 1.0],
-        [0.2, 0.9, 0.8],
-        [0.4, 1.0, 0.6],
-        [0.6, 1.0, 0.4],
-        [0.8, 1.0, 0.2],
-        [1.0, 1.0, 0.0],
-        [1.0, 0.9, 0.0],
-        [1.0, 0.8, 0.0],
-        [1.0, 0.6, 0.0],
-        [1.0, 0.4, 0.0],
-        [1.0, 0.2, 0.0],
-        [0.9, 0.0, 0.0],
-        [0.7, 0.0, 0.0],
-        [0.5, 0.0, 0.0],
-        [0.3, 0.0, 0.0],
-        [0.1, 0.5, 0.0],
-    ].flat();
-    const colorMapBuffer = device.createBuffer({
-        size: hsvColors.length * 3 * 4,
-        usage: GPUBufferUsage.UNIFORM,
-        mappedAtCreation: true,
-    });
-    const mapArray = new Float32Array(colorMapBuffer.getMappedRange());
-    mapArray.set(hsvColors);
-    colorMapBuffer.unmap();
-    const mvpBuffer = device.createBuffer({
-        size: 16 * 4,
-        usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST,
-    });
-    const viewMatrix = cam.matrixWorldInverse.elements;
-    const projView = gl_matrix__WEBPACK_IMPORTED_MODULE_1__.mul(gl_matrix__WEBPACK_IMPORTED_MODULE_1__.create(), projMatrix, viewMatrix);
-    return {
-        projView,
-        mvpBuffer,
-        colorMapBuffer,
-        paramsBuffer,
-    };
-}
-async function _createBindGroups(device, renderPipeline, mvpBuffer, colorMapBuffer, paramsBuffer) {
-    const mvpBindGroup = device.createBindGroup({
-        label: "uniform bindgroup - rendering",
-        layout: renderPipeline.getBindGroupLayout(0),
-        entries: [
-            {
-                binding: 0,
-                resource: { buffer: mvpBuffer },
-            },
-            {
-                binding: 1,
-                resource: { buffer: colorMapBuffer },
-            },
-            {
-                binding: 2,
-                resource: { buffer: paramsBuffer },
-            },
-        ],
-    });
-    return mvpBindGroup;
-}
-async function _createDepthBuffer(device, canvas) {
-    const renderDepthTexture = device.createTexture({
-        size: [canvas.width, canvas.height, 1],
-        format: "depth24plus-stencil8",
-        usage: GPUTextureUsage.RENDER_ATTACHMENT,
-    });
-    return renderDepthTexture;
-}
-async function _updateMaxIntensity(device, paramsBuffer, params) {
-    params[params.length - 1] = _canvas_state_manager__WEBPACK_IMPORTED_MODULE_3__.appState.globalMaxIntensity;
-    const stagingBuffer = device.createBuffer({
-        usage: GPUBufferUsage.MAP_WRITE | GPUBufferUsage.COPY_SRC,
-        size: 32,
-        mappedAtCreation: true,
-    });
-    const stagingData = new Float32Array(stagingBuffer.getMappedRange());
-    stagingData.set(params);
-    stagingBuffer.unmap();
-    const copyEncoder = device.createCommandEncoder();
-    copyEncoder.copyBufferToBuffer(stagingBuffer, 28, paramsBuffer, 28, 4);
-    device.queue.submit([copyEncoder.finish()]);
-}
-function _render(device, canvas, context, renderPipeline, mvpBuffer, mvpBindGroup, renderDepthTexture, camera, projMatrix) {
-    stats.update();
-    const commandEncoder = device.createCommandEncoder();
-    const viewMatrix = camera.matrixWorldInverse.elements;
-    const projView = gl_matrix__WEBPACK_IMPORTED_MODULE_1__.mul(gl_matrix__WEBPACK_IMPORTED_MODULE_1__.create(), projMatrix, viewMatrix);
-    _canvas_state_manager__WEBPACK_IMPORTED_MODULE_3__.appState.controls.update();
-    const renderPassDescriptor = _encodeCommand(context, renderDepthTexture);
-    const wvStagingBuffer = device.createBuffer({
-        size: 4 * 16,
-        usage: GPUBufferUsage.COPY_SRC,
-        mappedAtCreation: true,
-    });
-    const stagingUniformData = new Float32Array(wvStagingBuffer.getMappedRange());
-    stagingUniformData.set(projView);
-    wvStagingBuffer.unmap();
-    commandEncoder.copyBufferToBuffer(wvStagingBuffer, 0, mvpBuffer, 0, 64);
-    const renderPass = commandEncoder.beginRenderPass(renderPassDescriptor);
-    renderPass.setPipeline(renderPipeline);
-    renderPass.setViewport(0, 0, canvas.width, canvas.height, 0.0, 1.0);
-    renderPass.setBindGroup(0, mvpBindGroup);
-    for (let key in _canvas_state_manager__WEBPACK_IMPORTED_MODULE_3__.appState.bufferMap) {
-        renderPass.setVertexBuffer(0, _canvas_state_manager__WEBPACK_IMPORTED_MODULE_3__.appState.bufferMap[key].position);
-        renderPass.setVertexBuffer(1, _canvas_state_manager__WEBPACK_IMPORTED_MODULE_3__.appState.bufferMap[key].color);
-        const numPoints = Math.floor(+_canvas_state_manager__WEBPACK_IMPORTED_MODULE_3__.appState.bufferMap[key].position.label / 4);
-        renderPass.draw(4, numPoints, 0, 0);
-    }
-    renderPass.end();
-    device.queue.submit([commandEncoder.finish()]);
-    requestAnimationFrame(() => _render(device, canvas, context, renderPipeline, mvpBuffer, mvpBindGroup, renderDepthTexture, camera, projMatrix));
-}
-function _encodeCommand(context, renderDepthTexture) {
-    const colorAttachment = {
-        view: context.getCurrentTexture().createView(),
-        clearValue: { r: 1.0, g: 1.0, b: 1.0, a: 1.0 },
-        loadOp: "clear",
-        storeOp: "store",
-    };
-    const depthAttachment = {
-        view: renderDepthTexture.createView(),
-        depthLoadOp: "clear",
-        depthClearValue: 1.0,
-        depthStoreOp: "store",
-        stencilLoadOp: "clear",
-        stencilClearValue: 0,
-        stencilStoreOp: "store",
-    };
-    const renderPassDescriptor = {
-        colorAttachments: [colorAttachment],
-        depthStencilAttachment: depthAttachment,
-    };
-    return renderPassDescriptor;
 }
 
 
@@ -85342,16 +84934,59 @@ class WebGPUUniformer {
         this.projView = gl_matrix__WEBPACK_IMPORTED_MODULE_0__.create();
         this.device = device;
     }
-    initialize(camera, projMatrix, params) {
+    initialize(camera, projMatrix, params, globalMaxIntensity) {
         this.camera = camera;
         this.projMatrix = projMatrix;
-        this.params = new Float32Array(params);
+        this.params = params;
+        // TODO: Axisを変更できるように引数を後ほど修正する。
+        const currentAxis = 3;
+        params.push(currentAxis);
+        params.push(globalMaxIntensity);
         this._createParamsBuffer();
         this._createColorMapBuffer();
         this._createMVPBuffer();
         const viewMatrix = this.camera.matrixWorldInverse.elements;
         this.projView = gl_matrix__WEBPACK_IMPORTED_MODULE_0__.mul(this.projView, this.projMatrix, viewMatrix);
-        return this.projView;
+    }
+    createBindGroup(pipelineLayout) {
+        this.bindGroup = this.device.createBindGroup({
+            label: "uniform bindgroup",
+            layout: pipelineLayout,
+            entries: [
+                { binding: 0, resource: { buffer: this.mvpBuffer } },
+                { binding: 1, resource: { buffer: this.colorMapBuffer } },
+                { binding: 2, resource: { buffer: this.paramsBuffer } },
+            ],
+        });
+    }
+    updateMVP() {
+        const viewMatrix = this.camera.matrixWorldInverse.elements;
+        this.projView = gl_matrix__WEBPACK_IMPORTED_MODULE_0__.mul(this.projView, this.projMatrix, viewMatrix);
+        const stagingBuffer = this.device.createBuffer({
+            size: 4 * 16,
+            usage: GPUBufferUsage.COPY_SRC,
+            mappedAtCreation: true,
+        });
+        const stagingData = new Float32Array(stagingBuffer.getMappedRange());
+        stagingData.set(this.projView);
+        stagingBuffer.unmap();
+        const encoder = this.device.createCommandEncoder();
+        encoder.copyBufferToBuffer(stagingBuffer, 0, this.mvpBuffer, 0, 64);
+        this.device.queue.submit([encoder.finish()]);
+    }
+    updateParams(index, value) {
+        this.params[index] = value;
+        const stagingBuffer = this.device.createBuffer({
+            usage: GPUBufferUsage.MAP_WRITE | GPUBufferUsage.COPY_SRC,
+            size: 32,
+            mappedAtCreation: true,
+        });
+        const stagingData = new Float32Array(stagingBuffer.getMappedRange());
+        stagingData.set(this.params);
+        stagingBuffer.unmap();
+        const copyEncoder = this.device.createCommandEncoder();
+        copyEncoder.copyBufferToBuffer(stagingBuffer, index * 4, this.paramsBuffer, index * 4, 4);
+        this.device.queue.submit([copyEncoder.finish()]);
     }
     _createParamsBuffer() {
         this.paramsBuffer = this.device.createBuffer({
@@ -85397,52 +85032,18 @@ class WebGPUUniformer {
     }
     // MVP: (Model-View-Projection) , mvpBuffer: 全頂点に共通する変換行列を格納
     // バッファサイズ: 常に64バイト（頂点数に関係なく）
+    // この関数は初期データを書き込む
     _createMVPBuffer() {
         this.mvpBuffer = this.device.createBuffer({
             size: 16 * 4,
             usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST,
+            mappedAtCreation: true,
         });
-    }
-    createBindGroup(pipelineLayout) {
-        this.bindGroup = this.device.createBindGroup({
-            label: "uniform bindgroup",
-            layout: pipelineLayout,
-            entries: [
-                { binding: 0, resource: { buffer: this.mvpBuffer } },
-                { binding: 1, resource: { buffer: this.colorMapBuffer } },
-                { binding: 2, resource: { buffer: this.paramsBuffer } },
-            ],
-        });
-        return this.bindGroup;
-    }
-    updateMVP() {
         const viewMatrix = this.camera.matrixWorldInverse.elements;
-        this.projView = gl_matrix__WEBPACK_IMPORTED_MODULE_0__.mul(this.projView, this.projMatrix, viewMatrix);
-        const stagingBuffer = this.device.createBuffer({
-            size: 4 * 16,
-            usage: GPUBufferUsage.COPY_SRC,
-            mappedAtCreation: true,
-        });
-        const stagingData = new Float32Array(stagingBuffer.getMappedRange());
-        stagingData.set(this.projView);
-        stagingBuffer.unmap();
-        const encoder = this.device.createCommandEncoder();
-        encoder.copyBufferToBuffer(stagingBuffer, 0, this.mvpBuffer, 0, 64);
-        this.device.queue.submit([encoder.finish()]);
-    }
-    updateParams(index, value) {
-        this.params[index] = value;
-        const stagingBuffer = this.device.createBuffer({
-            usage: GPUBufferUsage.MAP_WRITE | GPUBufferUsage.COPY_SRC,
-            size: 32,
-            mappedAtCreation: true,
-        });
-        const stagingData = new Float32Array(stagingBuffer.getMappedRange());
-        stagingData.set(this.params);
-        stagingBuffer.unmap();
-        const copyEncoder = this.device.createCommandEncoder();
-        copyEncoder.copyBufferToBuffer(stagingBuffer, index * 4, this.paramsBuffer, index * 4, 4);
-        this.device.queue.submit([copyEncoder.finish()]);
+        const projView = gl_matrix__WEBPACK_IMPORTED_MODULE_0__.mul(gl_matrix__WEBPACK_IMPORTED_MODULE_0__.create(), this.projMatrix, viewMatrix);
+        const mapArray = new Float32Array(this.mvpBuffer.getMappedRange());
+        mapArray.set(projView);
+        this.mvpBuffer.unmap();
     }
     getMVPBuffer() {
         return this.mvpBuffer;
@@ -85573,13 +85174,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   WebGPURenderer: () => (/* binding */ WebGPURenderer)
 /* harmony export */ });
-/* harmony import */ var _context__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./context */ "./src/webgpu/context.ts");
-/* harmony import */ var _uniform_buffer__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./uniform-buffer */ "./src/webgpu/uniform-buffer.ts");
-/* harmony import */ var _render_loop__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./render-loop */ "./src/webgpu/render-loop.ts");
+/* harmony import */ var three_addons_libs_stats_module_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! three/addons/libs/stats.module.js */ "./node_modules/three/examples/jsm/libs/stats.module.js");
+/* harmony import */ var _context__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./context */ "./src/webgpu/context.ts");
+/* harmony import */ var _uniform_buffer__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./uniform-buffer */ "./src/webgpu/uniform-buffer.ts");
 /* harmony import */ var _canvas_event__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./canvas-event */ "./src/webgpu/canvas-event.ts");
-/* harmony import */ var _renderers_renderer_factory__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../renderers/renderer-factory */ "./src/renderers/renderer-factory.ts");
-/* harmony import */ var _canvas_state_manager__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../canvas/state-manager */ "./src/canvas/state-manager.ts");
-/* harmony import */ var _index__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../index */ "./src/index.ts");
+/* harmony import */ var _webgpu_webgpu_buffer__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../webgpu/webgpu-buffer */ "./src/webgpu/webgpu-buffer.ts");
+/* harmony import */ var _renderers_exports__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../renderers/exports */ "./src/renderers/exports.ts");
+/* harmony import */ var _canvas_state_manager__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../canvas/state-manager */ "./src/canvas/state-manager.ts");
+/* harmony import */ var _canvas_viewport_initializer__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../canvas/viewport-initializer */ "./src/canvas/viewport-initializer.ts");
+
 
 
 
@@ -85588,72 +85191,47 @@ __webpack_require__.r(__webpack_exports__);
 
 
 class WebGPURenderer {
-    constructor(canvasId = "screen-canvas", vectorType = "vec4") {
-        this.filename = "";
-        this.context = new _context__WEBPACK_IMPORTED_MODULE_0__.WebGPUContext(canvasId);
+    constructor(canvasId, vectorType = "vec4") {
+        this._render = () => {
+            this.stats.update();
+            this.uniformer.updateMVP();
+            _canvas_state_manager__WEBPACK_IMPORTED_MODULE_6__.appState.controls.update();
+            const device = this.context.getDevice();
+            const bindGroup = this.uniformer.getBindGroup();
+            const canvas = this.context.getCanvas();
+            const swapChainFormat = this.context.getFormat();
+            const encoder = device.createCommandEncoder();
+            const renderPassDescriptor = this._createRenderPassDescriptor();
+            const renderPass = encoder.beginRenderPass(renderPassDescriptor);
+            renderPass.setViewport(0, 0, canvas.width, canvas.height, 0.0, 1.0);
+            // バッファマップをループして描画
+            for (let key in _canvas_state_manager__WEBPACK_IMPORTED_MODULE_6__.appState.bufferMap) {
+                const bufferInfo = _canvas_state_manager__WEBPACK_IMPORTED_MODULE_6__.appState.bufferMap[key];
+                const renderer = _renderers_exports__WEBPACK_IMPORTED_MODULE_5__.RendererFactory.getRenderer(bufferInfo.vectorType || "vec4", device, swapChainFormat);
+                renderer.render(renderPass, bufferInfo.position, bufferInfo.color, bufferInfo.numPoints, bindGroup);
+            }
+            renderPass.end();
+            device.queue.submit([encoder.finish()]);
+            requestAnimationFrame(() => this._render());
+        };
+        this.context = new _context__WEBPACK_IMPORTED_MODULE_1__.WebGPUContext(canvasId);
         this.vectorType = vectorType;
     }
-    async initialize(camera, projMatrix, params) {
-        await this.context.initialize();
-        this.uniformer = new _uniform_buffer__WEBPACK_IMPORTED_MODULE_1__.WebGPUUniformer(this.context.getDevice());
-        const projView = this.uniformer.initialize(camera, projMatrix, params);
-        await this._initializeRenderers();
-        this.renderLoop = new _render_loop__WEBPACK_IMPORTED_MODULE_2__.RenderLoop(this.context, this.uniformer, _canvas_state_manager__WEBPACK_IMPORTED_MODULE_5__.appState.controls);
-        this.renderLoop.initialize();
-        this.eventManager = new _canvas_event__WEBPACK_IMPORTED_MODULE_3__.CanvasEventManager(this.context.getCanvas());
-        this.eventManager.initialize();
+    async initialize() {
+        await this._initializeContext();
+        await this._initializeViewport();
+        this._initializeRenderer();
+        this._initializeUniformer();
+        this._initializeEventManager();
         this._setupEventCallbacks();
-        return projView;
-    }
-    _setupEventCallbacks() {
-        this.eventManager.setCameraMoveCallback(async (signal) => {
-            await this._handleCameraMove(signal);
-        });
-        this.eventManager.setAxisChangeCallback((axis) => {
-            this.updateAxis(axis);
-        });
-    }
-    async _handleCameraMove(signal) {
-        if (!this.filename) {
-            console.warn("Filename not set. Call setFilename() before camera move.");
-            return;
-        }
-        const projView = this.uniformer.getProjView();
-        try {
-            await (0,_index__WEBPACK_IMPORTED_MODULE_6__.retrivePoints)(this.filename, projView, signal || null);
-            this.updateMaxIntensity(_canvas_state_manager__WEBPACK_IMPORTED_MODULE_5__.appState.globalMaxIntensity);
-        }
-        catch (error) {
-            if (error.name !== "AbortError") {
-                console.error("Error in _handleCameraMove:", error);
-            }
-        }
-    }
-    async _initializeRenderers() {
-        const device = this.context.getDevice();
-        if (this.vectorType == "vec3") {
-            const vec3Renderer = _renderers_renderer_factory__WEBPACK_IMPORTED_MODULE_4__.RendererFactory.getRenderer(this.vectorType, device);
-            const bindGroupLayout = vec3Renderer.getPipeline().getBindGroupLayout(0);
-            this.uniformer.createBindGroup(bindGroupLayout);
-        }
-        else if (this.vectorType == "vec4") {
-            const vec4Renderer = _renderers_renderer_factory__WEBPACK_IMPORTED_MODULE_4__.RendererFactory.getRenderer(this.vectorType, device);
-            const bindGroupLayout = vec4Renderer.getPipeline().getBindGroupLayout(0);
-            this.uniformer.createBindGroup(bindGroupLayout);
-        }
-        else {
-            throw Error("VectorType is invalid.");
-        }
+        this._initializeStats();
     }
     start() {
-        this.updateMaxIntensity(_canvas_state_manager__WEBPACK_IMPORTED_MODULE_5__.appState.globalMaxIntensity);
-        this.renderLoop.start();
-    }
-    setFilename(filename) {
-        this.filename = filename;
-    }
-    getDevice() {
-        return this.context.getDevice();
+        const pipelineLayout = this.pipeline.getBindGroupLayout(0);
+        this.uniformer.createBindGroup(pipelineLayout);
+        this.updateMaxIntensity(_canvas_state_manager__WEBPACK_IMPORTED_MODULE_6__.appState.globalMaxIntensity);
+        this.context.createDepthTexture();
+        this._render();
     }
     updateMaxIntensity(maxIntensity) {
         this.uniformer.updateParams(7, maxIntensity);
@@ -85661,31 +85239,86 @@ class WebGPURenderer {
     updateAxis(axis) {
         this.uniformer.updateParams(6, axis);
     }
-    // TODO: 後で削除する。
-    getBindGroupLayout(device) {
-        const vec4Renderer = _renderers_renderer_factory__WEBPACK_IMPORTED_MODULE_4__.RendererFactory.getRenderer("vec4", device);
-        const bindGroupLayout = vec4Renderer.getPipeline().getBindGroupLayout(0);
-        return bindGroupLayout;
+    async _initializeContext() {
+        await this.context.initialize();
+        const device = this.context.getDevice();
+        (0,_webgpu_webgpu_buffer__WEBPACK_IMPORTED_MODULE_4__.setGPUDevice)(device);
+        return device;
     }
-    getPipeline(device) {
-        const vec4Renderer = _renderers_renderer_factory__WEBPACK_IMPORTED_MODULE_4__.RendererFactory.getRenderer("vec4", device);
-        const pipeline = vec4Renderer.getPipeline();
-        return pipeline;
+    async _initializeViewport() {
+        const canvas = this.context.getCanvas();
+        await (0,_canvas_viewport_initializer__WEBPACK_IMPORTED_MODULE_7__.setupViewport)(canvas);
     }
-    getMVPBuffer() {
-        return this.uniformer.getMVPBuffer();
+    _initializeRenderer() {
+        const device = this.context.getDevice();
+        const swapChainFormat = this.context.getFormat();
+        if (this.vectorType == "vec3") {
+            this._initVec3Renderer(device, swapChainFormat);
+        }
+        else if (this.vectorType == "vec4") {
+            this._initVec4Renderer(device, swapChainFormat);
+        }
+        else {
+            throw Error("VectorType is invalid.");
+        }
     }
-    getColorMapBuffer() {
-        return this.uniformer.getColorMapBuffer();
+    _initVec3Renderer(device, swapChainFormat) {
+        const vec3Renderer = _renderers_exports__WEBPACK_IMPORTED_MODULE_5__.RendererFactory.getRenderer(this.vectorType, device, swapChainFormat);
+        vec3Renderer.initialize();
+        this.pipeline = vec3Renderer.getPipeline();
     }
-    getParamsBuffer() {
-        return this.uniformer.getParamsBuffer();
+    _initVec4Renderer(device, swapChainFormat) {
+        const vec4Renderer = _renderers_exports__WEBPACK_IMPORTED_MODULE_5__.RendererFactory.getRenderer(this.vectorType, device, swapChainFormat);
+        vec4Renderer.initialize();
+        this.pipeline = vec4Renderer.getPipeline();
     }
-    getCanvas() {
-        return this.context.getCanvas();
+    _initializeUniformer() {
+        const device = this.context.getDevice();
+        const camera = _canvas_state_manager__WEBPACK_IMPORTED_MODULE_6__.appState.camera;
+        const projMatrix = _canvas_state_manager__WEBPACK_IMPORTED_MODULE_6__.appState.proj;
+        const params = _canvas_state_manager__WEBPACK_IMPORTED_MODULE_6__.appState.params;
+        const globalMaxIntensity = _canvas_state_manager__WEBPACK_IMPORTED_MODULE_6__.appState.globalMaxIntensity;
+        this.uniformer = new _uniform_buffer__WEBPACK_IMPORTED_MODULE_2__.WebGPUUniformer(device);
+        this.uniformer.initialize(camera, projMatrix, params, globalMaxIntensity);
     }
-    getContext() {
-        return this.context.getContext();
+    _initializeEventManager() {
+        const canvas = this.context.getCanvas();
+        this.eventManager = new _canvas_event__WEBPACK_IMPORTED_MODULE_3__.CanvasEventManager(canvas);
+        this.eventManager.initialize();
+    }
+    _setupEventCallbacks() {
+        this.eventManager.setAxisChangeCallback((axis) => {
+            this.updateAxis(axis);
+        });
+    }
+    _initializeStats() {
+        this.stats = new three_addons_libs_stats_module_js__WEBPACK_IMPORTED_MODULE_0__["default"]();
+        document.body.appendChild(this.stats.dom);
+    }
+    _createRenderPassDescriptor() {
+        return {
+            colorAttachments: [
+                {
+                    view: this.context.getContext().getCurrentTexture().createView(),
+                    clearValue: { r: 1.0, g: 1.0, b: 1.0, a: 1.0 },
+                    loadOp: "clear",
+                    storeOp: "store",
+                },
+            ],
+            depthStencilAttachment: {
+                view: this.context.getDepthTexture().createView(),
+                depthLoadOp: "clear",
+                depthClearValue: 1.0,
+                depthStoreOp: "store",
+                stencilLoadOp: "clear",
+                stencilClearValue: 0,
+                stencilStoreOp: "store",
+            },
+        };
+    }
+    // getter
+    getProjView() {
+        return this.uniformer.getProjView();
     }
 }
 
@@ -85828,12 +85461,73 @@ function Worker_fn() {
 /******/ 	})();
 /******/ 	
 /************************************************************************/
-/******/ 	
-/******/ 	// startup
-/******/ 	// Load entry module and return exports
-/******/ 	// This entry module is referenced by other modules so it can't be inlined
-/******/ 	var __webpack_exports__ = __webpack_require__("./src/index.ts");
-/******/ 	
+var __webpack_exports__ = {};
+// This entry needs to be wrapped in an IIFE because it needs to be in strict mode.
+(() => {
+"use strict";
+/*!**********************!*\
+  !*** ./src/index.ts ***!
+  \**********************/
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _utils_file_manager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./utils/file-manager */ "./src/utils/file-manager.ts");
+/* harmony import */ var _cache_persistent_cache__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./cache/persistent-cache */ "./src/cache/persistent-cache.ts");
+/* harmony import */ var _pointcloud_initializer__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./pointcloud-initializer */ "./src/pointcloud-initializer.ts");
+/* harmony import */ var _canvas_state_manager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./canvas/state-manager */ "./src/canvas/state-manager.ts");
+/* harmony import */ var _webgpu_webgpu_buffer__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./webgpu/webgpu-buffer */ "./src/webgpu/webgpu-buffer.ts");
+/* harmony import */ var _webgpu_webgpu_renderer__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./webgpu/webgpu-renderer */ "./src/webgpu/webgpu-renderer.ts");
+/* harmony import */ var _loaders_point_cloud_loader__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./loaders/point-cloud-loader */ "./src/loaders/point-cloud-loader.ts");
+/* harmony import */ var _styles_main_css__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./styles/main.css */ "./src/styles/main.css");
+
+
+
+
+
+
+
+
+function _files_loader() {
+    const files = "[\"dataset/las/09KD9817.las\"]";
+    const parsed_files = JSON.parse(files);
+    return parsed_files;
+}
+function _copc_file_loader() {
+    const filename = "https://media.githubusercontent.com/media/sceneserver/copc/main/naarden-vesting.copc.laz";
+    return filename;
+}
+function _las_file_loader() {
+    const filename = "dataset/las/09KD9817.las";
+    return filename;
+}
+// ============================================================================
+// Initialization
+// ============================================================================
+async function _render(file) {
+    const vectorType = "vec4";
+    const renderer = new _webgpu_webgpu_renderer__WEBPACK_IMPORTED_MODULE_5__.WebGPURenderer("screen-canvas", vectorType);
+    await renderer.initialize();
+    const projView = renderer.getProjView();
+    if (_canvas_state_manager__WEBPACK_IMPORTED_MODULE_3__.appState.lasData) {
+        (0,_webgpu_webgpu_buffer__WEBPACK_IMPORTED_MODULE_4__.createLASBuffer)();
+    }
+    else {
+        await (0,_loaders_point_cloud_loader__WEBPACK_IMPORTED_MODULE_6__.retrivePoints)(file.split("/").pop().split(".")[0], projView);
+    }
+    renderer.start();
+}
+(async () => {
+    await (0,_utils_file_manager__WEBPACK_IMPORTED_MODULE_0__.createPersistentMetaCache)();
+    _canvas_state_manager__WEBPACK_IMPORTED_MODULE_3__.appState.persCache = await (0,_cache_persistent_cache__WEBPACK_IMPORTED_MODULE_1__.pCache)();
+    // const files = _files_loader();
+    // await initializePointCloud(files);
+    // const file = _las_file_loader();
+    // await initializeLAS(file);
+    const file = _copc_file_loader();
+    await (0,_pointcloud_initializer__WEBPACK_IMPORTED_MODULE_2__.initializeCOPC)(file);
+    await _render(file);
+})();
+
+})();
+
 /******/ })()
 ;
 //# sourceMappingURL=bundle.js.map

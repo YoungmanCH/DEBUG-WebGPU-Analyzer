@@ -18,4 +18,6 @@ dist
 # Visual regression test artifacts
 /tests/visual/
 /tests/visual/
-/tests/visual/
+/tests/visual/dataset/**/*.las
+dataset/**/*.laz
+dataset/
