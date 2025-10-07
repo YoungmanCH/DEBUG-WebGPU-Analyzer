@@ -10,7 +10,7 @@ import { createLASBuffer } from "./webgpu/webgpu-buffer";
 
 import { WebGPURenderer } from "./webgpu/webgpu-renderer";
 import { VectorType } from "./renderers/exports";
-import { retrivePoints } from "./loaders/pointcloud-fetcher";
+import { loadCOPCNodes } from "./loaders/copc-node-loader";
 import { POINT_CLOUD_FILES, COPC_FILE, LAS_FILES } from "./configs";
 
 import "./styles/main.css";
@@ -24,11 +24,11 @@ async function _initializeFileData() {
   // const files = _files_loader();
   // await initializePointCloud(files);
 
-  // const file = _las_file_loader();
-  // await initializeLAS(file);
+  const { filename, vectorType } = _las_file_loader();
+  await initializeLAS(filename);
 
-  const { filename, vectorType } = _copc_file_loader();
-  await initializeCOPC(filename);
+  // const { filename, vectorType } = _copc_file_loader();
+  // await initializeCOPC(filename);
 
   return { filename, vectorType };
 }
@@ -47,10 +47,11 @@ function _copc_file_loader() {
   return { filename, vectorType };
 }
 
-function _las_file_loader(): string {
+function _las_file_loader() {
   const filename = LAS_FILES;
+  const vectorType: VectorType = "vec3";
 
-  return filename;
+  return { filename, vectorType };
 }
 
 // ============================================================================
@@ -61,12 +62,11 @@ async function _render(file: string, vectorType: VectorType): Promise<void> {
   const renderer = new WebGPURenderer(vectorType);
   await renderer.initialize();
 
-  
   if (appState.lasData) {
     createLASBuffer();
   } else {
     const projView = renderer.getProjView();
-    await retrivePoints(file.split("/").pop().split(".")[0], projView);
+    await loadCOPCNodes(file.split("/").pop().split(".")[0], projView);
   }
 
   renderer.start();

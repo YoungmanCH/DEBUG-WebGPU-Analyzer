@@ -83061,17 +83061,44 @@ Stats.Panel = function ( name, fg, bg ) {
 
 /***/ }),
 
-/***/ "./src/cache/buffer-cache-coordinator.ts":
-/*!***********************************************!*\
-  !*** ./src/cache/buffer-cache-coordinator.ts ***!
-  \***********************************************/
+/***/ "./src/cache/lru-cache.ts":
+/*!********************************!*\
+  !*** ./src/cache/lru-cache.ts ***!
+  \********************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   filterKeyCountMap: () => (/* binding */ filterKeyCountMap),
-/* harmony export */   filterKeyCountMapPrefetch: () => (/* binding */ filterKeyCountMapPrefetch)
+/* harmony export */   lruCache: () => (/* binding */ lruCache)
+/* harmony export */ });
+/* harmony import */ var lru_cache__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! lru-cache */ "./node_modules/lru-cache/dist/mjs/index.js");
+
+const _options = {
+    max: 500,
+    //   ttl: 100 * 60 * 10,   i dont think i need this as the node value wont be time dependent
+    allowStale: false,
+    updateAgeOnGet: true,
+    updateAgeOnHas: true,
+};
+const lruCache = new lru_cache__WEBPACK_IMPORTED_MODULE_0__["default"](_options);
+// -------------------------------------------------------
+// since LRU Cache is not persistant on reload by default and is in-memory cache we dont need to be worried about clearing
+
+
+/***/ }),
+
+/***/ "./src/cache/node-cache-manager.ts":
+/*!*****************************************!*\
+  !*** ./src/cache/node-cache-manager.ts ***!
+  \*****************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   resolveNodeCache: () => (/* binding */ resolveNodeCache),
+/* harmony export */   resolvePrefetchNodes: () => (/* binding */ resolvePrefetchNodes)
 /* harmony export */ });
 /* harmony import */ var _lru_cache__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./lru-cache */ "./src/cache/lru-cache.ts");
 /* harmony import */ var _persistent_cache__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./persistent-cache */ "./src/cache/persistent-cache.ts");
@@ -83085,8 +83112,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-// TODO: COPC専用の形になっているので、後ほど追加修正が必要。
-async function filterKeyCountMapPrefetch(keyMap, filename) {
+async function resolvePrefetchNodes(keyMap, filename) {
     let afterCheckingCache = [];
     for (let i = 0; i < keyMap.length; i += 2) {
         let cachedResult = _lru_cache__WEBPACK_IMPORTED_MODULE_0__.lruCache.get(keyMap[i]);
@@ -83112,7 +83138,7 @@ async function filterKeyCountMapPrefetch(keyMap, filename) {
     (0,_utils_file_manager__WEBPACK_IMPORTED_MODULE_5__.throttledUpdatePersCache)(_mapIntoJSON(_lru_cache__WEBPACK_IMPORTED_MODULE_0__.lruCache));
     return filteredElements;
 }
-async function filterKeyCountMap(keyMap, filename) {
+async function resolveNodeCache(keyMap, filename) {
     let nodeNotFoundInBuffer = 0;
     let nodeFoundInBuffer = 0;
     let nodeFoundInLRU = 0;
@@ -83222,33 +83248,6 @@ async function filterKeyCountMap(keyMap, filename) {
 function _mapIntoJSON(map) {
     return JSON.stringify(Object.fromEntries(map));
 }
-
-
-/***/ }),
-
-/***/ "./src/cache/lru-cache.ts":
-/*!********************************!*\
-  !*** ./src/cache/lru-cache.ts ***!
-  \********************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   lruCache: () => (/* binding */ lruCache)
-/* harmony export */ });
-/* harmony import */ var lru_cache__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! lru-cache */ "./node_modules/lru-cache/dist/mjs/index.js");
-
-const _options = {
-    max: 500,
-    //   ttl: 100 * 60 * 10,   i dont think i need this as the node value wont be time dependent
-    allowStale: false,
-    updateAgeOnGet: true,
-    updateAgeOnHas: true,
-};
-const lruCache = new lru_cache__WEBPACK_IMPORTED_MODULE_0__["default"](_options);
-// -------------------------------------------------------
-// since LRU Cache is not persistant on reload by default and is in-memory cache we dont need to be worried about clearing
 
 
 /***/ }),
@@ -83524,13 +83523,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   fillArray: () => (/* binding */ fillArray),
 /* harmony export */   fillMidNodes: () => (/* binding */ fillMidNodes),
-/* harmony export */   updateHtmlUI: () => (/* binding */ updateHtmlUI)
+/* harmony export */   updateHtmlUI: () => (/* binding */ updateHtmlUI),
+/* harmony export */   updateHtmlUIForLAS: () => (/* binding */ updateHtmlUIForLAS)
 /* harmony export */ });
-/* harmony import */ var _octree__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./octree */ "./src/octree.ts");
+/* harmony import */ var _octree_octree__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./octree/octree */ "./src/octree/octree.ts");
 
 function fillArray(points, count, width, height, depth) {
     for (let i = 0; i < count; i++) {
-        let point = new _octree__WEBPACK_IMPORTED_MODULE_0__.Point(i, Math.floor(Math.random() * width) - width / 2, Math.floor(Math.random() * height) - height / 2, Math.floor(Math.random() * depth) - depth / 2);
+        let point = new _octree_octree__WEBPACK_IMPORTED_MODULE_0__.Point(i, Math.floor(Math.random() * width) - width / 2, Math.floor(Math.random() * height) - height / 2, Math.floor(Math.random() * depth) - depth / 2);
         points.push(point);
     }
 }
@@ -83573,6 +83573,16 @@ function updateHtmlUI(nodeNotFoundInBuffer, nodeFoundInBuffer, nodeFoundInLRU, n
                     nodes found in LRU Cache: ${nodeFoundInLRU} \b
                     nodes found in Persistent memory: ${nodeFoundInPersistent} \b
                     nodes that were fetched from host: ${nodeToFetch}    `;
+    document.getElementById("stats-div").innerText = statsText;
+}
+function updateHtmlUIForLAS(pointCount, filename) {
+    let statsText = `LAS File Loaded
+                    Total Points: ${pointCount.toLocaleString()}
+                    ----------------------------------------------------
+                    Status: All points loaded into GPU Buffer
+
+                    Format: LAS (flat structure, no LOD)
+                    Cache: Direct load (no dynamic caching)`;
     document.getElementById("stats-div").innerText = statsText;
 }
 
@@ -83642,6 +83652,79 @@ class COPCFileLoader extends _base_loader__WEBPACK_IMPORTED_MODULE_0__.BaseFileL
 
 /***/ }),
 
+/***/ "./src/loaders/copc-node-loader.ts":
+/*!*****************************************!*\
+  !*** ./src/loaders/copc-node-loader.ts ***!
+  \*****************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   loadCOPCNodes: () => (/* binding */ loadCOPCNodes)
+/* harmony export */ });
+/* harmony import */ var _octree_octree_traverser__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../octree/octree-traverser */ "./src/octree/octree-traverser.ts");
+/* harmony import */ var _utils_file_manager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../utils/file-manager */ "./src/utils/file-manager.ts");
+/* harmony import */ var _canvas_state_manager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../canvas/state-manager */ "./src/canvas/state-manager.ts");
+/* harmony import */ var _webgpu_webgpu_buffer__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../webgpu/webgpu-buffer */ "./src/webgpu/webgpu-buffer.ts");
+/* harmony import */ var _cache_node_cache_manager__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../cache/node-cache-manager */ "./src/cache/node-cache-manager.ts");
+/* harmony import */ var _worker_manager__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./worker-manager */ "./src/loaders/worker-manager.ts");
+
+
+
+
+
+
+async function loadCOPCNodes(filename, projectionViewMatrix, controllerSignal = null) {
+    let [keyCountMap, nodeToPrefetch] = (0,_octree_octree_traverser__WEBPACK_IMPORTED_MODULE_0__.selectVisibleNodes)(_canvas_state_manager__WEBPACK_IMPORTED_MODULE_2__.appState.nodePages, [0, 0, 0, 0], _canvas_state_manager__WEBPACK_IMPORTED_MODULE_2__.appState.centerX, _canvas_state_manager__WEBPACK_IMPORTED_MODULE_2__.appState.centerY, _canvas_state_manager__WEBPACK_IMPORTED_MODULE_2__.appState.centerZ, [0.5 * _canvas_state_manager__WEBPACK_IMPORTED_MODULE_2__.appState.widthX, 0.5 * _canvas_state_manager__WEBPACK_IMPORTED_MODULE_2__.appState.widthY, 0.5 * _canvas_state_manager__WEBPACK_IMPORTED_MODULE_2__.appState.widthZ], _canvas_state_manager__WEBPACK_IMPORTED_MODULE_2__.appState.scaleFactor, _canvas_state_manager__WEBPACK_IMPORTED_MODULE_2__.appState.controls, projectionViewMatrix);
+    keyCountMap = await (0,_cache_node_cache_manager__WEBPACK_IMPORTED_MODULE_4__.resolveNodeCache)(keyCountMap, filename);
+    _canvas_state_manager__WEBPACK_IMPORTED_MODULE_2__.appState.prefetchKeyCountMap = await (0,_cache_node_cache_manager__WEBPACK_IMPORTED_MODULE_4__.resolvePrefetchNodes)(nodeToPrefetch, filename);
+    _canvas_state_manager__WEBPACK_IMPORTED_MODULE_2__.appState.clock.getDelta();
+    let totalNodes = keyCountMap.length / 2;
+    let doneCount = 0;
+    for (let m = 0; m < keyCountMap.length;) {
+        let remaining = totalNodes - doneCount;
+        let numbWorker = Math.min(_worker_manager__WEBPACK_IMPORTED_MODULE_5__.MAX_WORKERS, remaining);
+        for (let i = 0; i < numbWorker; i++) {
+            _canvas_state_manager__WEBPACK_IMPORTED_MODULE_2__.appState.promises.push((0,_worker_manager__WEBPACK_IMPORTED_MODULE_5__.createWorker)(keyCountMap[m], keyCountMap[m + 1]));
+            doneCount++;
+            m += 2;
+            if (doneCount % _worker_manager__WEBPACK_IMPORTED_MODULE_5__.MAX_WORKERS == 0 || doneCount == totalNodes) {
+                await _syncThread(filename);
+                if (controllerSignal && controllerSignal.aborted) {
+                    return;
+                }
+            }
+        }
+    }
+}
+async function _syncThread(filename) {
+    await Promise.all(_canvas_state_manager__WEBPACK_IMPORTED_MODULE_2__.appState.promises).then(async (response) => {
+        for (let i = 0, _length = response.length; i < _length; i++) {
+            let data = response[i];
+            let fileName = data[2];
+            let dataJson = {
+                position: data[0],
+                color: data[1],
+                maxIntensity: data[3],
+            };
+            let dataJsonStringify = JSON.stringify(dataJson);
+            await (0,_utils_file_manager__WEBPACK_IMPORTED_MODULE_1__.writeFile)(`${filename}-${fileName}`, dataJsonStringify);
+            let [positionBuffer, colorBuffer] = (0,_webgpu_webgpu_buffer__WEBPACK_IMPORTED_MODULE_3__.createBuffer)(data[0], data[1]);
+            const numPoints = data[0].length / 4; // position is float32x4
+            _canvas_state_manager__WEBPACK_IMPORTED_MODULE_2__.appState.bufferMap[data[2]] = {
+                position: positionBuffer,
+                color: colorBuffer,
+                maxIntensity: data[3],
+                numPoints: numPoints,
+            };
+        }
+    });
+}
+
+
+/***/ }),
+
 /***/ "./src/loaders/las-loader.ts":
 /*!***********************************!*\
   !*** ./src/loaders/las-loader.ts ***!
@@ -83706,79 +83789,6 @@ class LASFileLoader extends _base_loader__WEBPACK_IMPORTED_MODULE_0__.BaseFileLo
             classifications,
         };
     }
-}
-
-
-/***/ }),
-
-/***/ "./src/loaders/pointcloud-fetcher.ts":
-/*!*******************************************!*\
-  !*** ./src/loaders/pointcloud-fetcher.ts ***!
-  \*******************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   retrivePoints: () => (/* binding */ retrivePoints)
-/* harmony export */ });
-/* harmony import */ var _passiveloader__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../passiveloader */ "./src/passiveloader.ts");
-/* harmony import */ var _utils_file_manager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../utils/file-manager */ "./src/utils/file-manager.ts");
-/* harmony import */ var _canvas_state_manager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../canvas/state-manager */ "./src/canvas/state-manager.ts");
-/* harmony import */ var _webgpu_webgpu_buffer__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../webgpu/webgpu-buffer */ "./src/webgpu/webgpu-buffer.ts");
-/* harmony import */ var _cache_buffer_cache_coordinator__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../cache/buffer-cache-coordinator */ "./src/cache/buffer-cache-coordinator.ts");
-/* harmony import */ var _worker_manager__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./worker-manager */ "./src/loaders/worker-manager.ts");
-
-
-
-
-
-
-async function retrivePoints(filename, projectionViewMatrix, controllerSignal = null) {
-    let [keyCountMap, nodeToPrefetch] = (0,_passiveloader__WEBPACK_IMPORTED_MODULE_0__.traverseTreeWrapper)(_canvas_state_manager__WEBPACK_IMPORTED_MODULE_2__.appState.nodePages, [0, 0, 0, 0], _canvas_state_manager__WEBPACK_IMPORTED_MODULE_2__.appState.centerX, _canvas_state_manager__WEBPACK_IMPORTED_MODULE_2__.appState.centerY, _canvas_state_manager__WEBPACK_IMPORTED_MODULE_2__.appState.centerZ, [0.5 * _canvas_state_manager__WEBPACK_IMPORTED_MODULE_2__.appState.widthX, 0.5 * _canvas_state_manager__WEBPACK_IMPORTED_MODULE_2__.appState.widthY, 0.5 * _canvas_state_manager__WEBPACK_IMPORTED_MODULE_2__.appState.widthZ], _canvas_state_manager__WEBPACK_IMPORTED_MODULE_2__.appState.scaleFactor, _canvas_state_manager__WEBPACK_IMPORTED_MODULE_2__.appState.controls, projectionViewMatrix);
-    keyCountMap = await (0,_cache_buffer_cache_coordinator__WEBPACK_IMPORTED_MODULE_4__.filterKeyCountMap)(keyCountMap, filename);
-    _canvas_state_manager__WEBPACK_IMPORTED_MODULE_2__.appState.prefetchKeyCountMap = await (0,_cache_buffer_cache_coordinator__WEBPACK_IMPORTED_MODULE_4__.filterKeyCountMapPrefetch)(nodeToPrefetch, filename);
-    _canvas_state_manager__WEBPACK_IMPORTED_MODULE_2__.appState.clock.getDelta();
-    let totalNodes = keyCountMap.length / 2;
-    let doneCount = 0;
-    for (let m = 0; m < keyCountMap.length;) {
-        let remaining = totalNodes - doneCount;
-        let numbWorker = Math.min(_worker_manager__WEBPACK_IMPORTED_MODULE_5__.MAX_WORKERS, remaining);
-        for (let i = 0; i < numbWorker; i++) {
-            _canvas_state_manager__WEBPACK_IMPORTED_MODULE_2__.appState.promises.push((0,_worker_manager__WEBPACK_IMPORTED_MODULE_5__.createWorker)(keyCountMap[m], keyCountMap[m + 1]));
-            doneCount++;
-            m += 2;
-            if (doneCount % _worker_manager__WEBPACK_IMPORTED_MODULE_5__.MAX_WORKERS == 0 || doneCount == totalNodes) {
-                await syncThread(filename);
-                if (controllerSignal && controllerSignal.aborted) {
-                    return;
-                }
-            }
-        }
-    }
-}
-async function syncThread(filename) {
-    await Promise.all(_canvas_state_manager__WEBPACK_IMPORTED_MODULE_2__.appState.promises).then(async (response) => {
-        for (let i = 0, _length = response.length; i < _length; i++) {
-            let data = response[i];
-            let fileName = data[2];
-            let dataJson = {
-                position: data[0],
-                color: data[1],
-                maxIntensity: data[3],
-            };
-            let dataJsonStringify = JSON.stringify(dataJson);
-            await (0,_utils_file_manager__WEBPACK_IMPORTED_MODULE_1__.writeFile)(`${filename}-${fileName}`, dataJsonStringify);
-            let [positionBuffer, colorBuffer] = (0,_webgpu_webgpu_buffer__WEBPACK_IMPORTED_MODULE_3__.createBuffer)(data[0], data[1]);
-            const numPoints = data[0].length / 4; // position is float32x4
-            _canvas_state_manager__WEBPACK_IMPORTED_MODULE_2__.appState.bufferMap[data[2]] = {
-                position: positionBuffer,
-                color: colorBuffer,
-                maxIntensity: data[3],
-                numPoints: numPoints,
-            };
-        }
-    });
 }
 
 
@@ -83941,10 +83951,112 @@ function createWorker(data1, data2) {
 
 /***/ }),
 
-/***/ "./src/octree.ts":
-/*!***********************!*\
-  !*** ./src/octree.ts ***!
-  \***********************/
+/***/ "./src/octree/octree-traverser.ts":
+/*!****************************************!*\
+  !*** ./src/octree/octree-traverser.ts ***!
+  \****************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   selectVisibleNodes: () => (/* binding */ selectVisibleNodes)
+/* harmony export */ });
+/* harmony import */ var _utils_loader__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../utils/loader */ "./src/utils/loader.ts");
+
+const DIRECTION = [
+    [0, 0, 0],
+    [0, 0, 1],
+    [0, 1, 0],
+    [0, 1, 1],
+    [1, 0, 0],
+    [1, 0, 1],
+    [1, 1, 0],
+    [1, 1, 1],
+];
+const canvas = document.getElementById("screen-canvas");
+canvas.width = window.innerWidth * (window.devicePixelRatio || 1);
+canvas.height = window.innerHeight * (window.devicePixelRatio || 1);
+const loaderState = {
+    cameraFocalLength: (0,_utils_loader__WEBPACK_IMPORTED_MODULE_0__.computeFocalLength)(90),
+    nodeToPrefetch: [],
+    screenWidth: canvas.width,
+    screenHeight: canvas.height,
+    fovRadian: Math.PI / 2,
+};
+/**
+ * カメラの視錐台とLODに基づいて、レンダリングすべきノードを選択する
+ *
+ * @param octreeNodes - Octreeノードの辞書
+ * @param rootKey - ルートノードのキー [level, x, y, z]
+ * @param boundingBox - バウンディングボックスの情報
+ * @param camera - カメラコントロール
+ * @param projViewMatrix - プロジェクション×ビュー行列
+ * @returns [可視ノードのキー配列, プリフェッチ対象のキー配列]
+ */
+function selectVisibleNodes(nodePages, root, centerX, centerY, centerZ, width, _scale, controls, projViewMatrix) {
+    let cameraPosition = controls.object.position.toArray();
+    loaderState.nodeToPrefetch = [];
+    function _traverseOctree(root, centerX, centerY, centerZ, width) {
+        let [level, x, y, z] = root;
+        let newLevel = level + 1;
+        let key = level + "-" + x + "-" + y + "-" + z;
+        let distance = Math.sqrt(Math.pow(Math.abs(cameraPosition[0] - centerX), 2) +
+            Math.pow(Math.abs(cameraPosition[1] - centerY), 2) +
+            Math.pow(Math.abs(cameraPosition[2] - centerZ), 2));
+        if (!_isNodeVisible([centerX, centerY, centerZ], Math.max(...width), distance, projViewMatrix, level, key, nodePages)) {
+            return [];
+        }
+        let centerXLeft = centerX - width[0] / 2;
+        let centerXRight = centerX + width[0] / 2;
+        let centerYTop = centerY + width[1] / 2;
+        let centerYBottom = centerY - width[1] / 2;
+        let centerZNear = centerZ + width[2] / 2;
+        let centerZFar = centerZ - width[2] / 2;
+        let result = [key, nodePages[key].pointCount];
+        DIRECTION.forEach((element) => {
+            let [dx, dy, dz] = element;
+            let key1 = `${newLevel}-${2 * x + dx}-${2 * y + dy}-${2 * z + dz}`;
+            if (!(key1 in nodePages && nodePages[key].pointCount > 0)) {
+                return [];
+            }
+            centerX = centerXLeft;
+            centerY = centerYBottom;
+            centerZ = centerZFar;
+            if (dx == 1) {
+                centerX = centerXRight;
+            }
+            if (dy == 1) {
+                centerY = centerYTop;
+            }
+            if (dz == 1) {
+                centerZ = centerZNear;
+            }
+            let result1 = _traverseOctree([newLevel, 2 * x + dx, 2 * y + dy, 2 * z + dz], centerX, centerY, centerZ, [width[0] / 2, width[1] / 2, width[2] / 2]);
+            result.push(...result1);
+        });
+        return result;
+    }
+    let finalPoints = _traverseOctree(root, centerX, centerY, centerZ, [
+        width[0],
+        width[1],
+        width[2],
+    ]);
+    return [finalPoints, loaderState.nodeToPrefetch];
+}
+function _isNodeVisible(_center, radius, distance, _projViewMatrix, _level, _key, _nodePages) {
+    let projectedRadius = (radius * loaderState.screenHeight) /
+        (distance * (2 * Math.tan(loaderState.fovRadian / 2.0)));
+    return Math.abs(projectedRadius) > 90;
+}
+
+
+/***/ }),
+
+/***/ "./src/octree/octree.ts":
+/*!******************************!*\
+  !*** ./src/octree/octree.ts ***!
+  \******************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -83955,7 +84067,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   Point: () => (/* binding */ Point)
 /* harmony export */ });
 /* harmony import */ var three__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! three */ "./node_modules/three/build/three.module.js");
-/* harmony import */ var _configs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./configs */ "./src/configs.ts");
+/* harmony import */ var _configs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../configs */ "./src/configs.ts");
 
 
 // Constants
@@ -84148,97 +84260,6 @@ class Octree {
 
 /***/ }),
 
-/***/ "./src/passiveloader.ts":
-/*!******************************!*\
-  !*** ./src/passiveloader.ts ***!
-  \******************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   traverseTreeWrapper: () => (/* binding */ traverseTreeWrapper)
-/* harmony export */ });
-/* harmony import */ var _utils_loader__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./utils/loader */ "./src/utils/loader.ts");
-
-const DIRECTION = [
-    [0, 0, 0],
-    [0, 0, 1],
-    [0, 1, 0],
-    [0, 1, 1],
-    [1, 0, 0],
-    [1, 0, 1],
-    [1, 1, 0],
-    [1, 1, 1],
-];
-const canvas = document.getElementById("screen-canvas");
-canvas.width = window.innerWidth * (window.devicePixelRatio || 1);
-canvas.height = window.innerHeight * (window.devicePixelRatio || 1);
-const loaderState = {
-    cameraFocalLength: (0,_utils_loader__WEBPACK_IMPORTED_MODULE_0__.computeFocalLength)(90),
-    nodeToPrefetch: [],
-    screenWidth: canvas.width,
-    screenHeight: canvas.height,
-    fovRadian: Math.PI / 2,
-};
-function traverseTreeWrapper(nodePages, root, centerX, centerY, centerZ, width, _scale, controls, projViewMatrix) {
-    let cameraPosition = controls.object.position.toArray();
-    loaderState.nodeToPrefetch = [];
-    function _traverseTree(root, centerX, centerY, centerZ, width) {
-        let [level, x, y, z] = root;
-        let newLevel = level + 1;
-        let key = level + "-" + x + "-" + y + "-" + z;
-        let distance = Math.sqrt(Math.pow(Math.abs(cameraPosition[0] - centerX), 2) +
-            Math.pow(Math.abs(cameraPosition[1] - centerY), 2) +
-            Math.pow(Math.abs(cameraPosition[2] - centerZ), 2));
-        if (!_isRendered([centerX, centerY, centerZ], Math.max(...width), distance, projViewMatrix, level, key, nodePages)) {
-            return [];
-        }
-        let centerXLeft = centerX - width[0] / 2;
-        let centerXRight = centerX + width[0] / 2;
-        let centerYTop = centerY + width[1] / 2;
-        let centerYBottom = centerY - width[1] / 2;
-        let centerZNear = centerZ + width[2] / 2;
-        let centerZFar = centerZ - width[2] / 2;
-        let result = [key, nodePages[key].pointCount];
-        DIRECTION.forEach((element) => {
-            let [dx, dy, dz] = element;
-            let key1 = `${newLevel}-${2 * x + dx}-${2 * y + dy}-${2 * z + dz}`;
-            if (!(key1 in nodePages && nodePages[key].pointCount > 0)) {
-                return [];
-            }
-            centerX = centerXLeft;
-            centerY = centerYBottom;
-            centerZ = centerZFar;
-            if (dx == 1) {
-                centerX = centerXRight;
-            }
-            if (dy == 1) {
-                centerY = centerYTop;
-            }
-            if (dz == 1) {
-                centerZ = centerZNear;
-            }
-            let result1 = _traverseTree([newLevel, 2 * x + dx, 2 * y + dy, 2 * z + dz], centerX, centerY, centerZ, [width[0] / 2, width[1] / 2, width[2] / 2]);
-            result.push(...result1);
-        });
-        return result;
-    }
-    let finalPoints = _traverseTree(root, centerX, centerY, centerZ, [
-        width[0],
-        width[1],
-        width[2],
-    ]);
-    return [finalPoints, loaderState.nodeToPrefetch];
-}
-function _isRendered(_center, radius, distance, _projViewMatrix, _level, _key, _nodePages) {
-    let projectedRadius = (radius * loaderState.screenHeight) / (distance * (2 * Math.tan(loaderState.fovRadian / 2.0)));
-    return Math.abs(projectedRadius) > 90;
-}
-
-
-/***/ }),
-
 /***/ "./src/pointcloud-initializer.ts":
 /*!***************************************!*\
   !*** ./src/pointcloud-initializer.ts ***!
@@ -84386,13 +84407,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 class RendererFactory {
-    // TODO: 共通のbindgrouplayoutがあれば実装
-    // private static bindGroupLayout: GPUBindGroupLayout | null = null;
-    // static setBindGroupLayout(layout: GPUBindGroupLayout | null) {
-    //   this.bindGroupLayout = layout;
-    // }
     static getRenderer(vectorType, device, swapChainFormat) {
-        // 既にレンダラーが存在する場合はそれを返す。
         if (!this.renderers.has(vectorType)) {
             const renderer = vectorType === "vec3"
                 ? new _vec3_renderer__WEBPACK_IMPORTED_MODULE_0__.Vec3Renderer(device, swapChainFormat)
@@ -84592,7 +84607,7 @@ class Vec4Renderer extends _base_renderer__WEBPACK_IMPORTED_MODULE_0__.BaseRende
 /***/ ((module) => {
 
 "use strict";
-module.exports = "struct VertexInput {\n    @location(0) position: vec3<f32>,\n    @location(1) color: vec3<f32>\n};\n\nstruct VertexOut {\n    @builtin(position) position: vec4<f32>,\n    @location(0) color: vec4<f32>,\n};\n\nstruct paramsUniform {\n    width_x:f32,\n    width_y:f32,\n    width_z:f32,\n    x_min: f32,\n    y_min: f32,\n    z_min: f32,\n    current_Axis: f32,\n    max_Intensity: f32\n};\n\nstruct cmapUniform {\n    colors: array<vec4<f32>, 20>\n};\n\n@group(0) @binding(0) var<uniform> MVP_Matrix: mat4x4<f32>;\n@group(0) @binding(1) var<uniform> cMap: cmapUniform;\n@group(0) @binding(2) var<uniform> params: paramsUniform;\n\nconst direction = array<vec2<f32>, 4>(\n    vec2<f32>(-1, -1),\n    vec2<f32>(1, -1),\n    vec2<f32>(-1, 1),\n    vec2<f32>(1, 1)\n);\n\nconst PI: f32 = 3.1415926535897932384626433832795;\n\nfn getCmapped(cMapIndex: i32)->vec4<f32>{\n    var cmapped = cMap.colors[cMapIndex];\n    if(cMapIndex>19){\n        cmapped = cMap.colors[19];\n    }\n    return cmapped;\n}\n\n@vertex\nfn main(in: VertexInput, @builtin(instance_index) inst_index:u32, @builtin(vertex_index) vertexIndex : u32)->VertexOut{\n    var out:VertexOut;\n    var cMapIndex:i32;\n    var level:f32 = 0.0;  // LASはlevelなし、デフォルト0\n    var radius:f32 = 3.0* pow(0.6, level);\n    radius = max(radius, 1.0);\n    var position:vec3<f32> = in.position - vec3(params.x_min, params.y_min, params.z_min) - 0.5*vec3(params.width_x, params.width_y, params.width_z);\n    var factor = in.color.x/params.max_Intensity;\n    if(params.current_Axis == 2.0){\n        cMapIndex = i32((abs(in.position.z - params.z_min)/params.width_z) *19);\n        let mappedColor = getCmapped(cMapIndex);\n        out.color = vec4(mappedColor.xyz, 1.0);\n        if(cMapIndex < 0){\n            out.color = vec4(1.0, 0.0, 0.0, 1.0);\n        }\n        out.color = vec4(out.color.x, out.color.y, out.color.z, 1.0)*factor;\n\n    }\n    else if(params.current_Axis == 1.0){\n        cMapIndex = i32(1.25*(abs(in.position.y - params.y_min)/params.width_y) *19);\n        out.color = getCmapped(cMapIndex);\n        out.color = vec4(out.color.x, out.color.y, out.color.z, 1.0)*factor;\n\n    }\n    else if(params.current_Axis == 0.0){\n        cMapIndex = i32(1.25*(abs(in.position.x - params.x_min)/params.width_x) *19);\n        out.color = getCmapped(cMapIndex);\n        out.color = vec4(out.color.x, out.color.y, out.color.z, 1.0)*factor;\n    }\n    else{\n        out.color = vec4(in.color.x/255.0, in.color.y/225.0, in.color.z/255.0, 1.0);\n    }\n\n    if(factor < 0.1){\n        factor = 0.35;\n    }\n    position = position + vec3<f32>(radius*direction[vertexIndex], 0.0);\n    out.position = MVP_Matrix* vec4<f32>(position, 1.0);\n    return out;\n}\n\n@fragment\nfn fragmentMain(in:VertexOut)->@location(0) vec4<f32>{\n    return in.color;\n}\n";
+module.exports = "struct VertexInput {\n    @location(0) position: vec3<f32>,\n    @location(1) color: vec3<f32>\n};\n\nstruct VertexOut {\n    @builtin(position) position: vec4<f32>,\n    @location(0) color: vec4<f32>,\n};\n\nstruct paramsUniform {\n    width_x: f32,\n    width_y: f32,\n    width_z: f32,\n    x_min: f32,\n    y_min: f32,\n    z_min: f32,\n    current_Axis: f32,\n    max_Intensity: f32\n};\n\nstruct cmapUniform {\n    colors: array<vec4<f32>, 20>\n};\n\n@group(0) @binding(0) var<uniform> MVP_Matrix: mat4x4<f32>;\n@group(0) @binding(1) var<uniform> cMap: cmapUniform;\n@group(0) @binding(2) var<uniform> params: paramsUniform;\n\nconst direction = array<vec2<f32>, 4>(\n    vec2<f32>(-1, -1),\n    vec2<f32>(1, -1),\n    vec2<f32>(-1, 1),\n    vec2<f32>(1, 1)\n);\n\nconst PI: f32 = 3.1415926535897932384626433832795;\n\nfn getCmapped(cMapIndex: i32) -> vec4<f32> {\n    var cmapped = cMap.colors[cMapIndex];\n    if cMapIndex > 19 {\n        cmapped = cMap.colors[19];\n    }\n    return cmapped;\n}\n\n@vertex\nfn main(in: VertexInput, @builtin(instance_index) inst_index: u32, @builtin(vertex_index) vertexIndex: u32) -> VertexOut {\n    var out: VertexOut;\n    var cMapIndex: i32;\n    var level: f32 = 0.0;  // LASはlevelなし、デフォルト0\n    var radius: f32 = 3.0 * pow(0.6, level);\n    radius = max(radius, 1.0);\n    var position: vec3<f32> = in.position - vec3(params.x_min, params.y_min, params.z_min) - 0.5 * vec3(params.width_x, params.width_y, params.width_z);\n\n    if params.current_Axis == 2.0 {\n        // Z-axis color map\n        cMapIndex = i32((abs(in.position.z - params.z_min) / params.width_z) * 19.0);\n        let mappedColor = getCmapped(cMapIndex);\n        out.color = vec4(mappedColor.xyz, 1.0);\n        if cMapIndex < 0 {\n            out.color = vec4(1.0, 0.0, 0.0, 1.0);\n        }\n    } else if params.current_Axis == 1.0 {\n        // Y-axis color map\n        cMapIndex = i32(1.25 * (abs(in.position.y - params.y_min) / params.width_y) * 19.0);\n        out.color = getCmapped(cMapIndex);\n    } else if params.current_Axis == 0.0 {\n        // X-axis color map\n        cMapIndex = i32(1.25 * (abs(in.position.x - params.x_min) / params.width_x) * 19.0);\n        out.color = getCmapped(cMapIndex);\n    } else {\n        // RGB color mode\n        out.color = vec4(in.color.x / 255.0, in.color.y / 255.0, in.color.z / 255.0, 1.0);\n    }\n\n    position = position + vec3<f32>(radius * direction[vertexIndex], 0.0);\n    out.position = MVP_Matrix * vec4<f32>(position, 1.0);\n    return out;\n}\n\n@fragment\nfn fragmentMain(in: VertexOut) -> @location(0) vec4<f32> {\n    return in.color;\n}\n";
 
 /***/ }),
 
@@ -84603,7 +84618,7 @@ module.exports = "struct VertexInput {\n    @location(0) position: vec3<f32>,\n 
 /***/ ((module) => {
 
 "use strict";
-module.exports = "struct VertexInput {\n    @location(0) position: vec4<f32>,\n    @location(1) color: vec3<f32>\n};\n\nstruct VertexOut {\n    @builtin(position) position: vec4<f32>,\n    @location(0) color: vec4<f32>,\n};\n\nstruct paramsUniform {\n    width_x:f32,\n    width_y:f32,\n    width_z:f32,\n    x_min: f32,\n    y_min: f32,\n    z_min: f32,\n    current_Axis: f32,\n    max_Intensity: f32\n};\n\nstruct cmapUniform {\n    colors: array<vec4<f32>, 20>\n};\n\n@group(0) @binding(0) var<uniform> MVP_Matrix: mat4x4<f32>;\n@group(0) @binding(1) var<uniform> cMap: cmapUniform;\n@group(0) @binding(2) var<uniform> params: paramsUniform;\n\nconst direction = array<vec2<f32>, 4>(\n    vec2<f32>(-1, -1),\n    vec2<f32>(1, -1),\n    vec2<f32>(-1, 1),\n    vec2<f32>(1, 1)\n);\n\nconst PI: f32 = 3.1415926535897932384626433832795;\n\nfn getCmapped(cMapIndex: i32)->vec4<f32>{\n    var cmapped = cMap.colors[cMapIndex];\n    if(cMapIndex>19){\n        cmapped = cMap.colors[19];\n    }\n    return cmapped;\n}\n\n@vertex\nfn main(in: VertexInput, @builtin(instance_index) inst_index:u32, @builtin(vertex_index) vertexIndex : u32)->VertexOut{\n    var out:VertexOut;\n    var cMapIndex:i32;\n    var level:f32 = in.position.w;\n    var radius:f32 = 3.0* pow(0.6, level);\n    radius = max(radius, 1.0);\n    var position:vec3<f32> = in.position.xyz - vec3(params.x_min, params.y_min, params.z_min) - 0.5*vec3(params.width_x, params.width_y, params.width_z);\n    var factor = in.color.x/params.max_Intensity;\n    if(params.current_Axis == 2.0){\n        cMapIndex = i32((abs(in.position.z - params.z_min)/params.width_z) *19);\n        let mappedColor = getCmapped(cMapIndex);\n        out.color = vec4(mappedColor.xyz, 1.0);\n        if(cMapIndex < 0){\n            out.color = vec4(1.0, 0.0, 0.0, 1.0);\n        }\n        out.color = vec4(out.color.x, out.color.y, out.color.z, 1.0)*factor;\n\n    }\n    else if(params.current_Axis == 1.0){\n        cMapIndex = i32(1.25*(abs(in.position.y - params.y_min)/params.width_y) *19);\n        out.color = getCmapped(cMapIndex);\n        out.color = vec4(out.color.x, out.color.y, out.color.z, 1.0)*factor;\n\n    }\n    else if(params.current_Axis == 0.0){\n        cMapIndex = i32(1.25*(abs(in.position.x - params.x_min)/params.width_x) *19);\n        out.color = getCmapped(cMapIndex);\n        out.color = vec4(out.color.x, out.color.y, out.color.z, 1.0)*factor;\n    }\n    else{\n        out.color = vec4(in.color.x/255.0, in.color.y/225.0, in.color.z/255.0, 1.0);\n    }\n\n    if(factor < 0.1){\n        factor = 0.35;\n    }\n    position = position + vec3<f32>(radius*direction[vertexIndex], 0.0);\n    out.position = MVP_Matrix* vec4<f32>(position, 1.0);\n    return out;\n}\n\n@fragment\nfn fragmentMain(in:VertexOut)->@location(0) vec4<f32>{\n    return in.color;\n}\n";
+module.exports = "struct VertexInput {\n    @location(0) position: vec4<f32>,\n    @location(1) color: vec3<f32>\n};\n\nstruct VertexOut {\n    @builtin(position) position: vec4<f32>,\n    @location(0) color: vec4<f32>,\n};\n\nstruct paramsUniform {\n    width_x: f32,\n    width_y: f32,\n    width_z: f32,\n    x_min: f32,\n    y_min: f32,\n    z_min: f32,\n    current_Axis: f32,\n    max_Intensity: f32\n};\n\nstruct cmapUniform {\n    colors: array<vec4<f32>, 20>\n};\n\n@group(0) @binding(0) var<uniform> MVP_Matrix: mat4x4<f32>;\n@group(0) @binding(1) var<uniform> cMap: cmapUniform;\n@group(0) @binding(2) var<uniform> params: paramsUniform;\n\nconst direction = array<vec2<f32>, 4>(\n    vec2<f32>(-1, -1),\n    vec2<f32>(1, -1),\n    vec2<f32>(-1, 1),\n    vec2<f32>(1, 1)\n);\n\nconst PI: f32 = 3.1415926535897932384626433832795;\n\nfn getCmapped(cMapIndex: i32) -> vec4<f32> {\n    var cmapped = cMap.colors[cMapIndex];\n    if cMapIndex > 19 {\n        cmapped = cMap.colors[19];\n    }\n    return cmapped;\n}\n\n@vertex\nfn main(in: VertexInput, @builtin(instance_index) inst_index: u32, @builtin(vertex_index) vertexIndex: u32) -> VertexOut {\n    var out: VertexOut;\n    var cMapIndex: i32;\n    var level: f32 = in.position.w;\n    var radius: f32 = 3.0 * pow(0.6, level);\n    radius = max(radius, 1.0);\n    var position: vec3<f32> = in.position.xyz - vec3(params.x_min, params.y_min, params.z_min) - 0.5 * vec3(params.width_x, params.width_y, params.width_z);\n    var factor = in.color.x / params.max_Intensity;\n    if params.current_Axis == 2.0 {\n        cMapIndex = i32((abs(in.position.z - params.z_min) / params.width_z) * 19);\n        let mappedColor = getCmapped(cMapIndex);\n        out.color = vec4(mappedColor.xyz, 1.0);\n        if cMapIndex < 0 {\n            out.color = vec4(1.0, 0.0, 0.0, 1.0);\n        }\n        out.color = vec4(out.color.x, out.color.y, out.color.z, 1.0) * factor;\n    } else if params.current_Axis == 1.0 {\n        cMapIndex = i32(1.25 * (abs(in.position.y - params.y_min) / params.width_y) * 19);\n        out.color = getCmapped(cMapIndex);\n        out.color = vec4(out.color.x, out.color.y, out.color.z, 1.0) * factor;\n    } else if params.current_Axis == 0.0 {\n        cMapIndex = i32(1.25 * (abs(in.position.x - params.x_min) / params.width_x) * 19);\n        out.color = getCmapped(cMapIndex);\n        out.color = vec4(out.color.x, out.color.y, out.color.z, 1.0) * factor;\n    } else {\n        out.color = vec4(in.color.x / 255.0, in.color.y / 255.0, in.color.z / 255.0, 1.0);\n    }\n\n    if factor < 0.1 {\n        factor = 0.35;\n    }\n    position = position + vec3<f32>(radius * direction[vertexIndex], 0.0);\n    out.position = MVP_Matrix * vec4<f32>(position, 1.0);\n    return out;\n}\n\n@fragment\nfn fragmentMain(in: VertexOut) -> @location(0) vec4<f32> {\n    return in.color;\n}\n";
 
 /***/ }),
 
@@ -84761,25 +84776,12 @@ async function _updatePersCache(updatedData) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   computeFocalLength: () => (/* binding */ computeFocalLength),
-/* harmony export */   computeSSE: () => (/* binding */ computeSSE)
+/* harmony export */   computeFocalLength: () => (/* binding */ computeFocalLength)
 /* harmony export */ });
-class Loader {
-    constructor(url) {
-        this.url = url;
-    }
-    async loadHeader() {
-        // loadheader
-        let loaderByteSize = 549;
-    }
-}
 function computeFocalLength(angle) {
-    let canvas = document.getElementById("screen-canvas");
-    let angleRadian = (angle * Math.PI) / 180;
+    const canvas = document.getElementById("screen-canvas");
+    const angleRadian = (angle * Math.PI) / 180;
     return canvas.clientHeight * 0.5 * (1 / Math.tan(angleRadian / 2));
-}
-function computeSSE(width, distance, focalLength) {
-    return (width / distance) * focalLength;
 }
 
 
@@ -85114,6 +85116,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   setGPUDevice: () => (/* binding */ setGPUDevice)
 /* harmony export */ });
 /* harmony import */ var _canvas_state_manager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../canvas/state-manager */ "./src/canvas/state-manager.ts");
+/* harmony import */ var _helper__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../helper */ "./src/helper.ts");
+
 
 let gpuDevice = null;
 function setGPUDevice(device) {
@@ -85152,7 +85156,7 @@ function _createPositionBuffer(elementCount) {
 function _createColorBuffer(elementCount) {
     const byteSize = elementCount * 4; // float32 × 4 bytes
     const buffer = gpuDevice.createBuffer({
-        label: 'Point Cloud Color Buffer',
+        label: "Point Cloud Color Buffer",
         size: byteSize,
         usage: GPUBufferUsage.VERTEX,
         mappedAtCreation: true,
@@ -85163,9 +85167,9 @@ function createLASBuffer() {
     const lasData = _canvas_state_manager__WEBPACK_IMPORTED_MODULE_0__.appState.lasData;
     // RGBAからRGBに変換（Aチャンネルを除去）
     let colors;
+    const pointCount = lasData.points.positions.length / 3; // vec3なので÷3
     if (lasData.points.colors) {
         const rgbaColors = lasData.points.colors;
-        const pointCount = lasData.points.positions.length / 3;
         colors = new Float32Array(pointCount * 3);
         for (let i = 0; i < pointCount; i++) {
             colors[i * 3] = rgbaColors[i * 4]; // R
@@ -85176,7 +85180,7 @@ function createLASBuffer() {
     }
     else {
         // カラーがない場合は白色で埋める
-        colors = new Float32Array(lasData.points.positions.length).fill(1.0);
+        colors = new Float32Array(pointCount * 3).fill(1.0);
     }
     const [positionBuffer, colorBuffer] = createBuffer(lasData.points.positions, colors);
     // 最大強度を計算（スプレッド演算子を使わない）
@@ -85192,7 +85196,11 @@ function createLASBuffer() {
         position: positionBuffer,
         color: colorBuffer,
         maxIntensity: maxIntensity,
+        numPoints: pointCount,
+        vectorType: "vec3",
     };
+    // LAS用統計情報を表示
+    (0,_helper__WEBPACK_IMPORTED_MODULE_1__.updateHtmlUIForLAS)(pointCount);
 }
 
 
@@ -85510,7 +85518,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _canvas_state_manager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./canvas/state-manager */ "./src/canvas/state-manager.ts");
 /* harmony import */ var _webgpu_webgpu_buffer__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./webgpu/webgpu-buffer */ "./src/webgpu/webgpu-buffer.ts");
 /* harmony import */ var _webgpu_webgpu_renderer__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./webgpu/webgpu-renderer */ "./src/webgpu/webgpu-renderer.ts");
-/* harmony import */ var _loaders_pointcloud_fetcher__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./loaders/pointcloud-fetcher */ "./src/loaders/pointcloud-fetcher.ts");
+/* harmony import */ var _loaders_copc_node_loader__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./loaders/copc-node-loader */ "./src/loaders/copc-node-loader.ts");
 /* harmony import */ var _configs__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./configs */ "./src/configs.ts");
 /* harmony import */ var _styles_main_css__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./styles/main.css */ "./src/styles/main.css");
 
@@ -85529,10 +85537,10 @@ async function _initializeCache() {
 async function _initializeFileData() {
     // const files = _files_loader();
     // await initializePointCloud(files);
-    // const file = _las_file_loader();
-    // await initializeLAS(file);
-    const { filename, vectorType } = _copc_file_loader();
-    await (0,_pointcloud_initializer__WEBPACK_IMPORTED_MODULE_2__.initializeCOPC)(filename);
+    const { filename, vectorType } = _las_file_loader();
+    await (0,_pointcloud_initializer__WEBPACK_IMPORTED_MODULE_2__.initializeLAS)(filename);
+    // const { filename, vectorType } = _copc_file_loader();
+    // await initializeCOPC(filename);
     return { filename, vectorType };
 }
 function _files_loader() {
@@ -85547,7 +85555,8 @@ function _copc_file_loader() {
 }
 function _las_file_loader() {
     const filename = _configs__WEBPACK_IMPORTED_MODULE_7__.LAS_FILES;
-    return filename;
+    const vectorType = "vec3";
+    return { filename, vectorType };
 }
 // ============================================================================
 // Initialization
@@ -85560,7 +85569,7 @@ async function _render(file, vectorType) {
     }
     else {
         const projView = renderer.getProjView();
-        await (0,_loaders_pointcloud_fetcher__WEBPACK_IMPORTED_MODULE_6__.retrivePoints)(file.split("/").pop().split(".")[0], projView);
+        await (0,_loaders_copc_node_loader__WEBPACK_IMPORTED_MODULE_6__.loadCOPCNodes)(file.split("/").pop().split(".")[0], projView);
     }
     renderer.start();
 }

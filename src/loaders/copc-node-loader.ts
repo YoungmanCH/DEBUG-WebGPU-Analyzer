@@ -1,19 +1,19 @@
-import { traverseTreeWrapper } from "../passiveloader";
+import { selectVisibleNodes } from "../octree/octree-traverser";
 import { writeFile } from "../utils/file-manager";
 import { appState } from "../canvas/state-manager";
 import { createBuffer } from "../webgpu/webgpu-buffer";
 import {
-  filterKeyCountMap,
-  filterKeyCountMapPrefetch,
-} from "../cache/buffer-cache-coordinator";
+  resolveNodeCache,
+  resolvePrefetchNodes,
+} from "../cache/node-cache-manager";
 import { createWorker, MAX_WORKERS } from "./worker-manager";
 
-export async function retrivePoints(
+export async function loadCOPCNodes(
   filename: string,
   projectionViewMatrix: any,
   controllerSignal: AbortSignal | null = null
 ): Promise<void> {
-  let [keyCountMap, nodeToPrefetch] = traverseTreeWrapper(
+  let [keyCountMap, nodeToPrefetch] = selectVisibleNodes(
     appState.nodePages,
     [0, 0, 0, 0],
     appState.centerX,
@@ -25,8 +25,8 @@ export async function retrivePoints(
     projectionViewMatrix
   );
 
-  keyCountMap = await filterKeyCountMap(keyCountMap, filename);
-  appState.prefetchKeyCountMap = await filterKeyCountMapPrefetch(
+  keyCountMap = await resolveNodeCache(keyCountMap, filename);
+  appState.prefetchKeyCountMap = await resolvePrefetchNodes(
     nodeToPrefetch,
     filename
   );
@@ -43,7 +43,7 @@ export async function retrivePoints(
       doneCount++;
       m += 2;
       if (doneCount % MAX_WORKERS == 0 || doneCount == totalNodes) {
-        await syncThread(filename);
+        await _syncThread(filename);
         if (controllerSignal && controllerSignal.aborted) {
           return;
         }
@@ -52,7 +52,7 @@ export async function retrivePoints(
   }
 }
 
-async function syncThread(filename: string): Promise<void> {
+async function _syncThread(filename: string): Promise<void> {
   await Promise.all(appState.promises).then(async (response) => {
     for (let i = 0, _length = response.length; i < _length; i++) {
       let data = response[i];

@@ -1,4 +1,4 @@
-import { computeFocalLength } from "./utils/loader";
+import { computeFocalLength } from "../utils/loader";
 
 const DIRECTION = [
   [0, 0, 0],
@@ -23,7 +23,17 @@ const loaderState = {
   fovRadian: Math.PI / 2,
 };
 
-export function traverseTreeWrapper(
+/**
+ * カメラの視錐台とLODに基づいて、レンダリングすべきノードを選択する
+ *
+ * @param octreeNodes - Octreeノードの辞書
+ * @param rootKey - ルートノードのキー [level, x, y, z]
+ * @param boundingBox - バウンディングボックスの情報
+ * @param camera - カメラコントロール
+ * @param projViewMatrix - プロジェクション×ビュー行列
+ * @returns [可視ノードのキー配列, プリフェッチ対象のキー配列]
+ */
+export function selectVisibleNodes(
   nodePages,
   root,
   centerX,
@@ -37,7 +47,7 @@ export function traverseTreeWrapper(
   let cameraPosition = controls.object.position.toArray();
   loaderState.nodeToPrefetch = [];
 
-  function _traverseTree(root, centerX, centerY, centerZ, width) {
+  function _traverseOctree(root, centerX, centerY, centerZ, width) {
     let [level, x, y, z] = root;
     let newLevel = level + 1;
     let key = level + "-" + x + "-" + y + "-" + z;
@@ -47,7 +57,7 @@ export function traverseTreeWrapper(
         Math.pow(Math.abs(cameraPosition[2] - centerZ), 2)
     );
     if (
-      !_isRendered(
+      !_isNodeVisible(
         [centerX, centerY, centerZ],
         Math.max(...width),
         distance,
@@ -86,7 +96,7 @@ export function traverseTreeWrapper(
       if (dz == 1) {
         centerZ = centerZNear;
       }
-      let result1 = _traverseTree(
+      let result1 = _traverseOctree(
         [newLevel, 2 * x + dx, 2 * y + dy, 2 * z + dz],
         centerX,
         centerY,
@@ -98,7 +108,7 @@ export function traverseTreeWrapper(
     return result;
   }
 
-  let finalPoints = _traverseTree(root, centerX, centerY, centerZ, [
+  let finalPoints = _traverseOctree(root, centerX, centerY, centerZ, [
     width[0],
     width[1],
     width[2],
@@ -106,7 +116,7 @@ export function traverseTreeWrapper(
   return [finalPoints, loaderState.nodeToPrefetch];
 }
 
-function _isRendered(
+function _isNodeVisible(
   _center,
   radius,
   distance,
@@ -116,6 +126,7 @@ function _isRendered(
   _nodePages
 ) {
   let projectedRadius =
-    (radius * loaderState.screenHeight) / (distance * (2 * Math.tan(loaderState.fovRadian / 2.0)));
+    (radius * loaderState.screenHeight) /
+    (distance * (2 * Math.tan(loaderState.fovRadian / 2.0)));
   return Math.abs(projectedRadius) > 90;
 }
