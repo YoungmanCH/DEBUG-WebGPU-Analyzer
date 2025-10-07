@@ -8,6 +8,7 @@ dist
 
 /research-memo
 /dataset
+/sample-dataset
 
 # Playwright
 /test-results/
