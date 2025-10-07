@@ -84386,13 +84386,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 class RendererFactory {
-    // TODO: 共通のbindgrouplayoutがあれば実装
-    // private static bindGroupLayout: GPUBindGroupLayout | null = null;
-    // static setBindGroupLayout(layout: GPUBindGroupLayout | null) {
-    //   this.bindGroupLayout = layout;
-    // }
     static getRenderer(vectorType, device, swapChainFormat) {
-        // 既にレンダラーが存在する場合はそれを返す。
         if (!this.renderers.has(vectorType)) {
             const renderer = vectorType === "vec3"
                 ? new _vec3_renderer__WEBPACK_IMPORTED_MODULE_0__.Vec3Renderer(device, swapChainFormat)
@@ -85152,7 +85146,7 @@ function _createPositionBuffer(elementCount) {
 function _createColorBuffer(elementCount) {
     const byteSize = elementCount * 4; // float32 × 4 bytes
     const buffer = gpuDevice.createBuffer({
-        label: 'Point Cloud Color Buffer',
+        label: "Point Cloud Color Buffer",
         size: byteSize,
         usage: GPUBufferUsage.VERTEX,
         mappedAtCreation: true,
@@ -85163,9 +85157,9 @@ function createLASBuffer() {
     const lasData = _canvas_state_manager__WEBPACK_IMPORTED_MODULE_0__.appState.lasData;
     // RGBAからRGBに変換（Aチャンネルを除去）
     let colors;
+    const pointCount = lasData.points.positions.length / 3; // vec3なので÷3
     if (lasData.points.colors) {
         const rgbaColors = lasData.points.colors;
-        const pointCount = lasData.points.positions.length / 3;
         colors = new Float32Array(pointCount * 3);
         for (let i = 0; i < pointCount; i++) {
             colors[i * 3] = rgbaColors[i * 4]; // R
@@ -85176,7 +85170,7 @@ function createLASBuffer() {
     }
     else {
         // カラーがない場合は白色で埋める
-        colors = new Float32Array(lasData.points.positions.length).fill(1.0);
+        colors = new Float32Array(pointCount * 3).fill(1.0);
     }
     const [positionBuffer, colorBuffer] = createBuffer(lasData.points.positions, colors);
     // 最大強度を計算（スプレッド演算子を使わない）
@@ -85192,6 +85186,8 @@ function createLASBuffer() {
         position: positionBuffer,
         color: colorBuffer,
         maxIntensity: maxIntensity,
+        numPoints: pointCount,
+        vectorType: "vec3",
     };
 }
 
@@ -85529,10 +85525,10 @@ async function _initializeCache() {
 async function _initializeFileData() {
     // const files = _files_loader();
     // await initializePointCloud(files);
-    // const file = _las_file_loader();
-    // await initializeLAS(file);
-    const { filename, vectorType } = _copc_file_loader();
-    await (0,_pointcloud_initializer__WEBPACK_IMPORTED_MODULE_2__.initializeCOPC)(filename);
+    const { filename, vectorType } = _las_file_loader();
+    await (0,_pointcloud_initializer__WEBPACK_IMPORTED_MODULE_2__.initializeLAS)(filename);
+    // const { filename, vectorType } = _copc_file_loader();
+    // await initializeCOPC(filename);
     return { filename, vectorType };
 }
 function _files_loader() {
@@ -85547,7 +85543,8 @@ function _copc_file_loader() {
 }
 function _las_file_loader() {
     const filename = _configs__WEBPACK_IMPORTED_MODULE_7__.LAS_FILES;
-    return filename;
+    const vectorType = "vec3";
+    return { filename, vectorType };
 }
 // ============================================================================
 // Initialization

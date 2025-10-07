@@ -85,7 +85,7 @@ export class WebGPURenderer {
     swapChainFormat: GPUTextureFormat
   ): void {
     const vec3Renderer = RendererFactory.getRenderer(
-      this.vectorType as "vec3",
+      this.vectorType,
       device,
       swapChainFormat
     ) as Vec3Renderer;
@@ -98,7 +98,7 @@ export class WebGPURenderer {
     swapChainFormat: GPUTextureFormat
   ): void {
     const vec4Renderer = RendererFactory.getRenderer(
-      this.vectorType as "vec4",
+      this.vectorType,
       device,
       swapChainFormat
     ) as Vec4Renderer;

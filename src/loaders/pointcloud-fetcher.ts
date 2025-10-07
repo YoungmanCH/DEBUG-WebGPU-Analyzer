@@ -43,7 +43,7 @@ export async function retrivePoints(
       doneCount++;
       m += 2;
       if (doneCount % MAX_WORKERS == 0 || doneCount == totalNodes) {
-        await syncThread(filename);
+        await _syncThread(filename);
         if (controllerSignal && controllerSignal.aborted) {
           return;
         }
@@ -52,7 +52,7 @@ export async function retrivePoints(
   }
 }
 
-async function syncThread(filename: string): Promise<void> {
+async function _syncThread(filename: string): Promise<void> {
   await Promise.all(appState.promises).then(async (response) => {
     for (let i = 0, _length = response.length; i < _length; i++) {
       let data = response[i];

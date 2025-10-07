@@ -34,7 +34,7 @@ export function createBuffer(
 }
 
 function _createPositionBuffer(elementCount: number): GPUBuffer {
-  const byteSize = elementCount * 4;  // float32 × 4 bytes
+  const byteSize = elementCount * 4; // float32 × 4 bytes
 
   const buffer: GPUBuffer = gpuDevice.createBuffer({
     // TODO: label経由でrendererで各点毎の要素数を取得しているが、文字列表記で返すのはカスなので修正。
@@ -48,10 +48,10 @@ function _createPositionBuffer(elementCount: number): GPUBuffer {
 }
 
 function _createColorBuffer(elementCount: number): GPUBuffer {
-  const byteSize = elementCount * 4;  // float32 × 4 bytes
+  const byteSize = elementCount * 4; // float32 × 4 bytes
 
   const buffer: GPUBuffer = gpuDevice.createBuffer({
-    label: 'Point Cloud Color Buffer',
+    label: "Point Cloud Color Buffer",
     size: byteSize,
     usage: GPUBufferUsage.VERTEX,
     mappedAtCreation: true,
@@ -65,9 +65,10 @@ export function createLASBuffer() {
 
   // RGBAからRGBに変換（Aチャンネルを除去）
   let colors: Float32Array;
+  const pointCount = lasData.points.positions.length / 3; // vec3なので÷3
+
   if (lasData.points.colors) {
     const rgbaColors = lasData.points.colors;
-    const pointCount = lasData.points.positions.length / 3;
     colors = new Float32Array(pointCount * 3);
 
     for (let i = 0; i < pointCount; i++) {
@@ -78,7 +79,7 @@ export function createLASBuffer() {
     }
   } else {
     // カラーがない場合は白色で埋める
-    colors = new Float32Array(lasData.points.positions.length).fill(1.0);
+    colors = new Float32Array(pointCount * 3).fill(1.0);
   }
 
   const [positionBuffer, colorBuffer] = createBuffer(
@@ -100,6 +101,7 @@ export function createLASBuffer() {
     position: positionBuffer,
     color: colorBuffer,
     maxIntensity: maxIntensity,
+    numPoints: pointCount,
+    vectorType: "vec3",
   };
-
 }

@@ -53149,8 +53149,8 @@ function _copc_file_loader() {
     return filename;
 }
 // const files = _files_loader();
-const FILENAME = _copc_file_loader();
-// const FILENAME = _las_file_loader();
+// const FILENAME = _copc_file_loader();
+const FILENAME = _las_file_loader();
 // Worker state
 const workerState = {
     color: new three__WEBPACK_IMPORTED_MODULE_1__.Color(),
