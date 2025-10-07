@@ -5,8 +5,7 @@ import { appState } from "../canvas/state-manager";
 import { updateHtmlUI } from "../helper";
 import { doesExist, throttledUpdatePersCache } from "../utils/file-manager";
 
-// TODO: COPC専用の形になっているので、後ほど追加修正が必要。
-export async function filterKeyCountMapPrefetch(keyMap: any, filename: string) {
+export async function resolvePrefetchNodes(keyMap: any, filename: string) {
   let afterCheckingCache = [];
 
   for (let i = 0; i < keyMap.length; i += 2) {
@@ -40,11 +39,11 @@ export async function filterKeyCountMapPrefetch(keyMap: any, filename: string) {
     }
   }
   throttledUpdatePersCache(_mapIntoJSON(lruCache));
-  
+
   return filteredElements;
 }
 
-export async function filterKeyCountMap(keyMap: any, filename: string) {
+export async function resolveNodeCache(keyMap: any, filename: string) {
   let nodeNotFoundInBuffer = 0;
   let nodeFoundInBuffer = 0;
   let nodeFoundInLRU = 0;

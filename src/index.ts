@@ -10,7 +10,7 @@ import { createLASBuffer } from "./webgpu/webgpu-buffer";
 
 import { WebGPURenderer } from "./webgpu/webgpu-renderer";
 import { VectorType } from "./renderers/exports";
-import { retrivePoints } from "./loaders/pointcloud-fetcher";
+import { loadCOPCNodes } from "./loaders/copc-node-loader";
 import { POINT_CLOUD_FILES, COPC_FILE, LAS_FILES } from "./configs";
 
 import "./styles/main.css";
@@ -66,7 +66,7 @@ async function _render(file: string, vectorType: VectorType): Promise<void> {
     createLASBuffer();
   } else {
     const projView = renderer.getProjView();
-    await retrivePoints(file.split("/").pop().split(".")[0], projView);
+    await loadCOPCNodes(file.split("/").pop().split(".")[0], projView);
   }
 
   renderer.start();

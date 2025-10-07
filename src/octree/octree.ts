@@ -1,7 +1,6 @@
 import * as THREE from "three";
-import { LEAF_CAPACITY, BUFFER_CAPACITY } from "./configs";
+import { LEAF_CAPACITY, BUFFER_CAPACITY } from "../configs";
 
-// Constants
 const maxBoundary = {
   x: 8,
   y: 8,
@@ -18,7 +17,7 @@ const colors = [
   new THREE.Color(0xf1a784), // illusion
 ];
 
-export class Point {
+export class OctreePoint {
   index: number;
   x: number;
   y: number;
@@ -41,7 +40,7 @@ export class Point {
   }
 }
 
-export class Box {
+export class OctreeBox {
   label: string;
   x: number;
   y: number;
@@ -117,7 +116,7 @@ export class Box {
 }
 
 export class Octree {
-  box: Box;
+  box: OctreeBox;
   minNE: any;
   minNW: any;
   minSW: any;
@@ -132,7 +131,7 @@ export class Octree {
   level: number;
   parent: any;
 
-  constructor(box: Box, level = 0) {
+  constructor(box: OctreeBox, level = 0) {
     this.box = box;
     this.minNE = null;
     this.minNW = null;
@@ -165,7 +164,7 @@ export class Octree {
     let z = this.box.z;
     let newWidth = this.box.width * 0.5;
     let level = this.level + 1;
-    let maxNE_Box = new Box(
+    let maxNE_Box = new OctreeBox(
       "maxNE",
       x + newWidth * 0.5,
       y + 0.5 * newWidth,
@@ -173,7 +172,7 @@ export class Octree {
       newWidth,
       level
     );
-    let maxNW_Box = new Box(
+    let maxNW_Box = new OctreeBox(
       "maxNW",
       x - newWidth * 0.5,
       y + 0.5 * newWidth,
@@ -181,7 +180,7 @@ export class Octree {
       newWidth,
       level
     );
-    let maxSW_Box = new Box(
+    let maxSW_Box = new OctreeBox(
       "maxSW",
       x - newWidth * 0.5,
       y - 0.5 * newWidth,
@@ -189,7 +188,7 @@ export class Octree {
       newWidth,
       level
     );
-    let maxSE_Box = new Box(
+    let maxSE_Box = new OctreeBox(
       "maxSE",
       x + newWidth * 0.5,
       y - 0.5 * newWidth,
@@ -198,7 +197,7 @@ export class Octree {
       level
     );
 
-    let minNE_Box = new Box(
+    let minNE_Box = new OctreeBox(
       "minNE",
       x + newWidth * 0.5,
       y + 0.5 * newWidth,
@@ -206,7 +205,7 @@ export class Octree {
       newWidth,
       level
     );
-    let minNW_Box = new Box(
+    let minNW_Box = new OctreeBox(
       "minNW",
       x - newWidth * 0.5,
       y + 0.5 * newWidth,
@@ -214,7 +213,7 @@ export class Octree {
       newWidth,
       level
     );
-    let minSW_Box = new Box(
+    let minSW_Box = new OctreeBox(
       "minSW",
       x - newWidth * 0.5,
       y - 0.5 * newWidth,
@@ -222,7 +221,7 @@ export class Octree {
       newWidth,
       level
     );
-    let minSE_Box = new Box(
+    let minSE_Box = new OctreeBox(
       "minSE",
       x + newWidth * 0.5,
       y - 0.5 * newWidth,

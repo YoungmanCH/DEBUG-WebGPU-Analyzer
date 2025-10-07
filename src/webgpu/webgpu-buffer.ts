@@ -1,5 +1,6 @@
 import { appState } from "../canvas/state-manager";
 import { LASParams } from "../loaders/las-loader";
+import { updateHtmlUIForLAS } from "../helper";
 
 let gpuDevice: GPUDevice | null = null;
 
@@ -104,4 +105,7 @@ export function createLASBuffer() {
     numPoints: pointCount,
     vectorType: "vec3",
   };
+
+  // LAS用統計情報を表示
+  updateHtmlUIForLAS(pointCount);
 }

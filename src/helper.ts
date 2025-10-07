@@ -1,8 +1,8 @@
-import * as Octree from "./octree";
+import * as Octree from "./octree/octree";
 
 export function fillArray(points, count, width, height, depth) {
   for (let i = 0; i < count; i++) {
-    let point = new Octree.Point(
+    let point = new Octree.OctreePoint(
       i,
       Math.floor(Math.random() * width) - width / 2,
       Math.floor(Math.random() * height) - height / 2,
@@ -44,8 +44,16 @@ export function fillMidNodes(tree) {
   return passingValue;
 }
 
-export function updateHtmlUI(nodeNotFoundInBuffer, nodeFoundInBuffer, nodeFoundInLRU, nodeFoundInPersistent, nodeToFetch) {
-  let statsText = `Among total nodes needed ${nodeFoundInBuffer + nodeNotFoundInBuffer}\b
+export function updateHtmlUI(
+  nodeNotFoundInBuffer,
+  nodeFoundInBuffer,
+  nodeFoundInLRU,
+  nodeFoundInPersistent,
+  nodeToFetch
+) {
+  let statsText = `Among total nodes needed ${
+    nodeFoundInBuffer + nodeNotFoundInBuffer
+  }\b
                     nodes found in GPU Buffer: ${nodeFoundInBuffer} \b
                     ----------------------------------------------------
                     nodes need to be loaded ${nodeNotFoundInBuffer}\b
@@ -53,5 +61,16 @@ export function updateHtmlUI(nodeNotFoundInBuffer, nodeFoundInBuffer, nodeFoundI
                     nodes found in LRU Cache: ${nodeFoundInLRU} \b
                     nodes found in Persistent memory: ${nodeFoundInPersistent} \b
                     nodes that were fetched from host: ${nodeToFetch}    `;
+  document.getElementById("stats-div").innerText = statsText;
+}
+
+export function updateHtmlUIForLAS(pointCount: number, filename?: string) {
+  let statsText = `LAS File Loaded
+                    Total Points: ${pointCount.toLocaleString()}
+                    ----------------------------------------------------
+                    Status: All points loaded into GPU Buffer
+
+                    Format: LAS (flat structure, no LOD)
+                    Cache: Direct load (no dynamic caching)`;
   document.getElementById("stats-div").innerText = statsText;
 }
