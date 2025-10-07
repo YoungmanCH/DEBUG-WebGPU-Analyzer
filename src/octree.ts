@@ -1,4 +1,5 @@
 import * as THREE from "three";
+import { LEAF_CAPACITY, BUFFER_CAPACITY } from "./configs";
 
 // Constants
 const maxBoundary = {
@@ -48,7 +49,14 @@ export class Box {
   width: number;
   mesh: THREE.Mesh;
 
-  constructor(label: string, x: number, y: number, z: number, width: number, level: number) {
+  constructor(
+    label: string,
+    x: number,
+    y: number,
+    z: number,
+    width: number,
+    level: number
+  ) {
     this.label = label;
     this.x = x;
     this.y = y;
@@ -251,12 +259,12 @@ export class Octree {
       // );
       return false;
     }
-    if (this.points.length < (tree as any).leafCapacity && !this.isDivided) {
+    if (this.points.length < LEAF_CAPACITY && !this.isDivided) {
       // this.updateRepresentativeNode();
       this.points.push(point.index);
       // this.sortNode();
       return true;
-    } else if (this.buffer.length < (tree as any).bufferCapacity && !this.isDivided) {
+    } else if (this.buffer.length < BUFFER_CAPACITY && !this.isDivided) {
       this.buffer.push(point.index);
       return true;
     } else {

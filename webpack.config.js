@@ -35,11 +35,24 @@ module.exports = {
         test: /\.css$/,
         use: ["style-loader", "css-loader"],
       },
+      {
+        test: /\.wgsl$/,
+        type: "asset/source",
+      },
     ],
   },
   devServer: {
     port: 8080,
-    static: path.resolve(__dirname, "docs"),
+    static: [
+      {
+        directory: path.resolve(__dirname, "docs"),
+        publicPath: "/",
+      },
+      {
+        directory: path.resolve(__dirname, "dataset"),
+        publicPath: "/dataset",
+      },
+    ],
     hot: true,
   },
   mode: "development",
