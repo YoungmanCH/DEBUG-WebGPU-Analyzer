@@ -1,23 +1,22 @@
 
-/node_modules
+node_modules/
 package-lock.json
 .DS_Store
 dist
 .env
 .vscode
 
-/research-memo
-/dataset
-/sample-dataset
+research-memo/
+dataset
+sample-dataset/
 
 # Playwright
-/test-results/
-/playwright-report/
-/playwright/.cache/
+test-results/
+playwright-report/
+playwright/.cache/
 
 # Visual regression test artifacts
-/tests/visual/
-/tests/visual/
-/tests/visual/dataset/**/*.las
-dataset/**/*.laz
+tests/visual/
+tests/visual/
+
 dataset/
