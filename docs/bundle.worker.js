@@ -53000,6 +53000,35 @@ if ( typeof window !== 'undefined' ) {
 
 /***/ }),
 
+/***/ "./src/configs.ts":
+/*!************************!*\
+  !*** ./src/configs.ts ***!
+  \************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   BUFFER_CAPACITY: () => (/* binding */ BUFFER_CAPACITY),
+/* harmony export */   COPC_FILE: () => (/* binding */ COPC_FILE),
+/* harmony export */   LAS_FILES: () => (/* binding */ LAS_FILES),
+/* harmony export */   LEAF_CAPACITY: () => (/* binding */ LEAF_CAPACITY),
+/* harmony export */   POINT_CLOUD_FILES: () => (/* binding */ POINT_CLOUD_FILES),
+/* harmony export */   P_CACHE: () => (/* binding */ P_CACHE),
+/* harmony export */   P_CACHE_CAPACITY: () => (/* binding */ P_CACHE_CAPACITY)
+/* harmony export */ });
+// Environment configuration
+const POINT_CLOUD_FILES = "[\"dataset/las/09KD9817.las\"]";
+const COPC_FILE = "https://media.githubusercontent.com/media/sceneserver/copc/main/naarden-vesting.copc.laz";
+const LAS_FILES = "dataset/las/09KD9817.las";
+const P_CACHE = "cache-holder";
+const P_CACHE_CAPACITY = "150";
+const LEAF_CAPACITY = "16";
+const BUFFER_CAPACITY = "16";
+
+
+/***/ }),
+
 /***/ "?3dd1":
 /*!********************!*\
   !*** fs (ignored) ***!
@@ -53101,20 +53130,22 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var copc__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! copc */ "./node_modules/copc/lib/index.js");
 /* harmony import */ var copc__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(copc__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var three__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! three */ "./node_modules/three/build/three.module.js");
+/* harmony import */ var _configs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../configs */ "./src/configs.ts");
+
 
 
 // TODO: 後でファイルを読み込みを修正する。
 function _files_loader() {
-    const files = "[\"dataset/las/09KD9817.las\"]";
+    const files = _configs__WEBPACK_IMPORTED_MODULE_2__.POINT_CLOUD_FILES;
     const parsed_files = JSON.parse(files);
     return parsed_files;
 }
 function _las_file_loader() {
-    const filename = "dataset/las/09KD9817.las";
+    const filename = _configs__WEBPACK_IMPORTED_MODULE_2__.LAS_FILES;
     return filename;
 }
 function _copc_file_loader() {
-    const filename = "https://media.githubusercontent.com/media/sceneserver/copc/main/naarden-vesting.copc.laz";
+    const filename = _configs__WEBPACK_IMPORTED_MODULE_2__.COPC_FILE;
     return filename;
 }
 // const files = _files_loader();
@@ -53175,7 +53206,12 @@ async function _loadData(copc, myRoot, pointCount) {
     postMessage([
         workerState.positions,
         workerState.colors,
-        [workerState.minZ, workerState.maxZ, workerState.maxIntensity, workerState.level]
+        [
+            workerState.minZ,
+            workerState.maxZ,
+            workerState.maxIntensity,
+            workerState.level,
+        ],
     ]);
 }
 function _readPoints(id, getters) {

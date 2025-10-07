@@ -83267,6 +83267,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   putInCache: () => (/* binding */ putInCache)
 /* harmony export */ });
 /* harmony import */ var _utils_file_manager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../utils/file-manager */ "./src/utils/file-manager.ts");
+/* harmony import */ var _configs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../configs */ "./src/configs.ts");
+
 
 function getInCache(cache, key) {
     if (!cache.has(key))
@@ -83278,7 +83280,7 @@ function getInCache(cache, key) {
 }
 function putInCache(cache, key, value) {
     cache.delete(key);
-    if (cache.size == "150") {
+    if (cache.size == _configs__WEBPACK_IMPORTED_MODULE_1__.P_CACHE_CAPACITY) {
         cache.delete(cache.keys().next().value);
     }
     else {
@@ -83287,7 +83289,7 @@ function putInCache(cache, key, value) {
     return cache;
 }
 async function pCache() {
-    const [, content] = await (0,_utils_file_manager__WEBPACK_IMPORTED_MODULE_0__.doesExist)("cache-holder");
+    const [, content] = await (0,_utils_file_manager__WEBPACK_IMPORTED_MODULE_0__.doesExist)(_configs__WEBPACK_IMPORTED_MODULE_1__.P_CACHE);
     const cache = _sortObjectIntoMap(content);
     return cache;
 }
@@ -83478,6 +83480,35 @@ async function setupViewport(canvas) {
     _state_manager__WEBPACK_IMPORTED_MODULE_3__.appState.controls.update();
     _state_manager__WEBPACK_IMPORTED_MODULE_3__.appState.proj = gl_matrix__WEBPACK_IMPORTED_MODULE_2__.perspective(gl_matrix__WEBPACK_IMPORTED_MODULE_2__.create(), (50 * Math.PI) / 180.0, canvas.width / canvas.height, 0.1, 8000);
 }
+
+
+/***/ }),
+
+/***/ "./src/configs.ts":
+/*!************************!*\
+  !*** ./src/configs.ts ***!
+  \************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   BUFFER_CAPACITY: () => (/* binding */ BUFFER_CAPACITY),
+/* harmony export */   COPC_FILE: () => (/* binding */ COPC_FILE),
+/* harmony export */   LAS_FILES: () => (/* binding */ LAS_FILES),
+/* harmony export */   LEAF_CAPACITY: () => (/* binding */ LEAF_CAPACITY),
+/* harmony export */   POINT_CLOUD_FILES: () => (/* binding */ POINT_CLOUD_FILES),
+/* harmony export */   P_CACHE: () => (/* binding */ P_CACHE),
+/* harmony export */   P_CACHE_CAPACITY: () => (/* binding */ P_CACHE_CAPACITY)
+/* harmony export */ });
+// Environment configuration
+const POINT_CLOUD_FILES = "[\"dataset/las/09KD9817.las\"]";
+const COPC_FILE = "https://media.githubusercontent.com/media/sceneserver/copc/main/naarden-vesting.copc.laz";
+const LAS_FILES = "dataset/las/09KD9817.las";
+const P_CACHE = "cache-holder";
+const P_CACHE_CAPACITY = "150";
+const LEAF_CAPACITY = "16";
+const BUFFER_CAPACITY = "16";
 
 
 /***/ }),
@@ -83680,9 +83711,9 @@ class LASFileLoader extends _base_loader__WEBPACK_IMPORTED_MODULE_0__.BaseFileLo
 
 /***/ }),
 
-/***/ "./src/loaders/point-cloud-loader.ts":
+/***/ "./src/loaders/pointcloud-fetcher.ts":
 /*!*******************************************!*\
-  !*** ./src/loaders/point-cloud-loader.ts ***!
+  !*** ./src/loaders/pointcloud-fetcher.ts ***!
   \*******************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
@@ -83924,6 +83955,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   Point: () => (/* binding */ Point)
 /* harmony export */ });
 /* harmony import */ var three__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! three */ "./node_modules/three/build/three.module.js");
+/* harmony import */ var _configs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./configs */ "./src/configs.ts");
+
 
 // Constants
 const maxBoundary = {
@@ -84069,13 +84102,13 @@ class Octree {
             // );
             return false;
         }
-        if (this.points.length < tree.leafCapacity && !this.isDivided) {
+        if (this.points.length < _configs__WEBPACK_IMPORTED_MODULE_1__.LEAF_CAPACITY && !this.isDivided) {
             // this.updateRepresentativeNode();
             this.points.push(point.index);
             // this.sortNode();
             return true;
         }
-        else if (this.buffer.length < tree.bufferCapacity && !this.isDivided) {
+        else if (this.buffer.length < _configs__WEBPACK_IMPORTED_MODULE_1__.BUFFER_CAPACITY && !this.isDivided) {
             this.buffer.push(point.index);
             return true;
         }
@@ -84644,9 +84677,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   writeFile: () => (/* binding */ writeFile)
 /* harmony export */ });
 /* harmony import */ var _webgpu_canvas_event__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../webgpu/canvas-event */ "./src/webgpu/canvas-event.ts");
+/* harmony import */ var _configs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../configs */ "./src/configs.ts");
+
 
 async function createPersistentMetaCache() {
-    const fileToCheck = `${"cache-holder"}.json`;
+    const fileToCheck = `${_configs__WEBPACK_IMPORTED_MODULE_1__.P_CACHE}.json`;
     const [alreadyExist] = await doesExist(fileToCheck);
     if (!alreadyExist) {
         const root = await navigator.storage.getDirectory();
@@ -84703,7 +84738,7 @@ async function _readBlobAsJSON(blob) {
     });
 }
 async function _updatePersCache(updatedData) {
-    const fileToCheck = `${"cache-holder"}.json`;
+    const fileToCheck = `${_configs__WEBPACK_IMPORTED_MODULE_1__.P_CACHE}.json`;
     const root = await navigator.storage.getDirectory();
     const fileHandle = await root.getFileHandle(fileToCheck, {
         create: true,
@@ -85191,7 +85226,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 class WebGPURenderer {
-    constructor(canvasId, vectorType = "vec4") {
+    constructor(vectorType) {
         this._render = () => {
             this.stats.update();
             this.uniformer.updateMVP();
@@ -85214,7 +85249,7 @@ class WebGPURenderer {
             device.queue.submit([encoder.finish()]);
             requestAnimationFrame(() => this._render());
         };
-        this.context = new _context__WEBPACK_IMPORTED_MODULE_1__.WebGPUContext(canvasId);
+        this.context = new _context__WEBPACK_IMPORTED_MODULE_1__.WebGPUContext();
         this.vectorType = vectorType;
     }
     async initialize() {
@@ -85475,8 +85510,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _canvas_state_manager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./canvas/state-manager */ "./src/canvas/state-manager.ts");
 /* harmony import */ var _webgpu_webgpu_buffer__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./webgpu/webgpu-buffer */ "./src/webgpu/webgpu-buffer.ts");
 /* harmony import */ var _webgpu_webgpu_renderer__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./webgpu/webgpu-renderer */ "./src/webgpu/webgpu-renderer.ts");
-/* harmony import */ var _loaders_point_cloud_loader__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./loaders/point-cloud-loader */ "./src/loaders/point-cloud-loader.ts");
-/* harmony import */ var _styles_main_css__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./styles/main.css */ "./src/styles/main.css");
+/* harmony import */ var _loaders_pointcloud_fetcher__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./loaders/pointcloud-fetcher */ "./src/loaders/pointcloud-fetcher.ts");
+/* harmony import */ var _configs__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./configs */ "./src/configs.ts");
+/* harmony import */ var _styles_main_css__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./styles/main.css */ "./src/styles/main.css");
 
 
 
@@ -85485,45 +85521,53 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
+async function _initializeCache() {
+    await (0,_utils_file_manager__WEBPACK_IMPORTED_MODULE_0__.createPersistentMetaCache)();
+    _canvas_state_manager__WEBPACK_IMPORTED_MODULE_3__.appState.persCache = await (0,_cache_persistent_cache__WEBPACK_IMPORTED_MODULE_1__.pCache)();
+}
+async function _initializeFileData() {
+    // const files = _files_loader();
+    // await initializePointCloud(files);
+    // const file = _las_file_loader();
+    // await initializeLAS(file);
+    const { filename, vectorType } = _copc_file_loader();
+    await (0,_pointcloud_initializer__WEBPACK_IMPORTED_MODULE_2__.initializeCOPC)(filename);
+    return { filename, vectorType };
+}
 function _files_loader() {
-    const files = "[\"dataset/las/09KD9817.las\"]";
+    const files = _configs__WEBPACK_IMPORTED_MODULE_7__.POINT_CLOUD_FILES;
     const parsed_files = JSON.parse(files);
     return parsed_files;
 }
 function _copc_file_loader() {
-    const filename = "https://media.githubusercontent.com/media/sceneserver/copc/main/naarden-vesting.copc.laz";
-    return filename;
+    const filename = _configs__WEBPACK_IMPORTED_MODULE_7__.COPC_FILE;
+    const vectorType = "vec4";
+    return { filename, vectorType };
 }
 function _las_file_loader() {
-    const filename = "dataset/las/09KD9817.las";
+    const filename = _configs__WEBPACK_IMPORTED_MODULE_7__.LAS_FILES;
     return filename;
 }
 // ============================================================================
 // Initialization
 // ============================================================================
-async function _render(file) {
-    const vectorType = "vec4";
-    const renderer = new _webgpu_webgpu_renderer__WEBPACK_IMPORTED_MODULE_5__.WebGPURenderer("screen-canvas", vectorType);
+async function _render(file, vectorType) {
+    const renderer = new _webgpu_webgpu_renderer__WEBPACK_IMPORTED_MODULE_5__.WebGPURenderer(vectorType);
     await renderer.initialize();
-    const projView = renderer.getProjView();
     if (_canvas_state_manager__WEBPACK_IMPORTED_MODULE_3__.appState.lasData) {
         (0,_webgpu_webgpu_buffer__WEBPACK_IMPORTED_MODULE_4__.createLASBuffer)();
     }
     else {
-        await (0,_loaders_point_cloud_loader__WEBPACK_IMPORTED_MODULE_6__.retrivePoints)(file.split("/").pop().split(".")[0], projView);
+        const projView = renderer.getProjView();
+        await (0,_loaders_pointcloud_fetcher__WEBPACK_IMPORTED_MODULE_6__.retrivePoints)(file.split("/").pop().split(".")[0], projView);
     }
     renderer.start();
 }
 (async () => {
-    await (0,_utils_file_manager__WEBPACK_IMPORTED_MODULE_0__.createPersistentMetaCache)();
-    _canvas_state_manager__WEBPACK_IMPORTED_MODULE_3__.appState.persCache = await (0,_cache_persistent_cache__WEBPACK_IMPORTED_MODULE_1__.pCache)();
-    // const files = _files_loader();
-    // await initializePointCloud(files);
-    // const file = _las_file_loader();
-    // await initializeLAS(file);
-    const file = _copc_file_loader();
-    await (0,_pointcloud_initializer__WEBPACK_IMPORTED_MODULE_2__.initializeCOPC)(file);
-    await _render(file);
+    await _initializeCache();
+    const { filename, vectorType } = await _initializeFileData();
+    await _render(filename, vectorType);
 })();
 
 })();

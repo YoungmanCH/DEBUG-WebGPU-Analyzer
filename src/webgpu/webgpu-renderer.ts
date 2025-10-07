@@ -23,8 +23,8 @@ export class WebGPURenderer {
   private eventManager: CanvasEventManager;
   private stats: any;
 
-  constructor(canvasId: string, vectorType: VectorType = "vec4") {
-    this.context = new WebGPUContext(canvasId);
+  constructor(vectorType: VectorType) {
+    this.context = new WebGPUContext();
     this.vectorType = vectorType;
   }
 

@@ -1,22 +1,23 @@
 import { Copc } from "copc";
 import * as THREE from "three";
+import { POINT_CLOUD_FILES, LAS_FILES, COPC_FILE } from "../configs";
 
 // TODO: 後でファイルを読み込みを修正する。
 function _files_loader(): any {
-  const files: string = (process.env as any).POINT_CLOUD_FILES;
+  const files: string = POINT_CLOUD_FILES;
   const parsed_files: string[] = JSON.parse(files);
 
   return parsed_files;
 }
 
 function _las_file_loader(): string {
-  const filename = (process.env as any).LAS_FILES;
+  const filename = LAS_FILES;
 
   return filename;
 }
 
 function _copc_file_loader(): string {
-  const filename = (process.env as any).COPC_FILE;
+  const filename = COPC_FILE;
 
   return filename;
 }
@@ -90,7 +91,12 @@ async function _loadData(copc, myRoot, pointCount) {
   postMessage([
     workerState.positions,
     workerState.colors,
-    [workerState.minZ, workerState.maxZ, workerState.maxIntensity, workerState.level]
+    [
+      workerState.minZ,
+      workerState.maxZ,
+      workerState.maxIntensity,
+      workerState.level,
+    ],
   ]);
 }
 
@@ -112,7 +118,11 @@ function _readPoints(id, getters) {
   }
 
   workerState.color.setRGB(returnPoint[3], returnPoint[4], returnPoint[5]);
-  workerState.colors.push(workerState.color.r, workerState.color.g, workerState.color.b);
+  workerState.colors.push(
+    workerState.color.r,
+    workerState.color.g,
+    workerState.color.b
+  );
 }
 
 function _getXYZRGB(index, getters) {

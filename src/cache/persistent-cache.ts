@@ -1,4 +1,5 @@
 import { doesExist } from "../utils/file-manager";
+import { P_CACHE, P_CACHE_CAPACITY } from "../configs";
 
 export function getInCache(cache, key) {
   if (!cache.has(key)) return cache;
@@ -10,7 +11,7 @@ export function getInCache(cache, key) {
 
 export function putInCache(cache, key, value) {
   cache.delete(key);
-  if (cache.size == (process.env as any).p_cache_capacity) {
+  if (cache.size == P_CACHE_CAPACITY) {
     cache.delete(cache.keys().next().value);
   } else {
     cache.set(key, value);
@@ -19,7 +20,7 @@ export function putInCache(cache, key, value) {
 }
 
 export async function pCache() {
-  const [, content]: any = await doesExist((process.env as any).p_cache);
+  const [, content]: any = await doesExist(P_CACHE);
   const cache = _sortObjectIntoMap(content);
   return cache;
 }

@@ -1,7 +1,8 @@
 import { CanvasEventManager } from "../webgpu/canvas-event";
+import { P_CACHE } from "../configs";
 
 export async function createPersistentMetaCache() {
-  const fileToCheck = `${(process.env as any).p_cache}.json`;
+  const fileToCheck = `${P_CACHE}.json`;
   const [alreadyExist]: any = await doesExist(fileToCheck);
   if (!alreadyExist) {
     const root = await navigator.storage.getDirectory();
@@ -62,7 +63,7 @@ async function _readBlobAsJSON(blob) {
 }
 
 async function _updatePersCache(updatedData) {
-  const fileToCheck = `${(process.env as any).p_cache}.json`;
+  const fileToCheck = `${P_CACHE}.json`;
   const root = await navigator.storage.getDirectory();
   const fileHandle = await root.getFileHandle(fileToCheck, {
     create: true,

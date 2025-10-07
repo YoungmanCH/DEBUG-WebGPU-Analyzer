@@ -10,25 +10,45 @@ import { createLASBuffer } from "./webgpu/webgpu-buffer";
 
 import { WebGPURenderer } from "./webgpu/webgpu-renderer";
 import { VectorType } from "./renderers/exports";
-import { retrivePoints } from "./loaders/point-cloud-loader";
+import { retrivePoints } from "./loaders/pointcloud-fetcher";
+import { POINT_CLOUD_FILES, COPC_FILE, LAS_FILES } from "./configs";
 
 import "./styles/main.css";
 
+async function _initializeCache() {
+  await createPersistentMetaCache();
+  appState.persCache = await pCache();
+}
+
+async function _initializeFileData() {
+  // const files = _files_loader();
+  // await initializePointCloud(files);
+
+  // const file = _las_file_loader();
+  // await initializeLAS(file);
+
+  const { filename, vectorType } = _copc_file_loader();
+  await initializeCOPC(filename);
+
+  return { filename, vectorType };
+}
+
 function _files_loader(): any {
-  const files: string = (process.env as any).POINT_CLOUD_FILES;
+  const files: string = POINT_CLOUD_FILES;
   const parsed_files: string[] = JSON.parse(files);
 
   return parsed_files;
 }
 
-function _copc_file_loader(): string {
-  const filename = (process.env as any).COPC_FILE;
+function _copc_file_loader() {
+  const filename = COPC_FILE;
+  const vectorType: VectorType = "vec4";
 
-  return filename;
+  return { filename, vectorType };
 }
 
 function _las_file_loader(): string {
-  const filename = (process.env as any).LAS_FILES;
+  const filename = LAS_FILES;
 
   return filename;
 }
@@ -37,20 +57,15 @@ function _las_file_loader(): string {
 // Initialization
 // ============================================================================
 
-
-
-
-async function _render(file: string): Promise<void> {
-  const vectorType: VectorType = "vec4";
-  const renderer = new WebGPURenderer("screen-canvas", vectorType);
-
+async function _render(file: string, vectorType: VectorType): Promise<void> {
+  const renderer = new WebGPURenderer(vectorType);
   await renderer.initialize();
 
-  const projView = renderer.getProjView();
-
+  
   if (appState.lasData) {
     createLASBuffer();
   } else {
+    const projView = renderer.getProjView();
     await retrivePoints(file.split("/").pop().split(".")[0], projView);
   }
 
@@ -58,17 +73,7 @@ async function _render(file: string): Promise<void> {
 }
 
 (async () => {
-  await createPersistentMetaCache();
-  appState.persCache = await pCache();
-
-  // const files = _files_loader();
-  // await initializePointCloud(files);
-
-  // const file = _las_file_loader();
-  // await initializeLAS(file);
-
-  const file = _copc_file_loader();
-  await initializeCOPC(file);
-
-  await _render(file);
+  await _initializeCache();
+  const { filename, vectorType } = await _initializeFileData();
+  await _render(filename, vectorType);
 })();
