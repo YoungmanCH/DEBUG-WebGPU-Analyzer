@@ -16,6 +16,6 @@ dist
 /playwright/.cache/
 
 # Visual regression test artifacts
-/tests/visual/snapshots/*/diffs/
-/tests/visual/snapshots/*-actual.png
-/tests/visual/snapshots/*-diff.png
+/tests/visual/
+/tests/visual/
+/tests/visual/
