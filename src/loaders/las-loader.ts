@@ -1,8 +1,10 @@
-import { BaseFileLoader } from "./base-loader";
 import { LASLoader } from "@loaders.gl/las";
 import { load } from "@loaders.gl/core";
 
-export interface LASHeader {
+import { VectorType } from "../renderers/exports";
+import { BaseFileLoader } from "./base-loader";
+
+interface LASHeader {
   version: string;
   pointFormat: number;
   pointCount: number;
@@ -12,7 +14,7 @@ export interface LASHeader {
   max: [number, number, number];
 }
 
-export interface LASPointData {
+interface LASPointData {
   positions: Float32Array; // [x, y, z, x, y, z, ...]
   colors?: Float32Array; // [r, g, b, r, g, b, ...]
   intensities?: Uint16Array;
@@ -26,7 +28,7 @@ export interface LASParams {
     min: [number, number, number];
     max: [number, number, number];
   };
-  vectorType: string; // "vec3" or "vec4"
+  vectorType: VectorType;
 }
 
 export class LASFileLoader extends BaseFileLoader<LASParams> {
@@ -53,7 +55,7 @@ export class LASFileLoader extends BaseFileLoader<LASParams> {
       header,
       points,
       boundingBox,
-      vectorType
+      vectorType,
     };
   }
 

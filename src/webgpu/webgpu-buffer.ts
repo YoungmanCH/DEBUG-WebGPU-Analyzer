@@ -1,6 +1,7 @@
 import { appState } from "../canvas/state-manager";
-import { LASParams } from "../loaders/las-loader";
-import { updateHtmlUIForLAS } from "../helper";
+import { LASParams, XYZParams } from "../loaders/exports";
+
+import { updateHtmlUIForLAS, updateHtmlUIForXYZ } from "../helper";
 
 let gpuDevice: GPUDevice | null = null;
 
@@ -76,11 +77,10 @@ export function createLASBuffer() {
       colors[i * 3] = rgbaColors[i * 4]; // R
       colors[i * 3 + 1] = rgbaColors[i * 4 + 1]; // G
       colors[i * 3 + 2] = rgbaColors[i * 4 + 2]; // B
-      // A (rgbaColors[i * 4 + 3]) は無視
     }
   } else {
     // カラーがない場合は白色で埋める
-    colors = new Float32Array(pointCount * 3).fill(1.0);
+    colors = new Float32Array(pointCount * 3).fill(255);
   }
 
   const [positionBuffer, colorBuffer] = createBuffer(
@@ -109,3 +109,36 @@ export function createLASBuffer() {
   // LAS用統計情報を表示
   updateHtmlUIForLAS(pointCount);
 }
+
+export function createXYZBuffer() {
+  const xyzData = appState.xyzData as XYZParams;
+  const points = xyzData.points;
+
+  // XYZからRGBに変換（XYZは既にRGB形式なのでそのまま）
+  let colors: Float32Array;
+  const pointCount = xyzData.points.positions.length / 3; // vec3なので÷3
+
+  if (points.colors) {
+    colors = points.colors;
+  } else {
+    // カラーがない場合は白色で埋める（シェーダーで255で割るため255にする）
+    colors = new Float32Array(pointCount * 3).fill(255);
+  }
+
+  const [positionBuffer, colorBuffer] = createBuffer(
+    points.positions,
+    colors,
+  );
+
+  appState.bufferMap["xyz-main"] = {
+    position: positionBuffer,
+    color: colorBuffer,
+    maxIntensity: 0, // XYZファイルにはIntensityがない
+    numPoints: pointCount,
+    vectorType: "vec3",
+  };
+
+  // XYZ用統計情報を表示
+  updateHtmlUIForXYZ(pointCount);
+}
+

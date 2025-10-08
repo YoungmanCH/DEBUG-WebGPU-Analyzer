@@ -1,17 +1,12 @@
 import { createPersistentMetaCache } from "./utils/file-manager";
 import { pCache } from "./cache/persistent-cache";
-import {
-  initializePointCloud,
-  initializeCOPC,
-  initializeLAS,
-} from "./pointcloud-initializer";
+import { initializePointCloud } from "./pointcloud-initializer";
 import { appState } from "./canvas/state-manager";
-import { createLASBuffer } from "./webgpu/webgpu-buffer";
-
+import { createLASBuffer, createXYZBuffer } from "./webgpu/webgpu-buffer";
 import { WebGPURenderer } from "./webgpu/webgpu-renderer";
 import { VectorType } from "./renderers/exports";
 import { loadCOPCNodes } from "./loaders/copc-node-loader";
-import { POINT_CLOUD_FILES, COPC_FILE, LAS_FILES } from "./configs";
+import { POINT_CLOUD_FILES, COPC_FILE, LAS_FILES, XYZ_FILES } from "./configs";
 
 import "./styles/main.css";
 
@@ -21,14 +16,11 @@ async function _initializeCache() {
 }
 
 async function _initializeFileData() {
-  // const files = _files_loader();
-  // await initializePointCloud(files);
-
-  const { filename, vectorType } = _las_file_loader();
-  await initializeLAS(filename);
-
   // const { filename, vectorType } = _copc_file_loader();
-  // await initializeCOPC(filename);
+  // const { filename, vectorType } = _las_file_loader();
+  const { filename, vectorType } = _xyz_file_loader();
+
+  await initializePointCloud(filename);
 
   return { filename, vectorType };
 }
@@ -54,6 +46,12 @@ function _las_file_loader() {
   return { filename, vectorType };
 }
 
+function _xyz_file_loader() {
+  const filename = XYZ_FILES;
+  const vectorType: VectorType = "vec3";
+  return { filename, vectorType };
+}
+
 // ============================================================================
 // Initialization
 // ============================================================================
@@ -64,6 +62,8 @@ async function _render(file: string, vectorType: VectorType): Promise<void> {
 
   if (appState.lasData) {
     createLASBuffer();
+  } else if (appState.xyzData) {
+    createXYZBuffer();
   } else {
     const projView = renderer.getProjView();
     await loadCOPCNodes(file.split("/").pop().split(".")[0], projView);

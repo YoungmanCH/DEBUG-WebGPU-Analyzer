@@ -1,10 +1,18 @@
 import { COPCFileLoader, COPCParams } from "./copc-loader";
 import { LASFileLoader, LASParams } from "./las-loader";
+import { XYZFileLoader, XYZParams } from "./xyz-loader";
 // import { LAZFileLoader, LAZParams } from "../loaders/laz-loader";
 
-export type extensionType = "copc" | "las" | "laz" | "tif" | "xyz" | "unknown";
+type extensionType =
+  | "copc"
+  | "las"
+  | "laz"
+  | "tif"
+  | "xyz"
+  | "txt"
+  | "unknown";
 
-export type PointCloudData = COPCParams | LASParams;
+type PointCloudData = COPCParams | LASParams | XYZParams;
 // export type PointCloudData = COPCParams | LASParams | LAZParams;
 
 export class PointCloudLoader {
@@ -45,8 +53,12 @@ export class PointCloudLoader {
           console.log(`TIF format not yet supported: ${filename}`);
           break;
         case "xyz":
+          const xyzLoader = new XYZFileLoader(filename);
+          data = await xyzLoader.loadFile();
+          break;
+        case "txt":
           // TODO: update
-          console.log(`XYZ format not yet supported: ${filename}`);
+          console.log(`TXT format not yet supported: ${filename}`);
           break;
         default:
           console.warn(`Unknown file format for: ${filename}`);
@@ -74,8 +86,10 @@ export class PointCloudLoader {
       return "tif";
     } else if (lowerFilename.endsWith(".xyz")) {
       return "xyz";
+    } else if (lowerFilename.endsWith(".txt")) {
+      return "txt";
+    } else {
+      return "unknown";
     }
-
-    return "unknown";
   }
 }

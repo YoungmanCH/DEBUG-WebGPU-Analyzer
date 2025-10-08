@@ -1,7 +1,6 @@
 import * as THREE from "three";
 
-import { COPCParams } from "../loaders/copc-loader";
-import { LASParams } from "../loaders/las-loader";
+import { COPCParams, LASParams, XYZParams } from "../loaders/exports";
 
 export const appState = {
   bufferMap: {},
@@ -18,6 +17,9 @@ export const appState = {
 
   // LAS data
   lasData: null,
+
+  // XYZ data
+  xyzData: null,
 
   // Bounding box
   xMin: 0,
@@ -45,8 +47,6 @@ export const appState = {
   promises: [],
   clock: new THREE.Clock(),
 };
-
-
 
 export function updateCOPCState(copcData: COPCParams) {
   // Initialize COPC state
@@ -100,7 +100,6 @@ export function updateCOPCState(copcData: COPCParams) {
   appState.pagesString = JSON.stringify(copcData.hierarchy.pages);
 }
 
-
 export function updateLASState(lasData: LASParams) {
   // スケールファクターを設定（正規化）
   appState.scaleFactor = [1.0, 1.0, 1.0];
@@ -148,4 +147,47 @@ export function updateLASState(lasData: LASParams) {
 
   // LASデータを一時保存（WebGPU初期化後にバッファ作成）
   appState.lasData = lasData;
+}
+
+export function updateXYZState(xyzData: XYZParams) {
+  appState.scaleFactor = [1.0, 1.0, 1.0];
+
+  [
+    appState.xMin,
+    appState.yMin,
+    appState.zMin,
+    appState.xMax,
+    appState.yMax,
+    appState.zMax,
+  ] = [...xyzData.boundingBox.min, ...xyzData.boundingBox.max];
+
+  appState.xMin *= appState.scaleFactor[0];
+  appState.xMax *= appState.scaleFactor[0];
+  appState.yMin *= appState.scaleFactor[1];
+  appState.yMax *= appState.scaleFactor[1];
+  appState.zMin *= appState.scaleFactor[2];
+  appState.zMax *= appState.scaleFactor[2];
+
+  appState.widthX = Math.abs(appState.xMax - appState.xMin);
+  appState.widthY = Math.abs(appState.yMax - appState.yMin);
+  appState.widthZ = Math.abs(appState.zMax - appState.zMin);
+
+  appState.params = [
+    appState.widthX,
+    appState.widthY,
+    appState.widthZ,
+    appState.xMin,
+    appState.yMin,
+    appState.zMin,
+  ];
+
+  appState.centerX =
+    (appState.xMin + appState.xMax) / 2 - appState.xMin - 0.5 * appState.widthX;
+  appState.centerY =
+    (appState.yMin + appState.yMax) / 2 - appState.yMin - 0.5 * appState.widthY;
+  appState.centerZ =
+    (appState.zMin + appState.zMax) / 2 - appState.zMin - 0.5 * appState.widthZ;
+
+  // XYZデータを一時保存（WebGPU初期化後にバッファ作成）
+  appState.xyzData = xyzData;
 }
