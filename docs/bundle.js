@@ -83315,7 +83315,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   appState: () => (/* binding */ appState),
 /* harmony export */   updateCOPCState: () => (/* binding */ updateCOPCState),
-/* harmony export */   updateLASState: () => (/* binding */ updateLASState)
+/* harmony export */   updateLASState: () => (/* binding */ updateLASState),
+/* harmony export */   updateXYZState: () => (/* binding */ updateXYZState)
 /* harmony export */ });
 /* harmony import */ var three__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! three */ "./node_modules/three/build/three.module.js");
 
@@ -83332,6 +83333,8 @@ const appState = {
     copcString: null,
     // LAS data
     lasData: null,
+    // XYZ data
+    xyzData: null,
     // Bounding box
     xMin: 0,
     yMin: 0,
@@ -83443,6 +83446,42 @@ function updateLASState(lasData) {
     // LASデータを一時保存（WebGPU初期化後にバッファ作成）
     appState.lasData = lasData;
 }
+function updateXYZState(xyzData) {
+    appState.scaleFactor = [1.0, 1.0, 1.0];
+    [
+        appState.xMin,
+        appState.yMin,
+        appState.zMin,
+        appState.xMax,
+        appState.yMax,
+        appState.zMax,
+    ] = [...xyzData.boundingBox.min, ...xyzData.boundingBox.max];
+    appState.xMin *= appState.scaleFactor[0];
+    appState.xMax *= appState.scaleFactor[0];
+    appState.yMin *= appState.scaleFactor[1];
+    appState.yMax *= appState.scaleFactor[1];
+    appState.zMin *= appState.scaleFactor[2];
+    appState.zMax *= appState.scaleFactor[2];
+    appState.widthX = Math.abs(appState.xMax - appState.xMin);
+    appState.widthY = Math.abs(appState.yMax - appState.yMin);
+    appState.widthZ = Math.abs(appState.zMax - appState.zMin);
+    appState.params = [
+        appState.widthX,
+        appState.widthY,
+        appState.widthZ,
+        appState.xMin,
+        appState.yMin,
+        appState.zMin,
+    ];
+    appState.centerX =
+        (appState.xMin + appState.xMax) / 2 - appState.xMin - 0.5 * appState.widthX;
+    appState.centerY =
+        (appState.yMin + appState.yMax) / 2 - appState.yMin - 0.5 * appState.widthY;
+    appState.centerZ =
+        (appState.zMin + appState.zMax) / 2 - appState.zMin - 0.5 * appState.widthZ;
+    // XYZデータを一時保存（WebGPU初期化後にバッファ作成）
+    appState.xyzData = xyzData;
+}
 
 
 /***/ }),
@@ -83498,12 +83537,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   LEAF_CAPACITY: () => (/* binding */ LEAF_CAPACITY),
 /* harmony export */   POINT_CLOUD_FILES: () => (/* binding */ POINT_CLOUD_FILES),
 /* harmony export */   P_CACHE: () => (/* binding */ P_CACHE),
-/* harmony export */   P_CACHE_CAPACITY: () => (/* binding */ P_CACHE_CAPACITY)
+/* harmony export */   P_CACHE_CAPACITY: () => (/* binding */ P_CACHE_CAPACITY),
+/* harmony export */   XYZ_FILES: () => (/* binding */ XYZ_FILES)
 /* harmony export */ });
 // Environment configuration
 const POINT_CLOUD_FILES = "[\"dataset/las/09KD9817.las\"]";
 const COPC_FILE = "https://media.githubusercontent.com/media/sceneserver/copc/main/naarden-vesting.copc.laz";
 const LAS_FILES = "dataset/las/09KD9817.las";
+const XYZ_FILES = "dataset/xyz/A1_20220512.xyz";
 const P_CACHE = "cache-holder";
 const P_CACHE_CAPACITY = "150";
 const LEAF_CAPACITY = "16";
@@ -83524,13 +83565,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   fillArray: () => (/* binding */ fillArray),
 /* harmony export */   fillMidNodes: () => (/* binding */ fillMidNodes),
 /* harmony export */   updateHtmlUI: () => (/* binding */ updateHtmlUI),
-/* harmony export */   updateHtmlUIForLAS: () => (/* binding */ updateHtmlUIForLAS)
+/* harmony export */   updateHtmlUIForLAS: () => (/* binding */ updateHtmlUIForLAS),
+/* harmony export */   updateHtmlUIForXYZ: () => (/* binding */ updateHtmlUIForXYZ)
 /* harmony export */ });
 /* harmony import */ var _octree_octree__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./octree/octree */ "./src/octree/octree.ts");
 
 function fillArray(points, count, width, height, depth) {
     for (let i = 0; i < count; i++) {
-        let point = new _octree_octree__WEBPACK_IMPORTED_MODULE_0__.Point(i, Math.floor(Math.random() * width) - width / 2, Math.floor(Math.random() * height) - height / 2, Math.floor(Math.random() * depth) - depth / 2);
+        let point = new _octree_octree__WEBPACK_IMPORTED_MODULE_0__.OctreePoint(i, Math.floor(Math.random() * width) - width / 2, Math.floor(Math.random() * height) - height / 2, Math.floor(Math.random() * depth) - depth / 2);
         points.push(point);
     }
 }
@@ -83582,6 +83624,16 @@ function updateHtmlUIForLAS(pointCount, filename) {
                     Status: All points loaded into GPU Buffer
 
                     Format: LAS (flat structure, no LOD)
+                    Cache: Direct load (no dynamic caching)`;
+    document.getElementById("stats-div").innerText = statsText;
+}
+function updateHtmlUIForXYZ(pointCount) {
+    let statsText = `XYZ File Loaded
+                    Total Points: ${pointCount.toLocaleString()}
+                    ----------------------------------------------------
+                    Status: All points loaded into GPU Buffer
+
+                    Format: XYZ (text-based, flat structure)
                     Cache: Direct load (no dynamic caching)`;
     document.getElementById("stats-div").innerText = statsText;
 }
@@ -83736,15 +83788,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   LASFileLoader: () => (/* binding */ LASFileLoader)
 /* harmony export */ });
-/* harmony import */ var _base_loader__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./base-loader */ "./src/loaders/base-loader.ts");
-/* harmony import */ var _loaders_gl_las__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @loaders.gl/las */ "./node_modules/@loaders.gl/las/dist/index.js");
-/* harmony import */ var _loaders_gl_core__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @loaders.gl/core */ "./node_modules/@loaders.gl/core/dist/lib/api/load.js");
+/* harmony import */ var _loaders_gl_las__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @loaders.gl/las */ "./node_modules/@loaders.gl/las/dist/index.js");
+/* harmony import */ var _loaders_gl_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @loaders.gl/core */ "./node_modules/@loaders.gl/core/dist/lib/api/load.js");
+/* harmony import */ var _base_loader__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./base-loader */ "./src/loaders/base-loader.ts");
 
 
 
-class LASFileLoader extends _base_loader__WEBPACK_IMPORTED_MODULE_0__.BaseFileLoader {
+class LASFileLoader extends _base_loader__WEBPACK_IMPORTED_MODULE_2__.BaseFileLoader {
     async loadFile() {
-        const lasData = await (0,_loaders_gl_core__WEBPACK_IMPORTED_MODULE_2__.load)(this.filename, _loaders_gl_las__WEBPACK_IMPORTED_MODULE_1__.LASLoader, {
+        const lasData = await (0,_loaders_gl_core__WEBPACK_IMPORTED_MODULE_1__.load)(this.filename, _loaders_gl_las__WEBPACK_IMPORTED_MODULE_0__.LASLoader, {
             las: {
                 // オプション設定
                 colorDepth: 16, // 16-bit colors
@@ -83763,7 +83815,7 @@ class LASFileLoader extends _base_loader__WEBPACK_IMPORTED_MODULE_0__.BaseFileLo
             header,
             points,
             boundingBox,
-            vectorType
+            vectorType,
         };
     }
     _parseHeader(header, loaderData) {
@@ -83807,6 +83859,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _copc_loader__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./copc-loader */ "./src/loaders/copc-loader.ts");
 /* harmony import */ var _las_loader__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./las-loader */ "./src/loaders/las-loader.ts");
+/* harmony import */ var _xyz_loader__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./xyz-loader */ "./src/loaders/xyz-loader.ts");
+
 
 
 // export type PointCloudData = COPCParams | LASParams | LAZParams;
@@ -83837,8 +83891,12 @@ class PointCloudLoader {
                     console.log(`TIF format not yet supported: ${filename}`);
                     break;
                 case "xyz":
+                    const xyzLoader = new _xyz_loader__WEBPACK_IMPORTED_MODULE_2__.XYZFileLoader(filename);
+                    data = await xyzLoader.loadFile();
+                    break;
+                case "txt":
                     // TODO: update
-                    console.log(`XYZ format not yet supported: ${filename}`);
+                    console.log(`TXT format not yet supported: ${filename}`);
                     break;
                 default:
                     console.warn(`Unknown file format for: ${filename}`);
@@ -83866,7 +83924,12 @@ class PointCloudLoader {
         else if (lowerFilename.endsWith(".xyz")) {
             return "xyz";
         }
-        return "unknown";
+        else if (lowerFilename.endsWith(".txt")) {
+            return "txt";
+        }
+        else {
+            return "unknown";
+        }
     }
 }
 
@@ -83946,6 +84009,137 @@ function createWorker(data1, data2) {
             }
         };
     });
+}
+
+
+/***/ }),
+
+/***/ "./src/loaders/xyz-loader.ts":
+/*!***********************************!*\
+  !*** ./src/loaders/xyz-loader.ts ***!
+  \***********************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   XYZFileLoader: () => (/* binding */ XYZFileLoader)
+/* harmony export */ });
+/* harmony import */ var _base_loader__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./base-loader */ "./src/loaders/base-loader.ts");
+
+class XYZFileLoader extends _base_loader__WEBPACK_IMPORTED_MODULE_0__.BaseFileLoader {
+    async loadFile() {
+        // ファイルをテキストとして読み込み
+        const text = await this._fetchTextFile(this.filename);
+        // 行に分割
+        const lines = text.split("\n").filter((line) => line.trim() && !line.startsWith("#") // 空行とコメント行を除外
+        );
+        // ヘッダー行のチェック
+        let dataStartIndex = 0;
+        if (this._isHeaderLine(lines[0])) {
+            dataStartIndex = 1;
+        }
+        const points = this._parsePoints(lines.slice(dataStartIndex));
+        const header = this._computeHeader(points);
+        const boundingBox = {
+            min: header.min,
+            max: header.max,
+        };
+        const vectorType = "vec3";
+        console.log(`XYZ file loaded: ${header.pointCount} points`);
+        return {
+            header: header,
+            points: points,
+            boundingBox: boundingBox,
+            vectorType: vectorType,
+        };
+    }
+    async _fetchTextFile(url) {
+        const response = await fetch(url);
+        if (!response.ok) {
+            throw new Error(`Failed to fetch ${url}: ${response.statusText}`);
+        }
+        return response.text();
+    }
+    _isHeaderLine(line) {
+        // 数字以外の文字が含まれていればヘッダー行と判定
+        const values = line.trim().split(/\s+/);
+        const isHeaderLine = values.some((v) => isNaN(parseFloat(v)));
+        return isHeaderLine;
+    }
+    _parsePoints(lines) {
+        const positions = [];
+        const colors = [];
+        let hasColors = false;
+        for (const line of lines) {
+            if (!line.trim())
+                continue;
+            const values = line.trim().split(/\s+/).map(Number);
+            // 最低でもXYZが必要 RGBかどうかの判定は後ほど
+            if (values.length < 3) {
+                console.warn(`Invalid line: ${line}`);
+                continue;
+            }
+            positions.push(values[0], values[1], values[2]);
+            if (values.length >= 6) {
+                hasColors = true;
+                const r = values[3];
+                const g = values[4];
+                const b = values[5];
+                // 0-255の範囲なら正規化
+                if (r > 1 || g > 1 || b > 1) {
+                    colors.push(r / 255, g / 255, b / 255);
+                }
+                else {
+                    colors.push(r, g, b);
+                }
+            }
+            else if (hasColors) {
+                // 一部の点にだけ色がある場合、白で埋める
+                colors.push(1.0, 1.0, 1.0);
+            }
+        }
+        const parsedPositions = new Float32Array(positions);
+        const parsedColors = hasColors && colors.length > 0 ? new Float32Array(colors) : undefined;
+        return {
+            positions: parsedPositions,
+            colors: parsedColors,
+        };
+    }
+    _computeHeader(points) {
+        const { positions, colors, normals } = points;
+        if (positions.length === 0)
+            throw new Error("No point data provided.");
+        let minX = positions[0];
+        let minY = positions[1];
+        let minZ = positions[2];
+        let maxX = minX;
+        let maxY = minY;
+        let maxZ = minZ;
+        for (let i = 3; i < positions.length; i += 3) {
+            const x = positions[i];
+            const y = positions[i + 1];
+            const z = positions[i + 2];
+            minX = Math.min(minX, x);
+            minY = Math.min(minY, y);
+            minZ = Math.min(minZ, z);
+            maxX = Math.min(maxX, x);
+            maxY = Math.min(maxY, y);
+            maxZ = Math.min(maxZ, z);
+        }
+        const pointCount = positions.length / 3;
+        const minPositions = [minX, minY, minZ];
+        const maxPositions = [maxX, maxY, maxZ];
+        const hasColors = colors !== undefined;
+        const hasNormals = normals !== undefined;
+        return {
+            pointCount: pointCount,
+            min: minPositions,
+            max: maxPositions,
+            hasColors: hasColors,
+            hasNormals: hasNormals,
+        };
+    }
 }
 
 
@@ -84062,15 +84256,14 @@ function _isNodeVisible(_center, radius, distance, _projViewMatrix, _level, _key
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   Box: () => (/* binding */ Box),
 /* harmony export */   Octree: () => (/* binding */ Octree),
-/* harmony export */   Point: () => (/* binding */ Point)
+/* harmony export */   OctreeBox: () => (/* binding */ OctreeBox),
+/* harmony export */   OctreePoint: () => (/* binding */ OctreePoint)
 /* harmony export */ });
 /* harmony import */ var three__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! three */ "./node_modules/three/build/three.module.js");
 /* harmony import */ var _configs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../configs */ "./src/configs.ts");
 
 
-// Constants
 const maxBoundary = {
     x: 8,
     y: 8,
@@ -84085,7 +84278,7 @@ const colors = [
     new three__WEBPACK_IMPORTED_MODULE_0__.Color(0xe0a387), // grey
     new three__WEBPACK_IMPORTED_MODULE_0__.Color(0xf1a784), // illusion
 ];
-class Point {
+class OctreePoint {
     constructor(index, x, y, z) {
         this.index = index;
         this.x = x;
@@ -84098,7 +84291,7 @@ class Point {
         this.mesh = mesh;
     }
 }
-class Box {
+class OctreeBox {
     constructor(label, x, y, z, width, level) {
         this.label = label;
         this.x = x;
@@ -84179,14 +84372,14 @@ class Octree {
         let z = this.box.z;
         let newWidth = this.box.width * 0.5;
         let level = this.level + 1;
-        let maxNE_Box = new Box("maxNE", x + newWidth * 0.5, y + 0.5 * newWidth, z - 0.5 * newWidth, newWidth, level);
-        let maxNW_Box = new Box("maxNW", x - newWidth * 0.5, y + 0.5 * newWidth, z - 0.5 * newWidth, newWidth, level);
-        let maxSW_Box = new Box("maxSW", x - newWidth * 0.5, y - 0.5 * newWidth, z - 0.5 * newWidth, newWidth, level);
-        let maxSE_Box = new Box("maxSE", x + newWidth * 0.5, y - 0.5 * newWidth, z - 0.5 * newWidth, newWidth, level);
-        let minNE_Box = new Box("minNE", x + newWidth * 0.5, y + 0.5 * newWidth, z + 0.5 * newWidth, newWidth, level);
-        let minNW_Box = new Box("minNW", x - newWidth * 0.5, y + 0.5 * newWidth, z + 0.5 * newWidth, newWidth, level);
-        let minSW_Box = new Box("minSW", x - newWidth * 0.5, y - 0.5 * newWidth, z + 0.5 * newWidth, newWidth, level);
-        let minSE_Box = new Box("minSE", x + newWidth * 0.5, y - 0.5 * newWidth, z + 0.5 * newWidth, newWidth, level);
+        let maxNE_Box = new OctreeBox("maxNE", x + newWidth * 0.5, y + 0.5 * newWidth, z - 0.5 * newWidth, newWidth, level);
+        let maxNW_Box = new OctreeBox("maxNW", x - newWidth * 0.5, y + 0.5 * newWidth, z - 0.5 * newWidth, newWidth, level);
+        let maxSW_Box = new OctreeBox("maxSW", x - newWidth * 0.5, y - 0.5 * newWidth, z - 0.5 * newWidth, newWidth, level);
+        let maxSE_Box = new OctreeBox("maxSE", x + newWidth * 0.5, y - 0.5 * newWidth, z - 0.5 * newWidth, newWidth, level);
+        let minNE_Box = new OctreeBox("minNE", x + newWidth * 0.5, y + 0.5 * newWidth, z + 0.5 * newWidth, newWidth, level);
+        let minNW_Box = new OctreeBox("minNW", x - newWidth * 0.5, y + 0.5 * newWidth, z + 0.5 * newWidth, newWidth, level);
+        let minSW_Box = new OctreeBox("minSW", x - newWidth * 0.5, y - 0.5 * newWidth, z + 0.5 * newWidth, newWidth, level);
+        let minSE_Box = new OctreeBox("minSE", x + newWidth * 0.5, y - 0.5 * newWidth, z + 0.5 * newWidth, newWidth, level);
         this.minNE = new Octree(minNE_Box, level);
         this.minNW = new Octree(minNW_Box, level);
         this.minSW = new Octree(minSW_Box, level);
@@ -84269,8 +84462,6 @@ class Octree {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   initializeCOPC: () => (/* binding */ initializeCOPC),
-/* harmony export */   initializeLAS: () => (/* binding */ initializeLAS),
 /* harmony export */   initializePointCloud: () => (/* binding */ initializePointCloud)
 /* harmony export */ });
 /* harmony import */ var _loaders_pointcloud_loader__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./loaders/pointcloud-loader */ "./src/loaders/pointcloud-loader.ts");
@@ -84278,8 +84469,9 @@ __webpack_require__.r(__webpack_exports__);
 
 
 async function initializePointCloud(files) {
+    _canvas_state_manager__WEBPACK_IMPORTED_MODULE_1__.appState.clock.getDelta(); // clock.getDelat()を呼び出すことで経過時間を計測・リセット
     const loader = new _loaders_pointcloud_loader__WEBPACK_IMPORTED_MODULE_0__.PointCloudLoader(files);
-    await loader.loadFiles(async (data, format, files) => {
+    const onFileLoaded = async (data, format, files) => {
         console.log(`Processing ${format} file: ${files}`);
         switch (format) {
             case "copc":
@@ -84292,44 +84484,20 @@ async function initializePointCloud(files) {
             case "laz":
                 // updateLAZState(data);
                 break;
+            case "tif":
+                // updateTIFState(data);
+                break;
+            case "xyz":
+                // updateXYZState(data);
+                break;
+            case "txt":
+                // updateTXTState(data);
+                break;
             default:
                 console.warn(`No state updater for format: ${format}`);
         }
-    });
-}
-async function initializeCOPC(file) {
-    _canvas_state_manager__WEBPACK_IMPORTED_MODULE_1__.appState.clock.getDelta(); // clock.getDelat()を呼び出すことで経過時間を計測・リセット
-    const loader = new _loaders_pointcloud_loader__WEBPACK_IMPORTED_MODULE_0__.PointCloudLoader(file);
-    await loader.loadFiles(async (data, format, file) => {
-        console.log(`Processing ${format} file: ${file}`);
-        switch (format) {
-            case "copc":
-                (0,_canvas_state_manager__WEBPACK_IMPORTED_MODULE_1__.updateCOPCState)(data);
-                break;
-            case "las":
-                (0,_canvas_state_manager__WEBPACK_IMPORTED_MODULE_1__.updateLASState)(data);
-                break;
-            default:
-                console.warn(`Unexpected format in loadCOPC: ${format}`);
-        }
-    });
-}
-async function initializeLAS(file) {
-    _canvas_state_manager__WEBPACK_IMPORTED_MODULE_1__.appState.clock.getDelta(); // clock.getDelat()を呼び出すことで経過時間を計測・リセット
-    const loader = new _loaders_pointcloud_loader__WEBPACK_IMPORTED_MODULE_0__.PointCloudLoader(file);
-    await loader.loadFiles(async (data, format, file) => {
-        console.log(`Processing ${format} file: ${file}`);
-        switch (format) {
-            case "copc":
-                (0,_canvas_state_manager__WEBPACK_IMPORTED_MODULE_1__.updateCOPCState)(data);
-                break;
-            case "las":
-                (0,_canvas_state_manager__WEBPACK_IMPORTED_MODULE_1__.updateLASState)(data);
-                break;
-            default:
-                console.warn(`Unexpected format in loadCOPC: ${format}`);
-        }
-    });
+    };
+    await loader.loadFiles(onFileLoaded);
 }
 
 
@@ -85113,6 +85281,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   createBuffer: () => (/* binding */ createBuffer),
 /* harmony export */   createLASBuffer: () => (/* binding */ createLASBuffer),
+/* harmony export */   createXYZBuffer: () => (/* binding */ createXYZBuffer),
 /* harmony export */   setGPUDevice: () => (/* binding */ setGPUDevice)
 /* harmony export */ });
 /* harmony import */ var _canvas_state_manager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../canvas/state-manager */ "./src/canvas/state-manager.ts");
@@ -85201,6 +85370,30 @@ function createLASBuffer() {
     };
     // LAS用統計情報を表示
     (0,_helper__WEBPACK_IMPORTED_MODULE_1__.updateHtmlUIForLAS)(pointCount);
+}
+function createXYZBuffer() {
+    const xyzData = _canvas_state_manager__WEBPACK_IMPORTED_MODULE_0__.appState.xyzData;
+    const points = xyzData.points;
+    // XYZからRGBに変換（XYZは既にRGB形式なのでそのまま）
+    let colors;
+    const pointCount = xyzData.points.positions.length / 3; // vec3なので÷3
+    if (points.colors) {
+        colors = points.colors;
+    }
+    else {
+        // カラーがない場合は白色で埋める
+        colors = new Float32Array(pointCount * 3).fill(1.0);
+    }
+    const [positionBuffer, colorBuffer] = createBuffer(points.positions, colors);
+    _canvas_state_manager__WEBPACK_IMPORTED_MODULE_0__.appState.bufferMap["xyz-main"] = {
+        position: positionBuffer,
+        color: colorBuffer,
+        maxIntensity: 0, // XYZファイルにはIntensityがない
+        numPoints: pointCount,
+        vectoryType: "vec3",
+    };
+    // XYZ用統計情報を表示
+    (0,_helper__WEBPACK_IMPORTED_MODULE_1__.updateHtmlUIForXYZ)(pointCount);
 }
 
 
@@ -85535,12 +85728,10 @@ async function _initializeCache() {
     _canvas_state_manager__WEBPACK_IMPORTED_MODULE_3__.appState.persCache = await (0,_cache_persistent_cache__WEBPACK_IMPORTED_MODULE_1__.pCache)();
 }
 async function _initializeFileData() {
-    // const files = _files_loader();
-    // await initializePointCloud(files);
-    const { filename, vectorType } = _las_file_loader();
-    await (0,_pointcloud_initializer__WEBPACK_IMPORTED_MODULE_2__.initializeLAS)(filename);
+    // const { filename, vectorType } = _las_file_loader();
     // const { filename, vectorType } = _copc_file_loader();
-    // await initializeCOPC(filename);
+    const { filename, vectorType } = _xyz_file_loader();
+    await (0,_pointcloud_initializer__WEBPACK_IMPORTED_MODULE_2__.initializePointCloud)(filename);
     return { filename, vectorType };
 }
 function _files_loader() {
@@ -85555,6 +85746,11 @@ function _copc_file_loader() {
 }
 function _las_file_loader() {
     const filename = _configs__WEBPACK_IMPORTED_MODULE_7__.LAS_FILES;
+    const vectorType = "vec3";
+    return { filename, vectorType };
+}
+function _xyz_file_loader() {
+    const filename = _configs__WEBPACK_IMPORTED_MODULE_7__.XYZ_FILES;
     const vectorType = "vec3";
     return { filename, vectorType };
 }

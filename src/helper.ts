@@ -74,3 +74,14 @@ export function updateHtmlUIForLAS(pointCount: number, filename?: string) {
                     Cache: Direct load (no dynamic caching)`;
   document.getElementById("stats-div").innerText = statsText;
 }
+
+export function updateHtmlUIForXYZ(pointCount: number) {
+  let statsText = `XYZ File Loaded
+                    Total Points: ${pointCount.toLocaleString()}
+                    ----------------------------------------------------
+                    Status: All points loaded into GPU Buffer
+
+                    Format: XYZ (text-based, flat structure)
+                    Cache: Direct load (no dynamic caching)`;
+  document.getElementById("stats-div").innerText = statsText;
+}

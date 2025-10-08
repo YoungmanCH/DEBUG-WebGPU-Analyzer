@@ -1,5 +1,6 @@
 import { BaseFileLoader } from "./base-loader";
 import { Copc } from "copc";
+import { VectorType } from "../renderers/exports";
 
 export interface COPCParams {
   copc: any;
@@ -11,7 +12,7 @@ export interface COPCParams {
     min: [number, number, number];
     max: [number, number, number];
   };
-  vectorType: string; // "vec3" or "vec4"
+  vectorType: VectorType;
 }
 
 export class COPCFileLoader extends BaseFileLoader<COPCParams> {

@@ -53015,12 +53015,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   LEAF_CAPACITY: () => (/* binding */ LEAF_CAPACITY),
 /* harmony export */   POINT_CLOUD_FILES: () => (/* binding */ POINT_CLOUD_FILES),
 /* harmony export */   P_CACHE: () => (/* binding */ P_CACHE),
-/* harmony export */   P_CACHE_CAPACITY: () => (/* binding */ P_CACHE_CAPACITY)
+/* harmony export */   P_CACHE_CAPACITY: () => (/* binding */ P_CACHE_CAPACITY),
+/* harmony export */   XYZ_FILES: () => (/* binding */ XYZ_FILES)
 /* harmony export */ });
 // Environment configuration
 const POINT_CLOUD_FILES = "[\"dataset/las/09KD9817.las\"]";
 const COPC_FILE = "https://media.githubusercontent.com/media/sceneserver/copc/main/naarden-vesting.copc.laz";
 const LAS_FILES = "dataset/las/09KD9817.las";
+const XYZ_FILES = "dataset/xyz/A1_20220512.xyz";
 const P_CACHE = "cache-holder";
 const P_CACHE_CAPACITY = "150";
 const LEAF_CAPACITY = "16";

@@ -7,7 +7,7 @@ dist
 .vscode
 
 research-memo/
-dataset
+dataset/
 sample-dataset/
 
 # Playwright
@@ -18,5 +18,3 @@ playwright/.cache/
 # Visual regression test artifacts
 tests/visual/
 tests/visual/
-
-dataset/
