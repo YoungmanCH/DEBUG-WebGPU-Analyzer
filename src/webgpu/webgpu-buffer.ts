@@ -1,7 +1,11 @@
 import { appState } from "../canvas/state-manager";
-import { LASParams, XYZParams } from "../loaders/exports";
-
-import { updateHtmlUIForLAS, updateHtmlUIForXYZ } from "../helper";
+import {
+  updateHtmlUIForLAS,
+  updateHtmlUIForXYZ,
+  updateHtmlUIForTIF,
+} from "../helper";
+import { LASParams, XYZParams, TIFParams } from "../loaders/exports";
+import { VectorType } from "../renderers/exports";
 
 let gpuDevice: GPUDevice | null = null;
 
@@ -98,12 +102,14 @@ export function createLASBuffer() {
     }
   }
 
+  const vectorType: VectorType = "vec3";
+
   appState.bufferMap["las-main"] = {
     position: positionBuffer,
     color: colorBuffer,
     maxIntensity: maxIntensity,
     numPoints: pointCount,
-    vectorType: "vec3",
+    vectorType: vectorType,
   };
 
   // LAS用統計情報を表示
@@ -125,20 +131,67 @@ export function createXYZBuffer() {
     colors = new Float32Array(pointCount * 3).fill(255);
   }
 
-  const [positionBuffer, colorBuffer] = createBuffer(
-    points.positions,
-    colors,
-  );
+  const [positionBuffer, colorBuffer] = createBuffer(points.positions, colors);
+  const vectorType: VectorType = "vec3";
 
   appState.bufferMap["xyz-main"] = {
     position: positionBuffer,
     color: colorBuffer,
     maxIntensity: 0, // XYZファイルにはIntensityがない
     numPoints: pointCount,
-    vectorType: "vec3",
+    vectorType: vectorType,
   };
 
   // XYZ用統計情報を表示
   updateHtmlUIForXYZ(pointCount);
 }
 
+export function createTIFBuffer() {
+  const tifData = appState.tifData as TIFParams;
+  const points = tifData.points;
+  const pointCount = points.positions.length / 3; // vec3なので÷3
+
+  let colors: Float32Array;
+  if (points.colors) {
+    colors = points.colors;
+  } else {
+    colors = new Float32Array(pointCount * 3).fill(255);
+  }
+
+  const [positionBuffer, colorBuffer] = createBuffer(
+    points.positions,
+    colors
+  );
+
+  const vectorType: VectorType = "vec3";
+
+  appState.bufferMap["tif-main"] = {
+    position: positionBuffer,
+    color: colorBuffer,
+    maxIntensity: 0,
+    numPoints: pointCount,
+    vectorType: vectorType,
+  };
+
+  updateHtmlUIForTIF(pointCount, tifData.header.width, tifData.header.height, {
+    dataType: (tifData.header as any).dataType,
+    samplesPerPixel: (tifData.header as any).samplesPerPixel,
+    bitsPerSample: (tifData.header as any).bitsPerSample,
+    elevationRange: (tifData.header as any).elevationRange,
+    boundingBox: {
+      xMin: appState.xMin,
+      yMin: appState.yMin,
+      zMin: appState.zMin,
+      xMax: appState.xMax,
+      yMax: appState.yMax,
+      zMax: appState.zMax,
+      widthX: appState.widthX,
+      widthY: appState.widthY,
+      widthZ: appState.widthZ,
+      centerX: appState.centerX,
+      centerY: appState.centerY,
+      centerZ: appState.centerZ,
+    },
+    scaleFactor: appState.scaleFactor,
+  });
+}

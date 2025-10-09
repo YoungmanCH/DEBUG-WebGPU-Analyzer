@@ -6,7 +6,15 @@ module.exports = {
   entry: "./src/index.ts",
   output: {
     filename: "bundle.js",
-    path: path.resolve(__dirname, "docs"),
+    path: path.resolve(__dirname, "dist"),
+  },
+  optimization: {
+    splitChunks: false, // vendor chunksを無効化
+    runtimeChunk: false, // runtime chunksも無効化
+  },
+  performance: {
+    maxAssetSize: 5000000, // 5MB - バンドルサイズ警告の上限を上げる
+    maxEntrypointSize: 5000000,
   },
   resolve: {
     extensions: [".ts", ".tsx", ".js", ".jsx"],

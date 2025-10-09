@@ -1,6 +1,6 @@
 import * as THREE from "three";
 
-import { COPCParams, LASParams, XYZParams } from "../loaders/exports";
+import { COPCParams, LASParams, XYZParams, TIFParams } from "../loaders/exports";
 
 export const appState = {
   bufferMap: {},
@@ -20,6 +20,9 @@ export const appState = {
 
   // XYZ data
   xyzData: null,
+
+  // TIF data
+  tifData: null,
 
   // Bounding box
   xMin: 0,
@@ -190,4 +193,48 @@ export function updateXYZState(xyzData: XYZParams) {
 
   // XYZデータを一時保存（WebGPU初期化後にバッファ作成）
   appState.xyzData = xyzData;
+}
+
+export function updateTIFState(tifData: TIFParams) {
+  appState.scaleFactor = [1.0, 1.0, 1.0];
+
+  [
+    appState.xMin,
+    appState.yMin,
+    appState.zMin,
+    appState.xMax,
+    appState.yMax,
+    appState.zMax,
+  ] = [...tifData.boundingBox.min, ...tifData.boundingBox.max];
+
+  // スケール適用
+  appState.xMin *= appState.scaleFactor[0];
+  appState.xMax *= appState.scaleFactor[0];
+  appState.yMin *= appState.scaleFactor[1];
+  appState.yMax *= appState.scaleFactor[1];
+  appState.zMin *= appState.scaleFactor[2];
+  appState.zMax *= appState.scaleFactor[2];
+
+  // 寸法計算
+  appState.widthX = Math.abs(appState.xMax - appState.xMin);
+  appState.widthY = Math.abs(appState.yMax - appState.yMin);
+  appState.widthZ = Math.abs(appState.zMax - appState.zMin);
+
+  // パラメータ設定
+  appState.params = [
+    appState.widthX,
+    appState.widthY,
+    appState.widthZ,
+    appState.xMin,
+    appState.yMin,
+    appState.zMin,
+  ];
+
+  // 中心点計算（バウンディングボックスの中心）
+  appState.centerX = (appState.xMin + appState.xMax) / 2;
+  appState.centerY = (appState.yMin + appState.yMax) / 2;
+  appState.centerZ = (appState.zMin + appState.zMax) / 2;
+
+  // TIFデータを一時保存
+  appState.tifData = tifData;
 }

@@ -3,11 +3,13 @@ import {
   updateCOPCState,
   updateLASState,
   updateXYZState,
+  updateTIFState,
 } from "./canvas/state-manager";
 import {
   COPCParams,
   LASParams,
   XYZParams,
+  TIFParams,
   PointCloudLoader,
 } from "./loaders/exports";
 
@@ -31,7 +33,9 @@ export async function initializePointCloud(files: string[]) {
         // updateLAZState(data);
         break;
       case "tif":
-        // updateTIFState(data);
+      case "tiff":
+        appState.clock.getDelta();
+        updateTIFState(data as TIFParams);
         break;
       case "xyz":
         appState.clock.getDelta();
