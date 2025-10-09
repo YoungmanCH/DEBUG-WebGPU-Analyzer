@@ -2,9 +2,15 @@
 node_modules/
 package-lock.json
 .DS_Store
-dist
+dist/
 .env
 .vscode
+
+# Webpack dynamic chunks (geotiff compression codecs)
+docs/node_modules_*.js
+docs/node_modules_*.js.map
+docs/vendors-*.js
+docs/vendors-*.js.map
 
 research-memo/
 dataset/

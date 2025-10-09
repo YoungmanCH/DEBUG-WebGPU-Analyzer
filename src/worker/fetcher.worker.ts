@@ -10,12 +10,6 @@ function _files_loader(): any {
   return parsed_files;
 }
 
-function _las_file_loader(): string {
-  const filename = LAS_FILES;
-
-  return filename;
-}
-
 function _copc_file_loader(): string {
   const filename = COPC_FILE;
 
@@ -23,8 +17,7 @@ function _copc_file_loader(): string {
 }
 
 // const files = _files_loader();
-// const FILENAME = _copc_file_loader();
-const FILENAME = _las_file_loader();
+const FILENAME = _copc_file_loader();
 
 // Worker state
 const workerState = {

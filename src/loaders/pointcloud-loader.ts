@@ -1,6 +1,9 @@
 import { COPCFileLoader, COPCParams } from "./copc-loader";
 import { LASFileLoader, LASParams } from "./las-loader";
 import { XYZFileLoader, XYZParams } from "./xyz-loader";
+import { TIFFileLoader, TIFParams } from "./tif-loader";
+
+
 // import { LAZFileLoader, LAZParams } from "../loaders/laz-loader";
 
 type extensionType =
@@ -8,11 +11,12 @@ type extensionType =
   | "las"
   | "laz"
   | "tif"
+  | "tiff"
   | "xyz"
   | "txt"
   | "unknown";
 
-type PointCloudData = COPCParams | LASParams | XYZParams;
+type PointCloudData = COPCParams | LASParams | XYZParams | TIFParams;
 // export type PointCloudData = COPCParams | LASParams | LAZParams;
 
 export class PointCloudLoader {
@@ -49,8 +53,10 @@ export class PointCloudLoader {
           // data = await lazLoader.loadFile();
           break;
         case "tif":
+        case "tiff":
           // TODO: update
-          console.log(`TIF format not yet supported: ${filename}`);
+          const tifLoader = new TIFFileLoader(filename);
+          data = await tifLoader.loadFile();
           break;
         case "xyz":
           const xyzLoader = new XYZFileLoader(filename);

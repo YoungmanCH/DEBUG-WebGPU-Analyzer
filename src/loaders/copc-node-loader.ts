@@ -6,7 +6,7 @@ import {
   resolveNodeCache,
   resolvePrefetchNodes,
 } from "../cache/node-cache-manager";
-import { createWorker, MAX_WORKERS } from "./worker-manager";
+import { createWorker, MAX_WORKERS } from "../worker/worker-manager";
 
 export async function loadCOPCNodes(
   filename: string,

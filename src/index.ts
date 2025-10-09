@@ -2,11 +2,11 @@ import { createPersistentMetaCache } from "./utils/file-manager";
 import { pCache } from "./cache/persistent-cache";
 import { initializePointCloud } from "./pointcloud-initializer";
 import { appState } from "./canvas/state-manager";
-import { createLASBuffer, createXYZBuffer } from "./webgpu/webgpu-buffer";
+import { createLASBuffer, createXYZBuffer, createTIFBuffer } from "./webgpu/webgpu-buffer";
 import { WebGPURenderer } from "./webgpu/webgpu-renderer";
 import { VectorType } from "./renderers/exports";
 import { loadCOPCNodes } from "./loaders/copc-node-loader";
-import { POINT_CLOUD_FILES, COPC_FILE, LAS_FILES, XYZ_FILES } from "./configs";
+import { POINT_CLOUD_FILES, COPC_FILE, LAS_FILES, LAZ_FILES, XYZ_FILES, TIF_FIlES } from "./configs";
 
 import "./styles/main.css";
 
@@ -18,8 +18,9 @@ async function _initializeCache() {
 async function _initializeFileData() {
   // const { filename, vectorType } = _copc_file_loader();
   // const { filename, vectorType } = _las_file_loader();
-  const { filename, vectorType } = _xyz_file_loader();
-
+  // const { filename, vectorType } = _xyz_file_loader();
+  const { filename, vectorType } = _tif_file_loader();
+  
   await initializePointCloud(filename);
 
   return { filename, vectorType };
@@ -40,6 +41,7 @@ function _copc_file_loader() {
 }
 
 function _las_file_loader() {
+  // const filename = LAZ_FILES;
   const filename = LAS_FILES;
   const vectorType: VectorType = "vec3";
 
@@ -50,6 +52,13 @@ function _xyz_file_loader() {
   const filename = XYZ_FILES;
   const vectorType: VectorType = "vec3";
   return { filename, vectorType };
+}
+
+function _tif_file_loader() {
+  const filename = TIF_FIlES;
+  const vectorType: VectorType = "vec3";
+  return { filename, vectorType };
+
 }
 
 // ============================================================================
@@ -64,6 +73,8 @@ async function _render(file: string, vectorType: VectorType): Promise<void> {
     createLASBuffer();
   } else if (appState.xyzData) {
     createXYZBuffer();
+  } else if (appState.tifData) {
+    createTIFBuffer();
   } else {
     const projView = renderer.getProjView();
     await loadCOPCNodes(file.split("/").pop().split(".")[0], projView);
@@ -71,6 +82,9 @@ async function _render(file: string, vectorType: VectorType): Promise<void> {
 
   renderer.start();
 }
+
+// デバッグ用にappStateをグローバルに公開
+(window as any).appState = appState;
 
 (async () => {
   await _initializeCache();

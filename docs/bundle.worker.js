@@ -53012,10 +53012,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   BUFFER_CAPACITY: () => (/* binding */ BUFFER_CAPACITY),
 /* harmony export */   COPC_FILE: () => (/* binding */ COPC_FILE),
 /* harmony export */   LAS_FILES: () => (/* binding */ LAS_FILES),
+/* harmony export */   LAZ_FILES: () => (/* binding */ LAZ_FILES),
 /* harmony export */   LEAF_CAPACITY: () => (/* binding */ LEAF_CAPACITY),
 /* harmony export */   POINT_CLOUD_FILES: () => (/* binding */ POINT_CLOUD_FILES),
 /* harmony export */   P_CACHE: () => (/* binding */ P_CACHE),
 /* harmony export */   P_CACHE_CAPACITY: () => (/* binding */ P_CACHE_CAPACITY),
+/* harmony export */   TIF_FIlES: () => (/* binding */ TIF_FIlES),
 /* harmony export */   XYZ_FILES: () => (/* binding */ XYZ_FILES)
 /* harmony export */ });
 // Environment configuration
@@ -53023,6 +53025,8 @@ const POINT_CLOUD_FILES = "[\"dataset/las/09KD9817.las\"]";
 const COPC_FILE = "https://media.githubusercontent.com/media/sceneserver/copc/main/naarden-vesting.copc.laz";
 const LAS_FILES = "dataset/las/09KD9817.las";
 const XYZ_FILES = "dataset/xyz/A1_20220512.xyz";
+const LAZ_FILES = "dataset/laz/200406_100502_Sample.laz";
+const TIF_FIlES = "dataset/tif/09KD9816.tif";
 const P_CACHE = "cache-holder";
 const P_CACHE_CAPACITY = "150";
 const LEAF_CAPACITY = "16";
@@ -53142,17 +53146,12 @@ function _files_loader() {
     const parsed_files = JSON.parse(files);
     return parsed_files;
 }
-function _las_file_loader() {
-    const filename = _configs__WEBPACK_IMPORTED_MODULE_2__.LAS_FILES;
-    return filename;
-}
 function _copc_file_loader() {
     const filename = _configs__WEBPACK_IMPORTED_MODULE_2__.COPC_FILE;
     return filename;
 }
 // const files = _files_loader();
-// const FILENAME = _copc_file_loader();
-const FILENAME = _las_file_loader();
+const FILENAME = _copc_file_loader();
 // Worker state
 const workerState = {
     color: new three__WEBPACK_IMPORTED_MODULE_1__.Color(),

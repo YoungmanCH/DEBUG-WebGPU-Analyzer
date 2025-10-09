@@ -1,4 +1,4 @@
-import * as WorkerModule from "../worker/fetcher.worker";
+import * as WorkerModule from "./fetcher.worker";
 import { appState } from "../canvas/state-manager";
 
 const Worker = (WorkerModule as any).default || WorkerModule;
