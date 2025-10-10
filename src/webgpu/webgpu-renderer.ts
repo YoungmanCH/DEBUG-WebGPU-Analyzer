@@ -1,7 +1,7 @@
 import Stats from "three/addons/libs/stats.module.js";
 import { mat4 } from "gl-matrix";
 
-import { WebGPUContext } from "./context";
+import { WebGPUContext } from "./webgpu-context";
 import { WebGPUUniformer } from "./uniform-buffer";
 import { CanvasEventManager } from "./canvas-event";
 
@@ -12,8 +12,8 @@ import {
   RendererFactory,
   VectorType,
 } from "../renderers/exports";
-import { appState } from "../canvas/state-manager";
-import { setupViewport } from "../canvas/viewport-initializer";
+import { appState } from "../views/states/state-manager";
+import { setupViewport } from "../views/states/viewport-initializer";
 
 export class WebGPURenderer {
   private context: WebGPUContext;

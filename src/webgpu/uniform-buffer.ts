@@ -20,14 +20,12 @@ export class WebGPUUniformer {
     camera: any,
     projMatrix: mat4,
     params: number[],
-    globalMaxIntensity: number
+    globalMaxIntensity: number,
+    currentAxis: number = 3 // デフォルト値3（RGBカラーモード）
   ) {
     this.camera = camera;
     this.projMatrix = projMatrix;
     this.params = params;
-
-    // TODO: Axisを変更できるように引数を後ほど修正する。
-    const currentAxis: number = 3;
 
     params.push(currentAxis);
     params.push(globalMaxIntensity);

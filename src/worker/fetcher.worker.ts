@@ -1,23 +1,6 @@
 import { Copc } from "copc";
 import * as THREE from "three";
-import { POINT_CLOUD_FILES, LAS_FILES, COPC_FILE } from "../configs";
-
-// TODO: 後でファイルを読み込みを修正する。
-function _files_loader(): any {
-  const files: string = POINT_CLOUD_FILES;
-  const parsed_files: string[] = JSON.parse(files);
-
-  return parsed_files;
-}
-
-function _copc_file_loader(): string {
-  const filename = COPC_FILE;
-
-  return filename;
-}
-
-// const files = _files_loader();
-const FILENAME = _copc_file_loader();
+import { COPC_FILE } from "../configs";
 
 // Worker state
 const workerState = {
@@ -74,7 +57,8 @@ async function _init() {
 }
 
 async function _loadData(copc, myRoot, pointCount) {
-  const view = await Copc.loadPointDataView(FILENAME, copc, myRoot);
+  const filename = _copc_file_loader();
+  const view = await Copc.loadPointDataView(filename, copc, myRoot);
   const getters = ["X", "Y", "Z", "Red", "Green", "Blue"].map(view.getter);
 
   for (let j = 0; j < pointCount; j += 1) {
@@ -91,6 +75,12 @@ async function _loadData(copc, myRoot, pointCount) {
       workerState.level,
     ],
   ]);
+}
+
+function _copc_file_loader(): string {
+  const filename = COPC_FILE;
+
+  return filename;
 }
 
 function _readPoints(id, getters) {
@@ -122,5 +112,4 @@ function _getXYZRGB(index, getters) {
   return getters.map((get) => get(index));
 }
 
-// Initialize worker
 _init();

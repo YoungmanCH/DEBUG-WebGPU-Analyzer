@@ -9,8 +9,8 @@ module.exports = {
     path: path.resolve(__dirname, "dist"),
   },
   optimization: {
-    splitChunks: false, // vendor chunksを無効化
-    runtimeChunk: false, // runtime chunksも無効化
+    splitChunks: false,
+    runtimeChunk: false,
   },
   performance: {
     maxAssetSize: 5000000, // 5MB - バンドルサイズ警告の上限を上げる
@@ -53,7 +53,7 @@ module.exports = {
     port: 8080,
     static: [
       {
-        directory: path.resolve(__dirname, "docs"),
+        directory: path.resolve(__dirname, "public"),
         publicPath: "/",
       },
       {
@@ -67,6 +67,5 @@ module.exports = {
   devtool: "cheap-module-source-map",
   plugins: [
     new Dotenv(),
-    // commonjs({ include: /node_modules\/laz-perf/ }),
   ],
 };

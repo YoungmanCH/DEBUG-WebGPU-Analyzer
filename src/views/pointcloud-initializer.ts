@@ -4,20 +4,23 @@ import {
   updateLASState,
   updateXYZState,
   updateTIFState,
-} from "./canvas/state-manager";
+} from "./states/state-manager";
 import {
   COPCParams,
   LASParams,
   XYZParams,
   TIFParams,
   PointCloudLoader,
-} from "./loaders/exports";
+} from "../loaders/exports";
 
 export async function initializePointCloud(files: string[]) {
   const loader = new PointCloudLoader(files);
 
   const onFileLoaded = async (data, format, files) => {
     console.log(`Processing ${format} file: ${files}`);
+
+    // ファイル名を保存
+    appState.currentFilename = files;
 
     switch (format) {
       case "copc":
@@ -26,11 +29,9 @@ export async function initializePointCloud(files: string[]) {
         updateCOPCState(data as COPCParams);
         break;
       case "las":
+      case "laz":
         appState.clock.getDelta();
         updateLASState(data as LASParams);
-        break;
-      case "laz":
-        // updateLAZState(data);
         break;
       case "tif":
       case "tiff":

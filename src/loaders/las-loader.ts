@@ -32,36 +32,82 @@ export interface LASParams {
 }
 
 export class LASFileLoader extends BaseFileLoader<LASParams> {
-  async loadFile(): Promise<LASParams> {
-    const lasData = await load(this.filename, LASLoader, {
-      las: {
-        // オプション設定
-        colorDepth: 16, // 16-bit colors
-        skip: 1, // 間引き（1 = 全ポイント読み込み）
-      },
-    });
+  /**
+   * LAZ/LASファイルのヘッダーから直接バージョンを読み取る
+   */
+  private async _readLAZVersion(url: string): Promise<string> {
+    try {
+      const response = await fetch(url);
+      const buffer = await response.arrayBuffer();
+      const view = new DataView(buffer);
 
-    const header = this._parseHeader(lasData.header, lasData.loaderData);
-    const points = this._parsePoints(lasData);
-    const boundingBox = {
-      min: header.min,
-      max: header.max,
-    };
-    const vectorType = "vec3";
+      // LASヘッダーのオフセット24-25にバージョン情報がある
+      const versionMajor = view.getUint8(24);
+      const versionMinor = view.getUint8(25);
 
-    console.log(`LAS file loaded: ${header.pointCount} points`);
-
-    return {
-      header,
-      points,
-      boundingBox,
-      vectorType,
-    };
+      return `${versionMajor}.${versionMinor}`;
+    } catch (error) {
+      console.warn('Failed to read LAZ version from header:', error);
+      return "1.2"; // デフォルト
+    }
   }
 
-  private _parseHeader(header: any, loaderData: any): LASHeader {
+  async loadFile(): Promise<LASParams> {
+    try {
+      // ファイルのバージョンを直接読み取る
+      const fileVersion = await this._readLAZVersion(this.filename);
+
+      const lasData = await load(this.filename, LASLoader, {
+        las: {
+          // オプション設定
+          colorDepth: 16, // 16-bit colors
+          skip: 1, // 間引き（1 = 全ポイント読み込み）
+        },
+      });
+
+      const header = this._parseHeader(lasData.header, lasData.loaderData, fileVersion);
+      const points = this._parsePoints(lasData);
+      const boundingBox = {
+        min: header.min,
+        max: header.max,
+      };
+      const vectorType = "vec3";
+
+      console.log(`LAS/LAZ file loaded: ${header.pointCount} points (version ${header.version})`);
+
+      return {
+        header,
+        points,
+        boundingBox,
+        vectorType,
+      };
+    } catch (error) {
+      // LAZ v1.4エラーを検出
+      if (error.message && error.message.includes("file versions <= 1.3")) {
+        const filename = this.filename.split("/").pop() || this.filename;
+        throw new Error(
+          `❌ LAZ v1.4+ File Not Supported\n\n` +
+          `File: ${filename}\n\n` +
+          `The current library (@loaders.gl/las) only supports LAZ v1.0-1.3.\n\n` +
+          `📋 Solution: Use the LAZ converter tool\n\n` +
+          `1. Convert LAZ v1.4+ to v1.3:\n` +
+          `   cd laz-converter\n` +
+          `   node convert.js ../dataset/laz/${filename} -o ../dataset/laz/v13_${filename}\n\n` +
+          `2. Update .env to use the converted file:\n` +
+          `   LAZ_FILES="dataset/laz/v13_${filename}"\n\n` +
+          `Note: The converter will check RGB presence and preserve available data.\n` +
+          `For COPC format (recommended for v1.4 files with RGB), see the converter README.`
+        );
+      }
+      throw error;
+    }
+  }
+
+  private _parseHeader(header: any, loaderData: any, fileVersion: string): LASHeader {
+    console.log(`LAS/LAZ Version: ${fileVersion} (format: ${loaderData.pointsFormatId})`);
+
     return {
-      version: `${header.versionMajor || 1}.${header.versionMinor || 2}`,
+      version: fileVersion,
       pointFormat: loaderData.pointsFormatId,
       pointCount: loaderData.pointsCount,
       scale: loaderData.scale,

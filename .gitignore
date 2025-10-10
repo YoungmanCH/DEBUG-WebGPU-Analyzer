@@ -2,25 +2,27 @@
 node_modules/
 package-lock.json
 .DS_Store
-dist/
 .env
 .vscode
 
+# Build outputs in public directory
+public/bundle.js
+public/bundle.js.map
+public/bundle.worker.js
+public/bundle.worker.js.map
+public/*.LICENSE.txt
+
 # Webpack dynamic chunks (geotiff compression codecs)
-docs/node_modules_*.js
-docs/node_modules_*.js.map
-docs/vendors-*.js
-docs/vendors-*.js.map
+public/node_modules_*.js
+public/node_modules_*.js.map
+public/vendors-*.js
+public/vendors-*.js.map
 
 research-memo/
 dataset/
-sample-dataset/
+examples/
 
-# Playwright
-test-results/
-playwright-report/
-playwright/.cache/
+dist/
 
-# Visual regression test artifacts
-tests/visual/
-tests/visual/
+laz-converter/node_modules/
+laz-converter/package-lock.json

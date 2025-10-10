@@ -1,12 +1,23 @@
 import { createPersistentMetaCache } from "./utils/file-manager";
 import { pCache } from "./cache/persistent-cache";
-import { initializePointCloud } from "./pointcloud-initializer";
-import { appState } from "./canvas/state-manager";
-import { createLASBuffer, createXYZBuffer, createTIFBuffer } from "./webgpu/webgpu-buffer";
+import { initializePointCloud } from "./views/pointcloud-initializer";
+import { appState } from "./views/states/state-manager";
+import {
+  createLASBuffer,
+  createXYZBuffer,
+  createTIFBuffer,
+} from "./webgpu/webgpu-buffer";
 import { WebGPURenderer } from "./webgpu/webgpu-renderer";
 import { VectorType } from "./renderers/exports";
 import { loadCOPCNodes } from "./loaders/copc-node-loader";
-import { POINT_CLOUD_FILES, COPC_FILE, LAS_FILES, LAZ_FILES, XYZ_FILES, TIF_FIlES } from "./configs";
+import {
+  POINT_CLOUD_FILES,
+  COPC_FILE,
+  LAS_FILES,
+  LAZ_FILES,
+  XYZ_FILES,
+  TIF_FIlES,
+} from "./configs";
 
 import "./styles/main.css";
 
@@ -18,10 +29,29 @@ async function _initializeCache() {
 async function _initializeFileData() {
   // const { filename, vectorType } = _copc_file_loader();
   // const { filename, vectorType } = _las_file_loader();
-  // const { filename, vectorType } = _xyz_file_loader();
-  const { filename, vectorType } = _tif_file_loader();
-  
-  await initializePointCloud(filename);
+  const { filename, vectorType } = _xyz_file_loader();
+  // const { filename, vectorType } = _tif_file_loader();
+  // const { filename, vectorType } = _laz_file_loader();
+
+  try {
+    await initializePointCloud(filename);
+  } catch (error) {
+    // エラーをUIに表示
+    const statsDiv = document.getElementById("stats-div");
+    if (statsDiv) {
+      statsDiv.innerText = error.message || "Failed to load point cloud";
+      statsDiv.style.color = "#ff6b6b";
+      statsDiv.style.whiteSpace = "pre-wrap"; // 改行を保持
+      statsDiv.style.fontFamily = "monospace";
+      statsDiv.style.fontSize = "12px";
+      statsDiv.style.padding = "20px";
+      statsDiv.style.backgroundColor = "#2a2a2a";
+      statsDiv.style.border = "2px solid #ff6b6b";
+      statsDiv.style.borderRadius = "8px";
+    }
+    console.error("Failed to load point cloud:", error);
+    throw error;
+  }
 
   return { filename, vectorType };
 }
@@ -41,10 +71,14 @@ function _copc_file_loader() {
 }
 
 function _las_file_loader() {
-  // const filename = LAZ_FILES;
   const filename = LAS_FILES;
   const vectorType: VectorType = "vec3";
+  return { filename, vectorType };
+}
 
+function _laz_file_loader() {
+  const filename = LAZ_FILES;
+  const vectorType: VectorType = "vec3";
   return { filename, vectorType };
 }
 
@@ -58,7 +92,6 @@ function _tif_file_loader() {
   const filename = TIF_FIlES;
   const vectorType: VectorType = "vec3";
   return { filename, vectorType };
-
 }
 
 // ============================================================================
@@ -82,9 +115,6 @@ async function _render(file: string, vectorType: VectorType): Promise<void> {
 
   renderer.start();
 }
-
-// デバッグ用にappStateをグローバルに公開
-(window as any).appState = appState;
 
 (async () => {
   await _initializeCache();
