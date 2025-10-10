@@ -1,0 +1,4 @@
+node_modules/
+*.log
+*_v13.laz
+converted/

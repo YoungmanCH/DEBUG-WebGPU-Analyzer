@@ -1,6 +1,11 @@
 import * as THREE from "three";
 
-import { COPCParams, LASParams, XYZParams, TIFParams } from "../loaders/exports";
+import {
+  COPCParams,
+  LASParams,
+  XYZParams,
+  TIFParams,
+} from "../../loaders/exports";
 
 export const appState = {
   bufferMap: {},
@@ -8,6 +13,9 @@ export const appState = {
   persCache: null,
   globalMaxIntensity: 0,
   prefetchKeyCountMap: null,
+
+  // File name
+  currentFilename: null,
 
   // COPC data
   nodePages: null,

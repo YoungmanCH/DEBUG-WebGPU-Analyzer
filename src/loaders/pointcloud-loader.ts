@@ -3,9 +3,6 @@ import { LASFileLoader, LASParams } from "./las-loader";
 import { XYZFileLoader, XYZParams } from "./xyz-loader";
 import { TIFFileLoader, TIFParams } from "./tif-loader";
 
-
-// import { LAZFileLoader, LAZParams } from "../loaders/laz-loader";
-
 type extensionType =
   | "copc"
   | "las"
@@ -17,7 +14,6 @@ type extensionType =
   | "unknown";
 
 type PointCloudData = COPCParams | LASParams | XYZParams | TIFParams;
-// export type PointCloudData = COPCParams | LASParams | LAZParams;
 
 export class PointCloudLoader {
   filenames: string[];
@@ -45,16 +41,12 @@ export class PointCloudLoader {
           data = await copcLoader.loadFile();
           break;
         case "las":
+        case "laz":
           const lasLoader = new LASFileLoader(filename);
           data = await lasLoader.loadFile();
           break;
-        case "laz":
-          // const lazLoader = new LAZFileLoader(filename);
-          // data = await lazLoader.loadFile();
-          break;
         case "tif":
         case "tiff":
-          // TODO: update
           const tifLoader = new TIFFileLoader(filename);
           data = await tifLoader.loadFile();
           break;

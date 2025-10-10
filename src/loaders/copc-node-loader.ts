@@ -1,6 +1,6 @@
 import { selectVisibleNodes } from "../octree/octree-traverser";
 import { writeFile } from "../utils/file-manager";
-import { appState } from "../canvas/state-manager";
+import { appState } from "../views/states/state-manager";
 import { createBuffer } from "../webgpu/webgpu-buffer";
 import {
   resolveNodeCache,

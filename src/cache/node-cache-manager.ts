@@ -1,8 +1,8 @@
 import { lruCache } from "./lru-cache";
 import { getInCache, putInCache } from "./persistent-cache";
 import { createBuffer } from "../webgpu/webgpu-buffer";
-import { appState } from "../canvas/state-manager";
-import { updateHtmlUI } from "../helper";
+import { appState } from "../views/states/state-manager";
+import { StatsFacade } from "../views/stats-display/exports";
 import { doesExist, throttledUpdatePersCache } from "../utils/file-manager";
 
 export async function resolvePrefetchNodes(keyMap: any, filename: string) {
@@ -168,13 +168,14 @@ export async function resolveNodeCache(keyMap: any, filename: string) {
   }
   appState.bufferMap = newBufferMap;
 
-  updateHtmlUI(
-    nodeNotFoundInBuffer,
-    nodeFoundInBuffer,
-    nodeFoundInLRU,
-    nodeFoundInPersistent,
-    nodeToFetch
-  );
+  StatsFacade.displayCOPC({
+    totalNodes: nodeFoundInBuffer + nodeNotFoundInBuffer,
+    nodesInBuffer: nodeFoundInBuffer,
+    nodesNotInBuffer: nodeNotFoundInBuffer,
+    nodesInLRU: nodeFoundInLRU,
+    nodesInPersistent: nodeFoundInPersistent,
+    nodesToFetch: nodeToFetch,
+  });
   return filteredElements;
 }
 

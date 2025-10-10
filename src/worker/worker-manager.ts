@@ -1,5 +1,5 @@
 import * as WorkerModule from "./fetcher.worker";
-import { appState } from "../canvas/state-manager";
+import { appState } from "../views/states/state-manager";
 
 const Worker = (WorkerModule as any).default || WorkerModule;
 

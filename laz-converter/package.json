@@ -1,0 +1,20 @@
+{
+  "name": "laz-converter",
+  "version": "1.0.0",
+  "description": "Convert LAZ v1.4+ files to LAZ v1.3",
+  "main": "convert.js",
+  "scripts": {
+    "convert": "node convert.js"
+  },
+  "keywords": [
+    "laz",
+    "las",
+    "point-cloud",
+    "converter"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "commander": "^11.1.0"
+  }
+}
