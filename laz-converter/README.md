@@ -180,6 +180,10 @@ LAZ v1.4からv1.3へのダウングレードでは、以下のデータが失�
    # PDALでCOPCに変換（LAZ 1.4のまま使える）
    pdal translate input_v14.laz output.copc.laz --writers.copc
    ```
+   ```bash
+   # PDALでCOPCに変換（LAZ 1.4のまま使える）
+   pdal translate input_14.las output_14.copc.laz copc --writers.copc.forward=all
+   ```
 
 ## 技術仕様
 

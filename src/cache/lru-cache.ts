@@ -1,6 +1,8 @@
 import LRUCache from "lru-cache";
+import { LRU_CACHE_CAPACITY } from "../configs";
+
 const _options = {
-  max: 500,
+  max: LRU_CACHE_CAPACITY,
   //   ttl: 100 * 60 * 10,   i dont think i need this as the node value wont be time dependent
   allowStale: false,
   updateAgeOnGet: true,

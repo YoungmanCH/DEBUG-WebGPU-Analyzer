@@ -8,7 +8,9 @@ export const LAZ_FILES = (process.env as any).LAZ_FILES;
 export const TIF_FIlES = (process.env as any).TIF_FIlES;
 
 export const P_CACHE = (process.env as any).P_CACHE;
-export const P_CACHE_CAPACITY = (process.env as any).P_CACHE_CAPACITY;
+export const P_CACHE_CAPACITY = parseInt((process.env as any).P_CACHE_CAPACITY) || 150;
+export const LRU_CACHE_CAPACITY = parseInt((process.env as any).LRU_CACHE_CAPACITY) || 500;
 
-export const LEAF_CAPACITY = (process.env as any).LEAF_CAPACITY;
-export const BUFFER_CAPACITY = (process.env as any).BUFFER_CAPACITY;
+export const LEAF_CAPACITY = parseInt((process.env as any).LEAF_CAPACITY) || 16;
+export const BUFFER_CAPACITY = parseInt((process.env as any).BUFFER_CAPACITY) || 16;
+export const MAX_BUFFER_NODES = parseInt((process.env as any).MAX_BUFFER_NODES) || 5000;

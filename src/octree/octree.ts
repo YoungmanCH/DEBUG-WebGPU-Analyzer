@@ -17,29 +17,6 @@ const colors = [
   new THREE.Color(0xf1a784), // illusion
 ];
 
-export class OctreePoint {
-  index: number;
-  x: number;
-  y: number;
-  z: number;
-  mesh: THREE.Mesh;
-
-  constructor(index: number, x: number, y: number, z: number) {
-    this.index = index;
-    this.x = x;
-    this.y = y;
-    this.z = z;
-    let mesh = new THREE.Mesh(
-      new THREE.BoxGeometry(5, 5, 5),
-      new THREE.MeshBasicMaterial({ color: 0xff0000 })
-    );
-    mesh.position.set(x, y, z);
-    mesh.updateMatrix();
-    mesh.matrixAutoUpdate = false;
-    this.mesh = mesh;
-  }
-}
-
 export class OctreeBox {
   label: string;
   x: number;

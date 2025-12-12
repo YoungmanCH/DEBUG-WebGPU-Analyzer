@@ -7,13 +7,16 @@ import { CanvasEventManager } from "./canvas-event";
 
 import { setGPUDevice } from "../webgpu/webgpu-buffer";
 import {
-  Vec3Renderer,
-  Vec4Renderer,
   RendererFactory,
   VectorType,
 } from "../renderers/exports";
 import { appState } from "../views/states/state-manager";
 import { setupViewport } from "../views/states/viewport-initializer";
+import {
+  incrementFrame,
+  cleanupOldNodes,
+  getMemoryStats,
+} from "../utils/memory-manager";
 
 export class WebGPURenderer {
   private context: WebGPUContext;
@@ -84,11 +87,20 @@ export class WebGPURenderer {
     device: GPUDevice,
     swapChainFormat: GPUTextureFormat
   ): void {
-    const vec3Renderer = RendererFactory.getRenderer(
+    // メッシュ版を使用（点描画版に切り替える場合は getMeshRenderer → getRenderer）
+    const vec3Renderer = RendererFactory.getMeshRenderer(
       this.vectorType,
       device,
       swapChainFormat
-    ) as Vec3Renderer;
+    );
+
+    // 点描画版（normal）
+    // const vec3Renderer = RendererFactory.getRenderer(
+    //   this.vectorType,
+    //   device,
+    //   swapChainFormat
+    // );
+
     vec3Renderer.initialize();
     this.pipeline = vec3Renderer.getPipeline();
   }
@@ -97,11 +109,21 @@ export class WebGPURenderer {
     device: GPUDevice,
     swapChainFormat: GPUTextureFormat
   ): void {
-    const vec4Renderer = RendererFactory.getRenderer(
+    // メッシュ版を使用（点描画版に切り替える場合は getMeshRenderer → getRenderer）
+    const vec4Renderer = RendererFactory.getMeshRenderer(
       this.vectorType,
       device,
       swapChainFormat
-    ) as Vec4Renderer;
+    );
+
+    // 点描画版（normal）
+    // const vec4Renderer = RendererFactory.getRenderer(
+    //   this.vectorType,
+    //   device,
+    //   swapChainFormat
+    // );
+
+
     vec4Renderer.initialize();
     this.pipeline = vec4Renderer.getPipeline();
   }
@@ -139,6 +161,9 @@ export class WebGPURenderer {
     this.uniformer.updateMVP();
     appState.controls.update();
 
+    // フレームカウンタを更新
+    const currentFrameNum = incrementFrame();
+
     const device = this.context.getDevice();
     const bindGroup = this.uniformer.getBindGroup();
     const canvas = this.context.getCanvas();
@@ -151,14 +176,25 @@ export class WebGPURenderer {
     renderPass.setViewport(0, 0, canvas.width, canvas.height, 0.0, 1.0);
 
     // バッファマップをループして描画
+    const visibleKeys: string[] = [];
     for (let key in appState.bufferMap) {
+      visibleKeys.push(key);
       const bufferInfo = appState.bufferMap[key];
 
-      const renderer = RendererFactory.getRenderer(
+      // 点描画版（normal）に切り替える場合は下記をコメント解除
+      // const renderer = RendererFactory.getRenderer(
+      //   bufferInfo.vectorType || "vec4",
+      //   device,
+      //   swapChainFormat
+      // );
+
+      // メッシュ描画版（mesh）
+      const renderer = RendererFactory.getMeshRenderer(
         bufferInfo.vectorType || "vec4",
         device,
         swapChainFormat
       );
+      
       renderer.render(
         renderPass,
         bufferInfo.position,
@@ -170,6 +206,22 @@ export class WebGPURenderer {
 
     renderPass.end();
     device.queue.submit([encoder.finish()]);
+
+    // 60フレームごとにメモリクリーンアップを実行
+    if (currentFrameNum % 60 === 0) {
+      cleanupOldNodes(visibleKeys);
+
+      // メモリ使用状況をコンソールに出力（デバッグ用）
+      const stats = getMemoryStats();
+      if (stats.utilizationPercent > 80) {
+        console.warn(
+          `[Memory] High utilization: ${stats.totalNodes}/${
+            stats.maxNodes
+          } (${stats.utilizationPercent.toFixed(1)}%)`
+        );
+      }
+    }
+
     requestAnimationFrame(() => this._render());
   };
 
