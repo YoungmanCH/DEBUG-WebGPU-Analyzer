@@ -27,11 +27,11 @@ async function _initializeCache() {
 }
 
 async function _initializeFileData() {
-  // const { filename, vectorType } = _copc_file_loader();
+  const { filename, vectorType } = _copc_file_loader();
   // const { filename, vectorType } = _las_file_loader();
-  const { filename, vectorType } = _xyz_file_loader();
-  // const { filename, vectorType } = _tif_file_loader();
   // const { filename, vectorType } = _laz_file_loader();
+  // const { filename, vectorType } = _xyz_file_loader();
+  // const { filename, vectorType } = _tif_file_loader();
 
   try {
     await initializePointCloud(filename);

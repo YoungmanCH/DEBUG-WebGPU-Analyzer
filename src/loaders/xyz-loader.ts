@@ -30,14 +30,17 @@ export class XYZFileLoader extends BaseFileLoader<XYZParams> {
     // ファイルをテキストとして読み込み
     const text = await this._fetchTextFile(this.filename);
 
-    // 行に分割
+    // 行に分割（空行とコメント行を除外）
     const lines = text.split("\n").filter(
-      (line) => line.trim() && !line.startsWith("#") // 空行とコメント行を除外
+      (line) => {
+        const trimmed = line.trim();
+        return trimmed && !trimmed.startsWith("#") && !trimmed.startsWith("//");
+      }
     );
 
     // ヘッダー行のチェック
     let dataStartIndex = 0;
-    if (this._isHeaderLine(lines[0])) {
+    if (lines.length > 0 && this._isHeaderLine(lines[0])) {
       dataStartIndex = 1;
     }
 
@@ -72,6 +75,8 @@ export class XYZFileLoader extends BaseFileLoader<XYZParams> {
   }
 
   private _isHeaderLine(line: string): boolean {
+    if (!line) return false;
+
     // 数字以外の文字が含まれていればヘッダー行と判定
     const values = line.trim().split(/\s+/);
     const isHeaderLine = values.some((v) => isNaN(parseFloat(v)));
@@ -91,7 +96,6 @@ export class XYZFileLoader extends BaseFileLoader<XYZParams> {
 
       // 最低でもXYZが必要 RGBかどうかの判定は後ほど
       if (values.length < 3) {
-        console.warn(`Invalid line: ${line}`);
         continue;
       }
 
@@ -103,12 +107,16 @@ export class XYZFileLoader extends BaseFileLoader<XYZParams> {
         const g = values[4];
         const b = values[5];
 
-        // 0-1の範囲なら0-255に変換（シェーダーで255で割るため）
+        // RGB値の範囲を自動判定して正規化
         if (r <= 1 && g <= 1 && b <= 1) {
+          // 0-1の範囲: 正規化カラー
           colors.push(r * 255, g * 255, b * 255);
-        } else {
-          // 0-255の範囲ならそのまま
+        } else if (r <= 255 && g <= 255 && b <= 255) {
+          // 0-255の範囲: 8bitカラー
           colors.push(r, g, b);
+        } else {
+          // 16bitカラー (0-65535): 8bitに変換
+          colors.push(r / 256, g / 256, b / 256);
         }
       } else if (hasColors) {
         // 一部の点にだけ色がある場合、白で埋める（シェーダーで255で割るため255にする）

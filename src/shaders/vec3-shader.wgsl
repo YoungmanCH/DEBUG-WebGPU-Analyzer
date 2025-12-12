@@ -27,13 +27,6 @@ struct cmapUniform {
 @group(0) @binding(1) var<uniform> cMap: cmapUniform;
 @group(0) @binding(2) var<uniform> params: paramsUniform;
 
-const direction = array<vec2<f32>, 4>(
-    vec2<f32>(-1, -1),
-    vec2<f32>(1, -1),
-    vec2<f32>(-1, 1),
-    vec2<f32>(1, 1)
-);
-
 const PI: f32 = 3.1415926535897932384626433832795;
 
 fn getCmapped(cMapIndex: i32) -> vec4<f32> {
@@ -45,12 +38,9 @@ fn getCmapped(cMapIndex: i32) -> vec4<f32> {
 }
 
 @vertex
-fn main(in: VertexInput, @builtin(instance_index) inst_index: u32, @builtin(vertex_index) vertexIndex: u32) -> VertexOut {
+fn main(in: VertexInput, @builtin(instance_index) inst_index: u32) -> VertexOut {
     var out: VertexOut;
     var cMapIndex: i32;
-    var level: f32 = 0.0;  // LASはlevelなし、デフォルト0
-    var radius: f32 = 3.0 * pow(0.6, level);
-    radius = max(radius, 1.0);
     var position: vec3<f32> = in.position - vec3(params.x_min, params.y_min, params.z_min) - 0.5 * vec3(params.width_x, params.width_y, params.width_z);
 
     if params.current_Axis == 2.0 {
@@ -74,7 +64,6 @@ fn main(in: VertexInput, @builtin(instance_index) inst_index: u32, @builtin(vert
         out.color = vec4(in.color.x / 255.0, in.color.y / 255.0, in.color.z / 255.0, 1.0);
     }
 
-    position = position + vec3<f32>(radius * direction[vertexIndex], 0.0);
     out.position = MVP_Matrix * vec4<f32>(position, 1.0);
     return out;
 }

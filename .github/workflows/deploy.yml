@@ -1,0 +1,88 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main  # mainブランチへのpushで自動デプロイ
+  workflow_dispatch:  # 手動実行も可能
+
+# GitHub Pagesへのデプロイ権限を設定
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# 同時実行を防ぐ（デプロイが重複しないように）
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          lfs: true  # Git LFSを使用している場合
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build for production
+        run: npm run build:prod
+
+      - name: Copy static files to dist
+        run: |
+          # public/index.htmlをdistにコピー
+          cp public/index.html dist/
+
+          # public/jsディレクトリをdistにコピー（必要に応じて）
+          if [ -d "public/js" ]; then
+            mkdir -p dist/js
+            cp -r public/js/* dist/js/
+          fi
+
+          # laz-perf.wasmをdistにコピー（必要に応じて）
+          if [ -f "public/laz-perf.wasm" ]; then
+            cp public/laz-perf.wasm dist/
+          fi
+
+          # WorkerConsole.jsをdistにコピー（必要に応じて）
+          if [ -f "public/WorkerConsole.js" ]; then
+            cp public/WorkerConsole.js dist/
+          fi
+
+      # オプション: datasetディレクトリをコピー（小規模データの場合）
+      # 大容量ファイルの場合はこのステップをコメントアウトして、
+      # 外部CDN（S3、GitHub LFSなど）から読み込むように設定
+      # - name: Copy dataset to dist
+      #   run: |
+      #     if [ -d "dataset" ]; then
+      #       mkdir -p dist/dataset
+      #       cp -r dataset/* dist/dataset/
+      #     fi
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./dist
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

@@ -69,7 +69,7 @@ export class Vec4Renderer extends BaseRenderer {
         depthCompare: "less",
       },
       primitive: {
-        topology: "triangle-strip",
+        topology: "point-list",
         cullMode: "none",
       },
     });

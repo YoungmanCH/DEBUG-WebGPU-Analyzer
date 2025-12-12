@@ -18,18 +18,18 @@ export abstract class BaseRenderer {
   abstract getPipeline(): GPURenderPipeline;
   abstract initialize(bindGroupLayout?: GPUBindGroupLayout): void;
 
-  // 共通の描画処理
+  // 共通の描画処理（点描画用）
   render(
     renderPass: GPURenderPassEncoder,
     positionBuffer: GPUBuffer,
     colorBuffer: GPUBuffer,
     pointCount: number,
     bindGroup: GPUBindGroup
-  ) {
+  ): void {
     renderPass.setPipeline(this.pipeline);
     renderPass.setBindGroup(0, bindGroup);
     renderPass.setVertexBuffer(0, positionBuffer);
     renderPass.setVertexBuffer(1, colorBuffer);
-    renderPass.draw(4, pointCount, 0, 0);
+    renderPass.draw(1, pointCount, 0, 0); // 点描画: 1頂点×点数
   }
 }
